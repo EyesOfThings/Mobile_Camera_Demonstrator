@@ -2,11 +2,12 @@ storage = undefined
 storageRef = undefined
 
 getAuthWithFirebase = ->
+  $("#image_processing").css('display', 'block')
   config = 
-    apiKey: 'FAKE'
-    authDomain: 'FAKE'
-    databaseURL: 'FAKE'
-    storageBucket: 'FAKE'
+    apiKey: AuthData.apiKey
+    authDomain: AuthData.authDomain
+    databaseURL: AuthData.databaseURL
+    storageBucket: AuthData.storageBucket
 
   firebase.initializeApp config
   storage = firebase.storage()
@@ -18,35 +19,25 @@ getAuthWithFirebase = ->
         logImageDataOnly(childSnap.val().Images)
         return
 
+capitalizeFirstLetter = (string) ->
+  string.charAt(0).toUpperCase() + string.slice(1)
+
 logImageDataOnly = (Images) ->
-  console.log Images
   $.each Images, (i, Image) ->
-    console.log Image.Path
-    # storageRef.child("#{Image.Path}").getDownloadURL().then((url) ->
-    #   # `url` is the download URL for 'images/stars.jpg'
-    #   # This can be downloaded directly:
-    #   xhr = new XMLHttpRequest
-    #   xhr.responseType = 'blob'
-
-    #   xhr.onload = (event) ->
-    #     blob = xhr.response
-    #     return
-
-    #   xhr.open 'GET', url
-    #   xhr.send()
-    #   console.log url
-    #   # Or inserted into an <img> element:
-    #   # img = document.getElementById('myimg')
-    #   # img.src = url
-    #   # return
-    # ).catch (error) ->
-    #   # Handle any errors
-    #   return
-
-    # console.log Image.Path
-    # console.log Image.Tags
+    tangRef = storageRef.child(capitalizeFirstLetter("#{Image.Path}"));
+    tangRef.getDownloadURL().then((url) ->
+      console.log Image.Path
+      console.log url
+      image_tag = "<img data-width='480' data-height='256' src='#{url}' />"
+      $(".google-image-layout").append(image_tag)
+      GoogleImageLayout.init()
+    ).catch (error) ->
+      console.log error
+      return
 
 window.initializeHome = ->
-  console.log CurrentUser.oauth_token
   getAuthWithFirebase()
-  console.log "hi"
+  setTimeout (->
+    $("#image_processing").css('display', 'none')
+    return
+  ), 5000

@@ -1,11 +1,15 @@
-<h1>Home#show</h1>
-<p>Find me in app/views/home/show.html.erb</p>
-<img height="125" width="125"/>
+<div id="image_processing">
+  <img class="loading-one" src="/assets/loading.gif"/>
+</div>
+<div class="google-image-layout" data-google-image-layout data-max-height="120">
+</div>
 
 <script>
   window.CurrentUser = <%= @current_user.to_json.html_safe %>;
-  console.log(CurrentUser);
+  window.AuthData = <%= @auth_data.to_json.html_safe %>;
   $(document).ready(function () {
     window.initializeHome();
   });
 </script>
+<script src="assets/google-image-layout.js"></script>
+<script src="assets/imagesloaded.pkgd.min.js"></script>
