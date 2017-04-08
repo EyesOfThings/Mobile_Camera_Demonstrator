@@ -15,4 +15,10 @@ test:
   <<: *default
   database: eot_project
 
-production: <%= ENV['DATABASE_URL'] %>
+production:
+  <<: *default
+  database: ddtvriq21o1j65
+  username: ybuxueuvsicofi
+  password: 7571e269d95bdc728058504a9e54a2e6f267c77c867602edbac6bc4dea0a46c1
+  host: ec2-54-197-232-155.compute-1.amazonaws.com
+  port: 5432
