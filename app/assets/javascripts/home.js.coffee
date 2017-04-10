@@ -23,17 +23,35 @@ capitalizeFirstLetter = (string) ->
   string.charAt(0).toUpperCase() + string.slice(1)
 
 logImageDataOnly = (Images) ->
+  tags = "image"
   $.each Images, (i, Image) ->
     tangRef = storageRef.child(capitalizeFirstLetter("#{Image.Path}"));
     tangRef.getDownloadURL().then((url) ->
-      console.log Image.Path
-      console.log url
-      image_tag = "<img data-width='480' data-height='256' src='#{url}' />"
+      $.each Image.Tags, (i, value) ->
+        if value == 1
+          tags += " #{i}"
+        # console.log "#{i} : #{value}"
+      console.log tags
+      image_tag = "<img data-tags='#{tags}' data-width='480' data-height='256' src='#{url}' />"
       $(".google-image-layout").append(image_tag)
       GoogleImageLayout.init()
+      tags = "image"
     ).catch (error) ->
       console.log error
       return
+
+filterImages = (e) ->
+  regex = new RegExp('\\b\\w*' + e + '\\w*\\b')
+  $('.layout-completed').hide().filter(->
+    regex.test $(this).data('tags')
+  ).show()
+  return
+
+onImageSearch = ->
+  $('#show-hide').keyup ->
+    selectTag = $(this).val()
+    filterImages(selectTag)
+    return
 
 window.initializeHome = ->
   getAuthWithFirebase()
@@ -41,3 +59,4 @@ window.initializeHome = ->
     $("#image_processing").css('display', 'none')
     return
   ), 5000
+  onImageSearch()
