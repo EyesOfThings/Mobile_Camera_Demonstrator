@@ -11,6 +11,7 @@
  * It is generally better to create a new file per style scope.
  *
  *= require photoswipe
+ *= require font-awesome
  *= require_self
  */
 
@@ -113,35 +114,10 @@ i {
   font-weight: bold;
 }
 
-input[type="checkbox"], input[type="radio"] {
-  -webkit-box-sizing:border-box;
-  -moz-box-sizing:border-box;
-  box-sizing:border-box;
-  padding: 0px;
-}
-input[type="checkbox"], input[type="radio"] {
-    margin: 4px 0px 0px;
-    line-height: normal;
-}
-.checkbox-inline, .radio-inline {
-    cursor: pointer;
-    display: inline-block;
-    font-weight: 400;
-    margin-bottom: 0;
-    margin-right: 20px;
-    padding-left: 20px;
-    position: relative;
-    vertical-align: middle;
-}
-
-.checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"], .radio input[type="radio"], .radio-inline input[type="radio"] {
-    position: absolute;
-    margin-left: -20px;
-}
-
 .my-gallery {
   width: 100%;
-  float: left;
+  float: none;
+  margin: 0 auto;
 }
 .my-gallery img {
   width: 100%;
@@ -155,4 +131,92 @@ input[type="checkbox"], input[type="radio"] {
 }
 .my-gallery figcaption {
   display: none;
+}
+
+.top-header {
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border: solid 1px black;
+}
+
+.logout {
+  width: 100px;
+  float: right;
+  height: auto;
+  overflow: hidden;
+}
+
+.filters-left {
+  float: left;
+  overflow: hidden;
+  width: 700px;
+}
+
+.fa-sign-out {
+  font-size: 27px;
+  color: #2F2F2F;
+}
+
+.radio-btn {
+  float: left;
+}
+
+body{color:#444;font:100%/1.4 sans-serif;}
+
+
+/* CUSTOM RADIO & CHECKBOXES
+   http://stackoverflow.com/a/17541916/383904 */
+.rad,
+.ckb{
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.rad > input,
+.ckb > input{ /* HIDE ORG RADIO & CHECKBOX */
+  visibility: hidden;
+  position: absolute;
+}
+/* RADIO & CHECKBOX STYLES */
+.rad > i,
+.ckb > i{     /* DEFAULT <i> STYLE */
+  display: inline-block;
+  vertical-align: middle;
+  width:  16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: 0.2s;
+  box-shadow: inset 0 0 0 8px #fff;
+  border: 1px solid gray;
+  background: gray;
+}
+/* CHECKBOX OVERWRITE STYLES */
+.ckb > i {
+  width: 25px;
+  border-radius: 3px;
+}
+.rad:hover > i{ /* HOVER <i> STYLE */
+  box-shadow: inset 0 0 0 3px #fff;
+  background: gray;
+}
+.rad > input:checked + i{ /* (RADIO CHECKED) <i> STYLE */
+  box-shadow: inset 0 0 0 3px #fff;
+  background: #2F2F2F;
+}
+/* CHECKBOX */
+.ckb > input + i:after{
+  content: "";
+  display: block;
+  height: 12px;
+  width:  12px;
+  margin: 2px;
+  border-radius: inherit;
+  transition: inherit;
+  background: gray;
+}
+.ckb > input:checked + i:after{ /* (RADIO CHECKED) <i> STYLE */
+  margin-left: 11px;
+  background:  #2F2F2F;
 }
