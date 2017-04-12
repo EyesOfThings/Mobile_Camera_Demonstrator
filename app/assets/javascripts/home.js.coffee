@@ -23,6 +23,8 @@ capitalizeFirstLetter = (string) ->
   string.charAt(0).toUpperCase() + string.slice(1)
 
 logImageDataOnly = (Images) ->
+  parent_width = (480 * 200) / 256
+  padding_bottom = (256/480)*100
   tags = "image"
   $.each Images, (i, Image) ->
     tangRef = storageRef.child(capitalizeFirstLetter("#{Image.Path}"));
@@ -32,9 +34,12 @@ logImageDataOnly = (Images) ->
           tags += " #{i}"
         # console.log "#{i} : #{value}"
       console.log tags
-      image_tag = "<img data-tags='#{tags}' data-width='480' data-height='256' src='#{url}' />"
-      $(".google-image-layout").append(image_tag)
-      GoogleImageLayout.init()
+      image_tag =
+        "<div data-tags='#{tags}' class='image-parent' style='width:#{parent_width}px;flex-grow:#{parent_width}'>
+          <i style='padding-bottom:#{padding_bottom}%'></i>
+          <img class='image-itself' src='#{url}' />
+        </div>"
+      $("section").append(image_tag)
       tags = "image"
     ).catch (error) ->
       console.log error
@@ -42,14 +47,15 @@ logImageDataOnly = (Images) ->
 
 filterImages = (e) ->
   regex = new RegExp('\\b\\w*' + e + '\\w*\\b')
-  $('.layout-completed').hide().filter(->
+  $('.image-parent').hide().filter(->
     regex.test $(this).data('tags')
   ).show()
   return
 
 onImageSearch = ->
-  $('#show-hide').keyup ->
-    selectTag = $(this).val()
+  $('.radio-inline').on "click", ->
+    console.log $('input[name=optradio]:checked').val()
+    selectTag = $('input[name=optradio]:checked').val()
     filterImages(selectTag)
     return
 

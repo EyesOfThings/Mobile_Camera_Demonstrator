@@ -1,11 +1,84 @@
+
 <div id="image_processing">
   <img class="loading-one" src="/assets/loading.gif"/>
 </div>
-<div>
-  <input type="text" id="show-hide" placeholder="Search: eg.. LargeFace">
+<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+
+<!-- <i class="em em-angry"></i> -->
+
+<div id="parent-section">
+  <div id="filter-heading">Filters:</div>
+  <div id="filters-of">
+    <form role="form">
+        <label class="radio-inline" id="filter-value">
+          <input type="radio" name="optradio" value="image">All
+        </label>
+        <label class="radio-inline" id="filter-value">
+          <input type="radio" name="optradio" value="LargeFaceDetected">Large Face
+        </label>
+        <label class="radio-inline" id="filter-value">
+          <input type="radio" name="optradio" value="Neutral">Neutral
+        </label>
+        <label class="radio-inline" id="filter-value">
+          <input type="radio" name="optradio" value="Sadness">Sadness
+        </label>
+        <label class="radio-inline" id="filter-value">
+          <input type="radio" name="optradio" value="Surprise">Surprise
+        </label>
+        <label class="radio-inline" id="filter-value">
+          <input type="radio" name="optradio" value="Happiness">Happiness
+        </label>
+        <label class="radio-inline" id="filter-value">
+          <input type="radio" name="optradio" value="Anger">Anger
+        </label>
+        <label class="radio-inline" id="filter-value">
+          <input type="radio" name="optradio" value="Fear">Fear
+        </label>
+        <label class="radio-inline" id="filter-value">
+          <input type="radio" name="optradio" value="Disgust">Disgust
+        </label>
+        <label class="radio-inline" id="filter-value">
+          <input type="radio" name="optradio" value="Face">Face
+        </label>
+      </form>
+    <!-- <fieldset> -->
+      <!-- <div class="some-class">
+        <input type="radio" class="radio" value="" id="filter-val" />
+        <label for="All">All</label>
+
+        <input type="radio" class="radio" value="LargeFaceDetected" id="filter-val" />
+        <label for="LargeFace">Large Face</label>
+
+        <input type="radio" class="radio" value="Neutral" id="filter-val" />
+        <label for="Neutral">Neutral</label>
+
+        <input type="radio" class="radio" value="Sadness" id="filter-val" />
+        <label for="Sadness">Sadness</label>
+
+        <input type="radio" class="radio" value="Surprise" id="filter-val" />
+        <label for="Surprise">Surprise</label>
+
+        <input type="radio" class="radio" value="Happiness" id="filter-val" />
+        <label for="Happiness">Happiness</label>
+
+        <input type="radio" class="radio" value="Anger" id="filter-val" />
+        <label for="Anger">Anger</label>
+
+        <input type="radio" class="radio" value="Disgust" id="filter-val" />
+        <label for="Disgust">Disgust</label>
+
+        <input type="radio" class="radio" value="Fear" id="filter-val" />
+        <label for="Fear">Fear</label>
+
+        <input type="radio" class="radio" value="Face" id="filter-val" />
+        <label for="Face">Face</label>
+      </div>
+    </fieldset> -->
+  </div>
 </div>
-<div class="google-image-layout" data-google-image-layout data-max-height="120">
-</div>
+
+<section class="image-section">
+</section>
 
 <script>
   window.CurrentUser = <%= @current_user.to_json.html_safe %>;
@@ -14,5 +87,5 @@
     window.initializeHome();
   });
 </script>
-<script src="assets/google-image-layout.js"></script>
-<script src="assets/imagesloaded.pkgd.min.js"></script>
+<!-- <script src="assets/google-image-layout.js"></script>
+<script src="assets/imagesloaded.pkgd.min.js"></script> -->
