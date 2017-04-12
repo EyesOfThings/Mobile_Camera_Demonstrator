@@ -10,6 +10,128 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
- *= require_tree .
  *= require_self
  */
+
+.image-section {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-section::after {
+  content: '';
+  flex-grow: 1e4;
+  min-width: 20%;
+}
+
+.image-parent {
+  margin: 2px;
+/*  background-color: violet;*/
+  position: relative;
+}
+
+i {
+  display: block;
+}
+
+.image-itself {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  vertical-align: bottom;
+}
+
+#parent-section {
+  width: 100%;
+  margin: 0 auto;
+  float: none;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+#image_processing{
+  bottom: 0;
+  color: #3d3d3d;
+  font-size: 16px;
+  height: 15px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+  width: 100px;
+  display: none;
+}
+
+.loading-one {
+  border: 0px solid #ebebeb;
+  box-shadow: 0 0 0px #ebebeb; 
+}
+
+#show-hide {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  font-size: 16px;
+  height: auto;
+  margin: 0;
+  outline: 0;
+  padding: 15px;
+  width: 100%;
+  background-color: #e8eeef;
+  color: #8a97a0;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+  margin-bottom: 30px;
+}
+
+.checkboxes label {
+  display: block;
+  float: left;
+  padding-right: 10px;
+  white-space: nowrap;
+}
+
+.checkboxes input {
+  vertical-align: middle;
+}
+.checkboxes label span {
+  vertical-align: middle;
+}
+
+#filters-of {
+  width: 70%;
+  float: left;
+}
+
+#filter-heading {
+  float: left;
+  width: 3%;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+input[type="checkbox"], input[type="radio"] {
+  -webkit-box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  box-sizing:border-box;
+  padding: 0px;
+}
+input[type="checkbox"], input[type="radio"] {
+    margin: 4px 0px 0px;
+    line-height: normal;
+}
+.checkbox-inline, .radio-inline {
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 400;
+    margin-bottom: 0;
+    margin-right: 20px;
+    padding-left: 20px;
+    position: relative;
+    vertical-align: middle;
+}
+
+.checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"], .radio input[type="radio"], .radio-inline input[type="radio"] {
+    position: absolute;
+    margin-left: -20px;
+}
