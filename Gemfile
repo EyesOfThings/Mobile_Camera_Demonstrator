@@ -55,3 +55,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "omniauth-google-oauth2", "~> 0.2.1"
 gem 'dotenv-rails'
+gem 'photoswipe-rails'
