@@ -52,10 +52,6 @@ filterImages = (e) ->
   return
 
 onImageSearch = ->
-  # $('.rad').on 'click', ->
-  #   val = $(this).closest('input').find('input[name=\'r1\']').val()
-
-    # console.log val
   $('.rad').on "click", ->
     console.log $('input[name=r1]:checked').val()
     selectTag = $('input[name=r1]:checked').val()

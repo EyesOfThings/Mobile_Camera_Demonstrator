@@ -120,6 +120,7 @@ i {
   width: 100%;
   float: none;
   margin: 0 auto;
+  padding: 0 10px;
 }
 .my-gallery img {
   width: 100%;
