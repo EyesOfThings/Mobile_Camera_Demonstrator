@@ -281,6 +281,15 @@ input.search {
   padding: 10px;
   cursor: pointer;
 }
+
+.circular--square {
+  border-radius: 50%;
+  height: 34px;
+  /* margin-top: -34px; */
+  margin-bottom: -14px;
+  margin-right: 4px;
+}
+
 @media (max-width: 700px ){
   .ac  {
     display: none;
