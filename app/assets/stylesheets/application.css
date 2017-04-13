@@ -14,6 +14,7 @@
  *= require font-awesome
  *= require_self
  */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 .image-section {
   display: flex;
@@ -87,6 +88,7 @@ i {
 }
 
 .checkboxes label {
+  font-family: 'Open Sans', sans-serif;
   display: block;
   float: left;
   padding-right: 10px;
@@ -153,7 +155,7 @@ i {
 }
 
 .fa-sign-out {
-  font-size: 20px;
+  font-size: 15px;
   color: #2F2F2F;
 }
 
@@ -161,7 +163,7 @@ i {
   float: left;
 }
 
-body{color:#444;font:100%/1.4 sans-serif;}
+/*body{color:#444;font:100%/1.4 sans-serif;}*/
 
 
 /* CUSTOM RADIO & CHECKBOXES
@@ -172,6 +174,7 @@ body{color:#444;font:100%/1.4 sans-serif;}
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+  font-size: 13px;
 }
 .rad > input,
 .ckb > input{ /* HIDE ORG RADIO & CHECKBOX */
@@ -183,8 +186,8 @@ body{color:#444;font:100%/1.4 sans-serif;}
 .ckb > i{     /* DEFAULT <i> STYLE */
   display: inline-block;
   vertical-align: middle;
-  width:  16px;
-  height: 16px;
+  width:  13px;
+  height: 13px;
   border-radius: 50%;
   transition: 0.2s;
   box-shadow: inset 0 0 0 8px #fff;
@@ -221,6 +224,77 @@ body{color:#444;font:100%/1.4 sans-serif;}
   background:  #2F2F2F;
 }
 
+.sag-menu > a {
+  text-decoration: none;
+  color: #2F2F2F;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+}
+
 .margin-right {
   margin-right: 5px;
 }
+.nav {
+  overflow: hidden;
+  z-index: 50;
+}
+.nav ul {
+  padding: 0;
+  margin: 0;
+}
+.sol-menu li {
+  float: left;
+  display: block;
+  list-style: none;
+}
+.sol-menu li a {
+  display: block;
+  text-decoration: none;
+  padding: 12px 12px;
+  color: #2F2F2F;
+  font-family: 'Open Sans', sans-serif;
+}
+/*.sol-menu li a:hover {
+  color: #4c6881;
+    padding: 15px 40px;
+    background-color: #FFFFFF;
+}*/
+ul.sag-menu {
+  float: right;
+  padding: 8px 10px;
+  overflow: hidden;
+}
+.sag-menu i {
+  margin: 8px;
+  cursor: pointer;
+}
+input.search {
+  display: none;
+  padding: 5px;
+  max-width: 100%;
+}
+.altmenu-ac {
+  display: none;
+}
+.menu-ac {
+  display: none;
+  padding: 10px;
+  cursor: pointer;
+}
+@media (max-width: 700px ){
+  .ac  {
+    display: none;
+  }
+  .nav ul li {
+    float: none;
+  }
+  .menu-ac {
+    display: block;
+  }
+}
+@media (min-width: 700px ){
+  .ac {
+    display: block!important;
+  }
+}
+

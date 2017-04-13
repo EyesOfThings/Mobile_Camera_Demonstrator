@@ -82,7 +82,17 @@
   window.AuthData = <%= @auth_data.to_json.html_safe %>;
   $(document).ready(function () {
     window.initializeHome();
+    // $('.menu-trigger').click(function() {
+    //   $('nav ul').slideToggle(500);
+    // });//end slide toggle
+    
+    // $(window).resize(function() {   
+    //   if (  $(window).width() > 500 ) {     
+    //     $('nav ul').removeAttr('style');
+    //    }
+    // });//end resize
   });
+
 </script>
 <!-- <script src="assets/google-image-layout.js"></script>
 <script src="assets/imagesloaded.pkgd.min.js"></script> -->
