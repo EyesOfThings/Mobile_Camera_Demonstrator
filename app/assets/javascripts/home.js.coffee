@@ -35,7 +35,7 @@ logImageDataOnly = (Images) ->
           <a href='#{url}' itemprop='contentUrl' data-size='480x256'>
             <img src='#{url}' itemprop='thumbnail' alt='Image descriptio' />
           </a>
-          <figcaption itemprop='caption description'>#{tags}</figcaption>
+          <figcaption itemprop='caption description'>#{tags.replace(/image/g,'')}</figcaption>
         </figure>"
       $(".my-gallery").append(image_tag)
       tags = "image"
@@ -52,10 +52,6 @@ filterImages = (e) ->
   return
 
 onImageSearch = ->
-  # $('.rad').on 'click', ->
-  #   val = $(this).closest('input').find('input[name=\'r1\']').val()
-
-    # console.log val
   $('.rad').on "click", ->
     console.log $('input[name=r1]:checked').val()
     selectTag = $('input[name=r1]:checked').val()
