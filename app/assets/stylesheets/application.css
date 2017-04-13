@@ -137,11 +137,10 @@ i {
   width: 100%;
   overflow: hidden;
   margin-bottom: 10px;
-  border: solid 1px black;
 }
 
 .logout {
-  width: 100px;
+  width: 5%;
   float: right;
   height: auto;
   overflow: hidden;
@@ -150,11 +149,11 @@ i {
 .filters-left {
   float: left;
   overflow: hidden;
-  width: 700px;
+  width: 80%;
 }
 
 .fa-sign-out {
-  font-size: 27px;
+  font-size: 20px;
   color: #2F2F2F;
 }
 
@@ -191,6 +190,7 @@ body{color:#444;font:100%/1.4 sans-serif;}
   box-shadow: inset 0 0 0 8px #fff;
   border: 1px solid gray;
   background: gray;
+  margin-bottom: 4px;
 }
 /* CHECKBOX OVERWRITE STYLES */
 .ckb > i {
@@ -219,4 +219,8 @@ body{color:#444;font:100%/1.4 sans-serif;}
 .ckb > input:checked + i:after{ /* (RADIO CHECKED) <i> STYLE */
   margin-left: 11px;
   background:  #2F2F2F;
+}
+
+.margin-right {
+  margin-right: 5px;
 }

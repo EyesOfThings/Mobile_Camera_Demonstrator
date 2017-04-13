@@ -31,11 +31,11 @@ logImageDataOnly = (Images) ->
         if value == 1
           tags += " #{i}"
       image_tag =
-        "<figure data-tags='#{tags}' itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject'>
+        "<figure data-tags='#{tags}' itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject' class='for-filter'>
           <a href='#{url}' itemprop='contentUrl' data-size='480x256'>
             <img src='#{url}' itemprop='thumbnail' alt='Image descriptio' />
           </a>
-          <figcaption itemprop='caption description'>Image caption 2.1</figcaption>
+          <figcaption itemprop='caption description'>#{tags}</figcaption>
         </figure>"
       $(".my-gallery").append(image_tag)
       tags = "image"
@@ -46,15 +46,19 @@ logImageDataOnly = (Images) ->
 
 filterImages = (e) ->
   regex = new RegExp('\\b\\w*' + e + '\\w*\\b')
-  $('.image-parent').hide().filter(->
+  $('.for-filter').hide().filter(->
     regex.test $(this).data('tags')
   ).show()
   return
 
 onImageSearch = ->
-  $('.radio-inline').on "click", ->
-    console.log $('input[name=optradio]:checked').val()
-    selectTag = $('input[name=optradio]:checked').val()
+  # $('.rad').on 'click', ->
+  #   val = $(this).closest('input').find('input[name=\'r1\']').val()
+
+    # console.log val
+  $('.rad').on "click", ->
+    console.log $('input[name=r1]:checked').val()
+    selectTag = $('input[name=r1]:checked').val()
     filterImages(selectTag)
     return
 
