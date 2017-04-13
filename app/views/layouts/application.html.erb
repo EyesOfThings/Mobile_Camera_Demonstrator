@@ -12,8 +12,51 @@
   <body>
     <div>
       <% if current_user %>
-        Signed in as <strong><%= current_user.name %></strong>!
-        <%= link_to "Sign out", signout_path, id: "sign_out" %>
+        <div class="top-header">
+          <div class="filters-left">
+            <label class="rad margin-right">
+              <input type="radio" name="r1" value="" />
+              <i></i> All
+            </label>
+            <label class="rad">
+              <input type="radio" name="r1" value="LargeFaceDetected" />
+              <i></i> Large Face
+            </label>
+            <label class="rad">
+              <input type="radio" name="r1" value="Neutral" />
+              <i></i> Neutral
+            </label>
+            <label class="rad">
+              <input type="radio" name="r1" value="Sadness" />
+              <i></i> Sadness
+            </label>
+            <label class="rad">
+              <input type="radio" name="r1" value="Surprise" />
+              <i></i> Surprise
+            </label>
+            <label class="rad">
+              <input type="radio" name="r1" value="Happiness" />
+              <i></i> Happiness
+            </label>
+            <label class="rad">
+              <input type="radio" name="r1" value="Angry" />
+              <i></i> Anger
+            </label>
+            <label class="rad">
+              <input type="radio" name="r1" value="Fear" />
+              <i></i> Fear
+            </label>
+            <label class="rad">
+              <input type="radio" name="r1" value="Disgust" />
+              <i></i> Disgust
+            </label>
+          </div>
+          <div class="logout">
+            <%= link_to signout_path do %>
+              <i class="fa fa-sign-out" aria-hidden="true"></i>
+            <% end %>
+          </div>
+        </div>
         <%= yield %>
       <% else %>
         <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in" %>
