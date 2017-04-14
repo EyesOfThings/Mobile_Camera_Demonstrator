@@ -20,7 +20,7 @@
               <li>
                 <a href="#">
                   <label class="rad margin-right">
-                    <input type="radio" name="r1" value="image" />
+                    <input class="default-is" type="radio" name="r1" value="image" />
                     <i></i> All
                   </label>
                 </a>
@@ -111,8 +111,8 @@
   </body>
 <script>
 $(document).ready(function () {
-      
-$('.menu-ac').click(function(){
+  $(".default-is").prop("checked", true)
+  $('.menu-ac').click(function(){
     $(this).next('.ac').slideToggle(500);
   });
   $('.fa-search').click(function(){
