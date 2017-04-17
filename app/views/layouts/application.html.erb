@@ -4,110 +4,13 @@
     <title>EotProject</title>
     <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
     <script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
     <%= javascript_include_tag 'application' %>
   </head>
 
   <body>
-    <div>
-      <% if current_user %>
-        <div class="top-header">
-          <nav class="nav">
-          <div class="menu-ac"><i class="fa fa-bars fa-lg"></i></div>
-          <div class="ac">
-            <ul class="sol-menu">
-              <li>
-                <a href="#">
-                  <label class="rad margin-right">
-                    <input class="default-is" type="radio" name="r1" value="image" />
-                    <i></i> All
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="rad">
-                    <input type="radio" name="r1" value="LargeFaceDetected" />
-                    <i></i> Large Face
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="rad">
-                    <input type="radio" name="r1" value="Neutral" />
-                    <i></i> Neutral
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="rad">
-                    <input type="radio" name="r1" value="Sadness" />
-                    <i></i> Sadness
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="rad">
-                    <input type="radio" name="r1" value="Surprise" />
-                    <i></i> Surprise
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="rad">
-                    <input type="radio" name="r1" value="Happiness" />
-                    <i></i> Happiness
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="rad">
-                    <input type="radio" name="r1" value="Angry" />
-                    <i></i> Anger
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="rad">
-                    <input type="radio" name="r1" value="Fear" />
-                    <i></i> Fear
-                  </label>      
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="rad">
-                    <input type="radio" name="r1" value="Disgust" />
-                    <i></i> Disgust
-                  </label>
-                </a>
-              </li>
-            </ul>
-            <ul class="sag-menu">
-              <img class="circular--square" src="<%= current_user.image %>" alt="">
-              <%= link_to signout_path do %>
-                <%= current_user.name %><i class="fa fa-sign-out" aria-hidden="true"></i>
-              <% end %>
-<!--               <form action="" method="GET">
-                <input type="text" class="search" name="s" /><i class="fa fa-search fa-lg"></i>
-              </form> -->
-            </ul>
-            </div>
-          </nav>
-        </div>
         <%= yield %>
-      <% else %>
-        <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in" %>
-      <% end %>
-    </div>
-    <div>
   </body>
 <script>
 $(document).ready(function () {

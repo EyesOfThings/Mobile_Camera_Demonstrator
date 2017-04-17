@@ -1,19 +1,51 @@
 storage = undefined
 storageRef = undefined
+auth_app = undefined
 
-getAuthWithFirebase = ->
-  $("#image_processing").css('display', 'block')
+startAuth = ->
   config = 
     apiKey: AuthData.apiKey
     authDomain: AuthData.authDomain
     databaseURL: AuthData.databaseURL
     storageBucket: AuthData.storageBucket
 
-  firebase.initializeApp config
-  storage = firebase.storage()
-  storageRef = storage.ref()
+  window.firebase.initializeApp config
 
-  firebase.database().ref().child('/visilabeot@gmail|com').once 'value', (snapshot) ->
+onSignIn = ->
+  $(".auth-provider").on "click", ".auth-with-google", ->
+    storage = firebase.storage()
+    storageRef = storage.ref()
+    console.log "clicke"
+    provider = new (firebase.auth.GoogleAuthProvider)
+    firebase.auth().signInWithPopup(provider).then((result) ->
+      $(".auth-provider").css('display', 'none')
+      $(".circular--square").attr("src", result.user.photoURL)
+      $(".profile-name").text(result.user.displayName)
+      console.log result.user
+      console.log result.user.email
+
+      console.log "calling geth auth"
+      getAuthWithFirebase(firebase, "visilabeot@gmail|com")
+      return
+    ).catch (error) ->
+      # Handle Errors here.
+      errorCode = error.code
+      errorMessage = error.message
+      # The email of the user's account used.
+      email = error.email
+      # The firebase.auth.AuthCredential type that was used.
+      credential = error.credential
+      # ...
+      return
+
+getAuthWithFirebase = (auth, email) ->
+  $("#image_processing").css('display', 'block')
+  $(".after-auth").css('display', 'block')
+  setTimeout (->
+    $("#image_processing").css('display', 'none')
+    return
+  ), 5000
+  auth.database().ref().child("/#{email}").once 'value', (snapshot) ->
     snapshot.forEach (childSnap) ->
       if childSnap.val().Images != null
         logImageDataOnly(childSnap.val().Images)
@@ -57,6 +89,19 @@ onImageSearch = ->
     selectTag = $('input[name=r1]:checked').val()
     filterImages(selectTag)
     return
+
+onSignOut = ->
+  $(".signout").on "click", ->
+    firebase.auth().signOut().then(->
+      # Sign-out successful.
+      $(".auth-provider").css('display', 'block')
+      $(".after-auth").css('display', 'none')
+      $(".my-gallery").text("")
+      console.log "signed out"
+      return
+    ).catch (error) ->
+      # An error happened.
+      return
 
 window.initPhotoSwipeFromDOM = (gallerySelector) ->
   # parse slide data (url, title, size ...) from DOM elements 
@@ -219,10 +264,9 @@ window.initPhotoSwipeFromDOM = (gallerySelector) ->
     openPhotoSwipe hashData.pid, galleryElements[hashData.gid - 1], true, true
   return
 
+
 window.initializeHome = ->
-  getAuthWithFirebase()
-  setTimeout (->
-    $("#image_processing").css('display', 'none')
-    return
-  ), 5000
+  startAuth()
+  onSignIn()
   onImageSearch()
+  onSignOut()

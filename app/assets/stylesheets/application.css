@@ -291,6 +291,29 @@ input.search {
   margin-right: 4px;
 }
 
+.auth-with-google {
+    border: 0;
+    width: 191px;
+    height: 46px;
+    text-indent: -1000px;
+    background-size: cover;
+    background-image: url('http://cantina-pm-dashboard-skills.herokuapp.com/images/vendor/google/btn_google_signin_light_normal_web@2x.png');
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.signout {
+  cursor: pointer;
+}
+
 @media (max-width: 700px ){
   .ac  {
     display: none;
