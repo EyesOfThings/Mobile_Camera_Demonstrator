@@ -1,10 +1,100 @@
-
 <div id="image_processing">
   <img class="loading-one" src="/assets/loading.gif"/>
 </div>
 <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+<div class="auth-provider">
+  <button class="auth-with-google">Sign in with Google</button>
+</div>
 
 <!-- <i class="em em-angry"></i> -->
+<div class="after-auth hide">
+        <div class="top-header">
+          <nav class="nav">
+          <div class="menu-ac"><i class="fa fa-bars fa-lg"></i></div>
+          <div class="ac">
+            <ul class="sol-menu">
+              <li>
+                <a href="#">
+                  <label class="rad margin-right">
+                    <input class="default-is" type="radio" name="r1" value="image" />
+                    <i></i> All
+                  </label>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <label class="rad">
+                    <input type="radio" name="r1" value="LargeFaceDetected" />
+                    <i></i> Large Face
+                  </label>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <label class="rad">
+                    <input type="radio" name="r1" value="Neutral" />
+                    <i></i> Neutral
+                  </label>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <label class="rad">
+                    <input type="radio" name="r1" value="Sadness" />
+                    <i></i> Sadness
+                  </label>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <label class="rad">
+                    <input type="radio" name="r1" value="Surprise" />
+                    <i></i> Surprise
+                  </label>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <label class="rad">
+                    <input type="radio" name="r1" value="Happiness" />
+                    <i></i> Happiness
+                  </label>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <label class="rad">
+                    <input type="radio" name="r1" value="Angry" />
+                    <i></i> Anger
+                  </label>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <label class="rad">
+                    <input type="radio" name="r1" value="Fear" />
+                    <i></i> Fear
+                  </label>      
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <label class="rad">
+                    <input type="radio" name="r1" value="Disgust" />
+                    <i></i> Disgust
+                  </label>
+                </a>
+              </li>
+            </ul>
+            <ul class="sag-menu signout">
+              <img class="circular--square" src="" alt="">
+              <a class="">
+                <span class="profile-name"></span><i class="fa fa-sign-out" aria-hidden="true"></i>
+              </a>
+            </ul>
+            </div>
+          </nav>
+        </div>
 
   <div class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
   </div>
@@ -76,23 +166,11 @@
         </div>
 
 </div>
-
+</div>
 <script>
   window.CurrentUser = <%= @current_user.to_json.html_safe %>;
   window.AuthData = <%= @auth_data.to_json.html_safe %>;
   $(document).ready(function () {
     window.initializeHome();
-    // $('.menu-trigger').click(function() {
-    //   $('nav ul').slideToggle(500);
-    // });//end slide toggle
-    
-    // $(window).resize(function() {   
-    //   if (  $(window).width() > 500 ) {     
-    //     $('nav ul').removeAttr('style');
-    //    }
-    // });//end resize
   });
-
 </script>
-<!-- <script src="assets/google-image-layout.js"></script>
-<script src="assets/imagesloaded.pkgd.min.js"></script> -->
