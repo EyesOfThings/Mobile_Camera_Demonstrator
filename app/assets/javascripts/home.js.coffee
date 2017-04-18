@@ -50,6 +50,7 @@ getAuthWithFirebase = (auth, email) ->
   ), 5000
   db_auth.once 'value', (snapshot) ->
     if !snapshot.hasChild(obliged_email)
+      $(".no-image").css('display', 'block')
       console.log "hello"
     else
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
