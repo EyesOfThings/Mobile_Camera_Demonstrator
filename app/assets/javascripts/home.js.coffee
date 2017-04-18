@@ -25,7 +25,7 @@ onSignIn = ->
       console.log result.user.email
 
       console.log "calling geth auth"
-      getAuthWithFirebase(firebase, "visilabeot@gmail|com")
+      getAuthWithFirebase(firebase, "#{result.user.email}")
       return
     ).catch (error) ->
       # Handle Errors here.
@@ -39,17 +39,26 @@ onSignIn = ->
       return
 
 getAuthWithFirebase = (auth, email) ->
+  db_auth = auth.database().ref()
+  obliged_email = "#{email}".replace(/\./g,'|')
+  console.log obliged_email
   $("#image_processing").css('display', 'block')
   $(".after-auth").css('display', 'block')
   setTimeout (->
     $("#image_processing").css('display', 'none')
     return
   ), 5000
-  auth.database().ref().child("/#{email}").once 'value', (snapshot) ->
-    snapshot.forEach (childSnap) ->
-      if childSnap.val().Images != null
-        logImageDataOnly(childSnap.val().Images)
-        return
+  db_auth.once 'value', (snapshot) ->
+    if !snapshot.hasChild(obliged_email)
+      $(".no-image").css('display', 'block')
+      console.log "hello"
+    else
+      db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
+        snapshot.forEach (childSnap) ->
+          console.log childSnap
+          if childSnap.val().Images != null
+            logImageDataOnly(childSnap.val().Images)
+            return
 
 capitalizeFirstLetter = (string) ->
   string.charAt(0).toUpperCase() + string.slice(1)
