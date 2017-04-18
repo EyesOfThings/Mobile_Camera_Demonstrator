@@ -297,7 +297,7 @@ input.search {
     height: 46px;
     text-indent: -1000px;
     background-size: cover;
-    background-image: url('http://cantina-pm-dashboard-skills.herokuapp.com/images/vendor/google/btn_google_signin_light_normal_web@2x.png');
+    background-image: url('https://cantina-pm-dashboard-skills.herokuapp.com/images/vendor/google/btn_google_signin_light_normal_web@2x.png');
     background-color: transparent;
     cursor: pointer;
 }
