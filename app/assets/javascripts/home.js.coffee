@@ -1,6 +1,7 @@
 storage = undefined
 storageRef = undefined
 auth_app = undefined
+mac_address = undefined
 
 startAuth = ->
   config = 
@@ -15,7 +16,7 @@ onSignIn = ->
   $(".auth-provider").on "click", ".auth-with-google", ->
     storage = firebase.storage()
     storageRef = storage.ref()
-    console.log "clicke"
+    console.log "clicked"
     provider = new (firebase.auth.GoogleAuthProvider)
     firebase.auth().signInWithPopup(provider).then((result) ->
       $(".auth-provider").css('display', 'none')
@@ -54,6 +55,8 @@ getAuthWithFirebase = (auth, email) ->
       console.log "hello"
     else
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
+        console.log snapshot.val()
+        mac_address = Object.keys(snapshot.val())[0]
         snapshot.forEach (childSnap) ->
           console.log childSnap
           if childSnap.val().Images != null
@@ -65,8 +68,8 @@ capitalizeFirstLetter = (string) ->
 
 logImageDataOnly = (Images) ->
   tags = "image"
-  $.each Images, (i, Image) ->
-    tangRef = storageRef.child(capitalizeFirstLetter("#{Image.Path}"));
+  $.each Images, (timestamp, Image) ->
+    tangRef = storageRef.child("#{Image.Path}");
     tangRef.getDownloadURL().then((url) ->
       $.each Image.Tags, (i, value) ->
         if value == 1
@@ -74,9 +77,9 @@ logImageDataOnly = (Images) ->
       image_tag =
         "<figure data-tags='#{tags}' itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject' class='for-filter'>
           <a href='#{url}' itemprop='contentUrl' data-size='480x256'>
-            <img src='#{url}' itemprop='thumbnail' alt='Image descriptio' />
+            <img src='#{url}' itemprop='thumbnail' alt='Image description' />
           </a>
-          <figcaption itemprop='caption description'>#{tags.replace(/image/g,'')}</figcaption>
+          <figcaption itemprop='caption description'>Device ID: #{mac_address}, Tags: #{tags.replace(/image/g,'')}, Date & Time: #{moment.unix(timestamp).format("MM/DD/YYYY")}</figcaption>
         </figure>"
       $(".my-gallery").append(image_tag)
       tags = "image"
