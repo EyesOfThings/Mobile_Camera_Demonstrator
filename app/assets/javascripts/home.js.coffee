@@ -19,7 +19,7 @@ onSignIn = ->
     console.log "clicked"
     provider = new (firebase.auth.GoogleAuthProvider)
     firebase.auth().signInWithPopup(provider).then((result) ->
-      $(".auth-provider").css('display', 'none')
+      $("#page-splash").css('display', 'none')
       $(".circular--square").attr("src", result.user.photoURL)
       $(".profile-name").text(result.user.displayName)
       console.log result.user
@@ -106,7 +106,7 @@ onSignOut = ->
   $(".signout").on "click", ->
     firebase.auth().signOut().then(->
       # Sign-out successful.
-      $(".auth-provider").css('display', 'block')
+      $("#page-splash").css('display', 'flex')
       $(".after-auth").css('display', 'none')
       $(".my-gallery").text("")
       console.log "signed out"
