@@ -1,9 +1,9 @@
-storage = undefined
-storageRef = undefined
+window.storage = undefined
+window.storageRef = undefined
 auth_app = undefined
 mac_address = undefined
 
-startAuth = ->
+window.startAuth = ->
   config = 
     apiKey: AuthData.apiKey
     authDomain: AuthData.authDomain
@@ -11,6 +11,8 @@ startAuth = ->
     storageBucket: AuthData.storageBucket
 
   window.firebase.initializeApp config
+  window.storage = firebase.storage()
+  window.storageRef = storage.ref()
 
 onSignIn = ->
   $(".auth-provider").on "click", ".auth-with-google", ->
@@ -39,7 +41,7 @@ onSignIn = ->
       # ...
       return
 
-getAuthWithFirebase = (auth, email) ->
+window.getAuthWithFirebase = (auth, email) ->
   db_auth = auth.database().ref()
   obliged_email = "#{email}".replace(/\./g,'|')
   console.log obliged_email
@@ -276,6 +278,17 @@ window.initPhotoSwipeFromDOM = (gallerySelector) ->
     openPhotoSwipe hashData.pid, galleryElements[hashData.gid - 1], true, true
   return
 
+window.getParameterByName = (name, url) ->
+  if !url
+    url = window.location.href
+  name = name.replace(/[\[\]]/g, '\\$&')
+  regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
+  results = regex.exec(url)
+  if !results
+    return null
+  if !results[2]
+    return ''
+  decodeURIComponent results[2].replace(/\+/g, ' ')
 
 window.initializeHome = ->
   startAuth()
