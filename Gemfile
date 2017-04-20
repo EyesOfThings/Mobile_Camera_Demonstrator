@@ -57,3 +57,4 @@ gem "omniauth-google-oauth2", "~> 0.2.1"
 gem 'dotenv-rails'
 gem 'photoswipe-rails'
 gem "font-awesome-rails"
+gem 'momentjs-rails'

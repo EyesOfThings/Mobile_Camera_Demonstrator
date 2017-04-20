@@ -12,6 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-
+//= require moment
 //= require photoswipe
 //= require home.js
