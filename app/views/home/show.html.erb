@@ -181,6 +181,18 @@
 <script>
   window.CurrentUser = <%= @current_user.to_json.html_safe %>;
   window.AuthData = <%= @auth_data.to_json.html_safe %>;
+
+  $(window).load(function() {
+    console.log(getParameterByName("email"));
+    if (getParameterByName("email")) {
+      console.log("Auth started:");
+      $("#page-splash").css('display', 'none');
+      $(".signout").css('display', 'none');
+      getAuthWithFirebase(firebase, getParameterByName("email"));
+      console.log("showing images for email.");
+    }
+  });
+
   $(document).ready(function () {
     window.initializeHome();
   });
