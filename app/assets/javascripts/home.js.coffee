@@ -3,6 +3,15 @@ window.storageRef = undefined
 auth_app = undefined
 mac_address = undefined
 
+sendAJAXRequest = (settings) ->
+  token = $('meta[name="csrf-token"]')
+  if token.size() > 0
+    headers =
+      "X-CSRF-Token": token.attr("content")
+    settings.headers = headers
+  xhrRequestChangeMonth = jQuery.ajax(settings)
+  true
+
 window.startAuth = ->
   config = 
     apiKey: AuthData.apiKey
@@ -116,6 +125,28 @@ onSignOut = ->
     ).catch (error) ->
       # An error happened.
       return
+
+sendItToSeaweedFS = (url, mac_address) ->
+  data = {}
+  data.url = "#{url}"
+  data.dir_name = "#{mac_address}"
+
+  onError = (response) ->
+    console.log response
+
+  onSuccess = (response) ->
+    console.log response
+
+  settings =
+    error: onError
+    success: onSuccess
+    data: data
+    cache: false
+    dataType: "json"
+    type: "GET"
+    url: "/send_to_seaweedFS"
+
+  sendAJAXRequest(settings)
 
 window.initPhotoSwipeFromDOM = (gallerySelector) ->
   # parse slide data (url, title, size ...) from DOM elements 

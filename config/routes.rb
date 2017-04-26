@@ -7,5 +7,7 @@ Rails.application.routes.draw do
   resource :home, only: [:show]
 
   root to: "home#show"
+
+  get "/send_to_seaweedFS", to: "home#send_to_seaweedfs"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
