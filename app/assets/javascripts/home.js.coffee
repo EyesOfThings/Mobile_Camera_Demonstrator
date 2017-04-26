@@ -110,6 +110,7 @@ onSignOut = ->
       # Sign-out successful.
       $("#page-splash").css('display', 'flex')
       $(".after-auth").css('display', 'none')
+      $(".no-image").css('display', 'none')
       $(".my-gallery").text("")
       console.log "signed out"
       return
