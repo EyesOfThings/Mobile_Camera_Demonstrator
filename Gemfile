@@ -58,3 +58,4 @@ gem 'dotenv-rails'
 gem 'photoswipe-rails'
 gem "font-awesome-rails"
 gem 'momentjs-rails'
+gem 'rest-client'
