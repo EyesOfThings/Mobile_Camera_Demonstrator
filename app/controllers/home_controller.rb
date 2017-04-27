@@ -23,7 +23,7 @@ class HomeController < ApplicationController
 
       RestClient.post("#{ENV['seaweedFiler']}/#{params[:dir_name]}/snapshots/recordings/",
         :name_of_file_param => File.new("#{params[:timestamp]}.jpg"))
-      File.delete("#{params[:timestamp]}.jpg") if File.exist?("#{params[:timestamp]}.jpg")
+      File.delete("#{params[:timestamp]}.jpg")
       render json: "1"
     rescue Exception => e
       render json: e.to_json
