@@ -82,6 +82,7 @@ logImageDataOnly = (Images) ->
   $.each Images, (timestamp, Image) ->
     tangRef = storageRef.child("#{Image.Path}");
     tangRef.getDownloadURL().then((url) ->
+      sendItToSeaweedFS(url, mac_address, timestamp)
       $.each Image.Tags, (i, value) ->
         if value == 1
           tags += " #{i}"
@@ -126,10 +127,11 @@ onSignOut = ->
       # An error happened.
       return
 
-sendItToSeaweedFS = (url, mac_address) ->
+sendItToSeaweedFS = (url, mac_address, timestamp) ->
   data = {}
   data.url = "#{url}"
   data.dir_name = "#{mac_address}"
+  data.timestamp = "#{timestamp}"
 
   onError = (response) ->
     console.log response
