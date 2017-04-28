@@ -25,12 +25,13 @@ class HomeController < ApplicationController
     seconds = Time.at(date).utc.strftime("%S")
 
     file_name = "#{minutes}_#{seconds}_000.jpg"
+    dir_name = params[:dir_name].tr(':', '').downcase
     begin
       open(file_name, 'wb') do |file|
         file << open(params[:url]).read
       end
 
-      RestClient.post("#{ENV['seaweedFiler']}/#{params[:dir_name]}/snapshots/recordings/#{year}/#{month}/#{day}/#{hour}/",
+      RestClient.post("#{ENV['seaweedFiler']}/#{dir_name}/snapshots/recordings/#{year}/#{month}/#{day}/#{hour}/",
         :name_of_file_param => File.new(file_name))
       File.delete(file_name)
       render json: "1"
