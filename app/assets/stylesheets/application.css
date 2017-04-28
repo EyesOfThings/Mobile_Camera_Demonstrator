@@ -244,6 +244,11 @@ i {
   padding: 0;
   margin: 0;
 }
+
+.sol-menu {
+  margin-left: 7px;
+}
+
 .sol-menu li {
   float: left;
   display: block;
@@ -253,6 +258,7 @@ i {
   display: block;
   text-decoration: none;
   padding: 12px 12px;
+  padding-left: 0px;
   color: #2F2F2F;
   font-family: 'Open Sans', sans-serif;
 }
@@ -372,15 +378,45 @@ h2, h3 {
 }
 
 #page-splash .fp-caption {
-    margin: 20px 0 40px 0;
-    font-family: 'Amaranth', sans-serif;
-    font-size: 18px;
-    opacity: 0.8;
+  margin: 20px 0 40px 0;
+  font-family: 'Amaranth', sans-serif;
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+.with-label {
+  font-size: 13px;
+}
+
+/*** custom checkboxes ***/
+input[type=checkbox] {
+  position: relative;
+  color: #2F2F2F;
+  font-size: 16px;
+}
+/* to hide the checkbox itself */
+label>input[type=checkbox]:before {
+  position: absolute;
+  background-color: #FFFFFF;
+  height: 100%;
+  width: 100%;
+  font-family: FontAwesome;
+  display: inline-block;
+  content:"\f096";
+  letter-spacing: 10px;
+}
+/* space between checkbox and label */
+ label>input[type=checkbox]:checked:before {
+     font-family: FontAwesome;
+    display: inline-block;
+    content:"\f046";
+    letter-spacing: 5px;
 }
 
 @media (max-width: 700px ){
   .ac  {
     display: none;
+    margin-left: 7px;
   }
   .nav ul li {
     float: none;
@@ -392,6 +428,7 @@ h2, h3 {
 @media (min-width: 700px ){
   .ac {
     display: block!important;
+    margin-left: 7px;
   }
 }
 
