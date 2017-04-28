@@ -2,6 +2,7 @@ window.storage = undefined
 window.storageRef = undefined
 auth_app = undefined
 mac_address = undefined
+allVals = []
 
 sendAJAXRequest = (settings) ->
   token = $('meta[name="csrf-token"]')
@@ -78,7 +79,7 @@ capitalizeFirstLetter = (string) ->
   string.charAt(0).toUpperCase() + string.slice(1)
 
 logImageDataOnly = (Images) ->
-  tags = "image"
+  tags = "all"
   $.each Images, (timestamp, Image) ->
     tangRef = storageRef.child("#{Image.Path}");
     tangRef.getDownloadURL().then((url) ->
@@ -86,33 +87,34 @@ logImageDataOnly = (Images) ->
       $.each Image.Tags, (i, value) ->
         if value == 1
           tags += " #{i}"
+      if tags == "all"
+        tags = "all normal"
+      console.log tags
       image_tag =
-        "<figure data-tags='#{tags}' itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject' class='for-filter'>
+        "<figure data-tags='#{tags}' itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject' class='#{tags}'>
           <a href='#{url}' itemprop='contentUrl' data-size='480x256'>
             <img src='#{url}' itemprop='thumbnail' alt='Image description' />
           </a>
-          <figcaption itemprop='caption description'>Device ID: #{mac_address}, Tags: #{tags.replace(/image/g,'')}, Date & Time: #{moment.unix(timestamp).format("MM/DD/YYYY")}</figcaption>
+          <figcaption itemprop='caption description'>Device ID: #{mac_address}, Tags: #{tags.replace(/all/g,'')}, Date & Time: #{moment.unix(timestamp).format("MM/DD/YYYY")}</figcaption>
         </figure>"
       $(".my-gallery").append(image_tag)
-      tags = "image"
+      tags = "all"
       initPhotoSwipeFromDOM(".my-gallery")
     ).catch (error) ->
       console.log error
       return
 
-filterImages = (e) ->
-  regex = new RegExp('\\b\\w*' + e + '\\w*\\b')
-  $('.for-filter').hide().filter(->
-    regex.test $(this).data('tags')
-  ).show()
-  return
-
 onImageSearch = ->
-  $('.rad').on "click", ->
-    console.log $('input[name=r1]:checked').val()
-    selectTag = $('input[name=r1]:checked').val()
-    filterImages(selectTag)
-    return
+  $('.with-label').on "click", ->
+    $('.with-label :checked').each ->
+      allVals.push("." + $(this).val())
+    if allVals.length < 1
+      allVals.push(".all")
+
+    console.log allVals
+    $('.my-gallery > figure').hide()
+    $(allVals.join(',')).show()
+    allVals = []
 
 onSignOut = ->
   $(".signout").on "click", ->
