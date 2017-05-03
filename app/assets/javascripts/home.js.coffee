@@ -106,11 +106,25 @@ logImageDataOnly = (Images) ->
 
 onImageSearch = ->
   $('.with-label').on "click", ->
+    $('.default-is').not(this).prop 'checked', false
     $('.with-label :checked').each ->
       allVals.push("." + $(this).val())
     if allVals.length < 1
+      $('.default-is').not(this).prop 'checked', true
       allVals.push(".all")
 
+    console.log allVals
+    $('.my-gallery > figure').hide()
+    $(allVals.join(',')).show()
+    allVals = []
+
+onAllClicked = ->
+  $('.with-master').on "click", ->
+    $('.with-label :checkbox').removeAttr('checked')
+
+    $('.default-is').not(this).prop 'checked', true
+    allVals = []
+    allVals.push(".all")
     console.log allVals
     $('.my-gallery > figure').hide()
     $(allVals.join(',')).show()
@@ -330,4 +344,5 @@ window.initializeHome = ->
   startAuth()
   onSignIn()
   onImageSearch()
+  onAllClicked()
   onSignOut()
