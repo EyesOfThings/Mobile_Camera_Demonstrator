@@ -388,6 +388,10 @@ h2, h3 {
   font-size: 13px;
 }
 
+.with-master {
+  font-size: 13px;
+}
+
 /*** custom checkboxes ***/
 input[type=checkbox] {
   position: relative;
