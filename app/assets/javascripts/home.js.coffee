@@ -5,6 +5,9 @@ mac_address = undefined
 iam_authenticated = undefined
 globalModal = undefined
 user_email = undefined
+api_key = undefined
+api_id = undefined
+lastSyncDateIs = undefined
 allVals = []
 
 sendAJAXRequest = (settings) ->
@@ -71,14 +74,25 @@ window.getAuthWithFirebase = (auth, email) ->
       console.log "hello"
     else
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
-        console.log snapshot.val()
-        console.log Object.values(snapshot.val())[1].lastSyncDate
+        console.log Object.values(snapshot.val())[1]
+        if typeof Object.values(snapshot.val())[1] != 'undefined'
+          $(".not-on").css('display', 'none')
+          $(".already-on").css("display", "block")
+          lastSyncDateIs = Object.values(snapshot.val())[1].lastSyncDate
+          console.log Object.values(snapshot.val())[1].lastSyncDate
+        else
+          $(".not-on").css('display', 'block')
+          $(".already-on").css("display", "none")
+          lastSyncDateIs = moment().unix()
         mac_address = Object.keys(snapshot.val())[0]
         snapshot.forEach (childSnap) ->
           console.log childSnap
           if childSnap.val().Images != null
             logImageDataOnly(childSnap.val().Images)
             return
+
+isset = (variable) ->
+  if typeof variable != typeof undefined then true else false
 
 capitalizeFirstLetter = (string) ->
   string.charAt(0).toUpperCase() + string.slice(1)
@@ -88,7 +102,9 @@ logImageDataOnly = (Images) ->
   $.each Images, (timestamp, Image) ->
     tangRef = storageRef.child("#{Image.Path}");
     tangRef.getDownloadURL().then((url) ->
-      sendItToSeaweedFS(url, mac_address, timestamp)
+      if timestamp > lastSyncDateIs
+        updateSyncDate(iam_authenticated, user_email, timestamp, api_key, api_id)
+        sendItToSeaweedFS(url, mac_address, timestamp)
       $.each Image.Tags, (i, value) ->
         if value == 1
           tags += " #{i}"
@@ -143,6 +159,8 @@ onSignOut = ->
       $(".after-auth").css('display', 'none')
       $(".no-image").css('display', 'none')
       $(".my-gallery").text("")
+      $(".not-on").css('display', 'block')
+      $(".already-on").css("display", "none")
       console.log "signed out"
       return
     ).catch (error) ->
@@ -353,14 +371,14 @@ onSettingTab = ->
       globalModal = this
       # this part overrides "close" method in MagnificPopup object
 
-      $.magnificPopup.instance.close = ->
-        if !confirm('Are you sure?')
-          return
-        # "proto" variable holds MagnificPopup class prototype
-        # The above change that we did to instance is not applied to the prototype, 
-        # which allows us to call parent method:
-        $.magnificPopup.proto.close.call this
-        return
+      # $.magnificPopup.instance.close = ->
+      #   if !confirm('Are you sure?')
+      #     return
+      #   # "proto" variable holds MagnificPopup class prototype
+      #   # The above change that we did to instance is not applied to the prototype, 
+      #   # which allows us to call parent method:
+      #   $.magnificPopup.proto.close.call this
+      #   return
 
       # you may override any method like so, just note that it's applied globally
       return
@@ -372,6 +390,8 @@ onSaveValues = ->
     addTable(iam_authenticated, user_email, api_key, api_id)
     $(".api_key").val("")
     $(".api_id").val("")
+    $(".not-on").css('display', 'none')
+    $(".already-on").css("display", "block")
     $.magnificPopup.proto.close.call globalModal
 
 addTable = (auth, email, api_key, api_id) ->
@@ -382,8 +402,20 @@ addTable = (auth, email, api_key, api_id) ->
     evercam:
       apiKey: "#{api_key}"
       apiId: "#{api_id}"
-      lastSyncDate: ''
+      lastSyncDate: '1293916756'
+
   console.log "done"
+
+updateSyncDate = (auth, email, timestamp, api_key, api_id) ->
+  db_auth = auth.database().ref()
+  obliged_email = "#{email}".replace(/\./g,'|')
+  evercamRef = db_auth.child("#{obliged_email}")
+  evercamRef.update
+    evercam:
+      apiKey: "#{api_key}"
+      apiId: "#{api_id}"
+      lastSyncDate: "#{timestamp}"
+  console.log "done"  
 
 window.initializeHome = ->
   startAuth()
