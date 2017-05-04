@@ -12,6 +12,7 @@
  *
  *= require photoswipe
  *= require font-awesome
+ *= require magnific-popup
  *= require_self
  */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
@@ -436,3 +437,12 @@ label>input[type=checkbox]:before {
   }
 }
 
+.white-popup {
+  position: relative;
+  background: #FFF;
+  padding: 40px;
+  width: auto;
+  max-width: 300px;
+  margin: 20px auto;
+  text-align: center;
+}

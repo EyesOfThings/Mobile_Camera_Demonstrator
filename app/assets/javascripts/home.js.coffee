@@ -2,6 +2,9 @@ window.storage = undefined
 window.storageRef = undefined
 auth_app = undefined
 mac_address = undefined
+iam_authenticated = undefined
+globalModal = undefined
+user_email = undefined
 allVals = []
 
 sendAJAXRequest = (settings) ->
@@ -36,7 +39,8 @@ onSignIn = ->
       $(".profile-name").text(result.user.displayName)
       console.log result.user
       console.log result.user.email
-
+      user_email = result.user.email
+      iam_authenticated = firebase
       console.log "calling geth auth"
       getAuthWithFirebase(firebase, "#{result.user.email}")
       return
@@ -68,6 +72,7 @@ window.getAuthWithFirebase = (auth, email) ->
     else
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
         console.log snapshot.val()
+        console.log Object.values(snapshot.val())[1].lastSyncDate
         mac_address = Object.keys(snapshot.val())[0]
         snapshot.forEach (childSnap) ->
           console.log childSnap
@@ -340,9 +345,51 @@ window.getParameterByName = (name, url) ->
     return ''
   decodeURIComponent results[2].replace(/\+/g, ' ')
 
+onSettingTab = ->
+  # $(".integrate-evercam").on "click", ->
+  $('.integrate-evercam').magnificPopup
+    type: 'inline'
+    callbacks: open: ->
+      globalModal = this
+      # this part overrides "close" method in MagnificPopup object
+
+      $.magnificPopup.instance.close = ->
+        if !confirm('Are you sure?')
+          return
+        # "proto" variable holds MagnificPopup class prototype
+        # The above change that we did to instance is not applied to the prototype, 
+        # which allows us to call parent method:
+        $.magnificPopup.proto.close.call this
+        return
+
+      # you may override any method like so, just note that it's applied globally
+      return
+
+onSaveValues = ->
+  $(".save-values").on "click", ->
+    api_key = $(".api_key").val()
+    api_id = $(".api_id").val()
+    addTable(iam_authenticated, user_email, api_key, api_id)
+    $(".api_key").val("")
+    $(".api_id").val("")
+    $.magnificPopup.proto.close.call globalModal
+
+addTable = (auth, email, api_key, api_id) ->
+  db_auth = auth.database().ref()
+  obliged_email = "#{email}".replace(/\./g,'|')
+  evercamRef = db_auth.child("#{obliged_email}")
+  evercamRef.update
+    evercam:
+      apiKey: "#{api_key}"
+      apiId: "#{api_id}"
+      lastSyncDate: ''
+  console.log "done"
+
 window.initializeHome = ->
   startAuth()
   onSignIn()
   onImageSearch()
   onAllClicked()
+  onSettingTab()
+  onSaveValues()
   onSignOut()
