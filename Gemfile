@@ -59,3 +59,4 @@ gem 'photoswipe-rails'
 gem "font-awesome-rails"
 gem 'momentjs-rails'
 gem 'rest-client'
+gem 'magnific-popup-rails', '~> 1.1.0'

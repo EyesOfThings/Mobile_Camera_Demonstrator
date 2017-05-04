@@ -11,7 +11,7 @@
     <button class="auth-with-google"></button>
   </div>
 </div>
-
+<%= render :partial => 'shared/integrate' %>
 <!-- <i class="em em-angry"></i> -->
 <div class="after-auth hide">
         <div class="top-header">
@@ -90,10 +90,15 @@
                 </a>
               </li>
             </ul>
-            <ul class="sag-menu signout">
-              <img class="circular--square" src="" alt="">
-              <a class="">
-                <span class="profile-name"></span><i class="fa fa-sign-out" aria-hidden="true"></i>
+            <ul class="sag-menu">
+              <font class="signout">
+                <img class="circular--square" src="" alt="">
+                <a class="">
+                  <span class="profile-name"></span><i class="fa fa-sign-out" aria-hidden="true"></i>
+                </a>
+              </font>
+              <a class="integrate-evercam" href="#my-popup">
+                Settings
               </a>
             </ul>
             </div>

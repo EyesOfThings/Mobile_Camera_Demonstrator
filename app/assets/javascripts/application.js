@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require magnific-popup
 //= require moment
 //= require photoswipe
 //= require home.js
