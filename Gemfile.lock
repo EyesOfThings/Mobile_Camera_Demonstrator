@@ -84,6 +84,7 @@ GEM
       rb-inotify (~> 0.9, >= 0.9.7)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
+    magnific-popup-rails (1.1.0)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
     method_source (0.8.2)
@@ -209,6 +210,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   listen (~> 3.0.5)
+  magnific-popup-rails (~> 1.1.0)
   momentjs-rails
   omniauth-google-oauth2 (~> 0.2.1)
   pg
@@ -225,4 +227,4 @@ DEPENDENCIES
   web-console (>= 3.3.0)
 
 BUNDLED WITH
-   1.13.6
+   1.14.6

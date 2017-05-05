@@ -2,6 +2,12 @@ window.storage = undefined
 window.storageRef = undefined
 auth_app = undefined
 mac_address = undefined
+iam_authenticated = undefined
+globalModal = undefined
+user_email = undefined
+api_key = undefined
+api_id = undefined
+lastSyncDateIs = undefined
 allVals = []
 
 sendAJAXRequest = (settings) ->
@@ -36,7 +42,8 @@ onSignIn = ->
       $(".profile-name").text(result.user.displayName)
       console.log result.user
       console.log result.user.email
-
+      user_email = result.user.email
+      iam_authenticated = firebase
       console.log "calling geth auth"
       getAuthWithFirebase(firebase, "#{result.user.email}")
       return
@@ -67,13 +74,25 @@ window.getAuthWithFirebase = (auth, email) ->
       console.log "hello"
     else
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
-        console.log snapshot.val()
+        console.log Object.values(snapshot.val())[1]
+        if typeof Object.values(snapshot.val())[1] != 'undefined'
+          $(".not-on").css('display', 'none')
+          $(".already-on").css("display", "block")
+          lastSyncDateIs = Object.values(snapshot.val())[1].lastSyncDate
+          console.log Object.values(snapshot.val())[1].lastSyncDate
+        else
+          $(".not-on").css('display', 'block')
+          $(".already-on").css("display", "none")
+          lastSyncDateIs = moment().unix()
         mac_address = Object.keys(snapshot.val())[0]
         snapshot.forEach (childSnap) ->
           console.log childSnap
           if childSnap.val().Images != null
             logImageDataOnly(childSnap.val().Images)
             return
+
+isset = (variable) ->
+  if typeof variable != typeof undefined then true else false
 
 capitalizeFirstLetter = (string) ->
   string.charAt(0).toUpperCase() + string.slice(1)
@@ -83,7 +102,9 @@ logImageDataOnly = (Images) ->
   $.each Images, (timestamp, Image) ->
     tangRef = storageRef.child("#{Image.Path}");
     tangRef.getDownloadURL().then((url) ->
-      sendItToSeaweedFS(url, mac_address, timestamp)
+      if timestamp > lastSyncDateIs
+        updateSyncDate(iam_authenticated, user_email, timestamp, api_key, api_id)
+        sendItToSeaweedFS(url, mac_address, timestamp)
       $.each Image.Tags, (i, value) ->
         if value == 1
           tags += " #{i}"
@@ -106,11 +127,25 @@ logImageDataOnly = (Images) ->
 
 onImageSearch = ->
   $('.with-label').on "click", ->
+    $('.default-is').not(this).prop 'checked', false
     $('.with-label :checked').each ->
       allVals.push("." + $(this).val())
     if allVals.length < 1
+      $('.default-is').not(this).prop 'checked', true
       allVals.push(".all")
 
+    console.log allVals
+    $('.my-gallery > figure').hide()
+    $(allVals.join(',')).show()
+    allVals = []
+
+onAllClicked = ->
+  $('.with-master').on "click", ->
+    $('.with-label :checkbox').removeAttr('checked')
+
+    $('.default-is').not(this).prop 'checked', true
+    allVals = []
+    allVals.push(".all")
     console.log allVals
     $('.my-gallery > figure').hide()
     $(allVals.join(',')).show()
@@ -124,6 +159,8 @@ onSignOut = ->
       $(".after-auth").css('display', 'none')
       $(".no-image").css('display', 'none')
       $(".my-gallery").text("")
+      $(".not-on").css('display', 'block')
+      $(".already-on").css("display", "none")
       console.log "signed out"
       return
     ).catch (error) ->
@@ -326,8 +363,65 @@ window.getParameterByName = (name, url) ->
     return ''
   decodeURIComponent results[2].replace(/\+/g, ' ')
 
+onSettingTab = ->
+  # $(".integrate-evercam").on "click", ->
+  $('.integrate-evercam').magnificPopup
+    type: 'inline'
+    callbacks: open: ->
+      globalModal = this
+      # this part overrides "close" method in MagnificPopup object
+
+      # $.magnificPopup.instance.close = ->
+      #   if !confirm('Are you sure?')
+      #     return
+      #   # "proto" variable holds MagnificPopup class prototype
+      #   # The above change that we did to instance is not applied to the prototype, 
+      #   # which allows us to call parent method:
+      #   $.magnificPopup.proto.close.call this
+      #   return
+
+      # you may override any method like so, just note that it's applied globally
+      return
+
+onSaveValues = ->
+  $(".save-values").on "click", ->
+    api_key = $(".api_key").val()
+    api_id = $(".api_id").val()
+    addTable(iam_authenticated, user_email, api_key, api_id)
+    $(".api_key").val("")
+    $(".api_id").val("")
+    $(".not-on").css('display', 'none')
+    $(".already-on").css("display", "block")
+    $.magnificPopup.proto.close.call globalModal
+
+addTable = (auth, email, api_key, api_id) ->
+  db_auth = auth.database().ref()
+  obliged_email = "#{email}".replace(/\./g,'|')
+  evercamRef = db_auth.child("#{obliged_email}")
+  evercamRef.update
+    evercam:
+      apiKey: "#{api_key}"
+      apiId: "#{api_id}"
+      lastSyncDate: '1293916756'
+
+  console.log "done"
+
+updateSyncDate = (auth, email, timestamp, api_key, api_id) ->
+  db_auth = auth.database().ref()
+  obliged_email = "#{email}".replace(/\./g,'|')
+  evercamRef = db_auth.child("#{obliged_email}")
+  evercamRef.update
+    evercam:
+      apiKey: "#{api_key}"
+      apiId: "#{api_id}"
+      lastSyncDate: "#{timestamp}"
+  console.log "done"  
+
 window.initializeHome = ->
   startAuth()
   onSignIn()
   onImageSearch()
+  onAllClicked()
+  onSettingTab()
+  onSaveValues()
   onSignOut()
