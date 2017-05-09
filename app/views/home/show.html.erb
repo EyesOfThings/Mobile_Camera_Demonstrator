@@ -15,7 +15,116 @@
 <!-- <i class="em em-angry"></i> -->
 <div class="after-auth hide">
         <div class="top-header">
-          <nav class="nav">
+          <div class="ui top attached menu">
+            <div class="ui dropdown icon item">
+              <i class="wrench icon"></i>
+              <div class="menu">
+                <div class="item">
+                  <i class="dropdown icon"></i>
+                  <span class="text">Filters</span>
+                  <div class="menu">
+                    <div class="item">Document</div>
+                    <div class="item">Image</div>
+                  </div>
+                </div>
+                <div class="item">
+                  Open...
+                </div>
+                <div class="item">
+                  Save...
+                </div>
+                <div class="item">Edit Permissions</div>
+                <div class="divider"></div>
+                <div class="header">
+                  Info
+                </div>
+                <div class="item">
+                  <font class="signout">
+                      <img class="circular--square" src="" alt="">
+                      <a class="">
+                        <span class="profile-name"></span><i class="fa fa-sign-out" aria-hidden="true"></i>
+                      </a>
+                    </font>
+                </div>
+              </div>
+            </div>
+            <div class="right menu">
+              <div class="ui right aligned category search item">
+                <div class="ui transparent icon input">
+                  <input class="prompt" type="text" placeholder="Search animals...">
+                  <i class="search link icon"></i>
+                </div>
+                <div class="results"></div>
+              </div>
+            </div>
+          </div>
+          <div class="ui bottom attached segment do-min">
+            <div id="album" style="display: none;">
+                <div class="ui piled compact segment">
+                  <!-- <div class="floating ui red label image_total">9</div> -->
+                  <div class="ui card">
+                    <div class="blurring dimmable image">
+                      <div class="ui inverted dimmer">
+                       <div class="content">
+                         <div class="center">
+                           <div class="ui red button view">VIEW</div>
+                         </div>
+                       </div>
+                       </div>
+                      <img src="http://cumbrianrun.co.uk/wp-content/uploads/2014/02/default-placeholder.png">
+                    </div>
+                      <div class="content">
+                        <div id="rate" class="ui star rating right floated" data-rating="3"></div>
+                        <div class="header device_id">Animals</div>
+                        <div class="meta">
+                          <!-- <span class="date"><i class="calendar icon"></i>Created 7/27/2014</span> -->
+                          <span class="right floated date"><i class="history icon"></i><font class="lastSync"></font></span>
+                        </div>
+                        <div class="description">
+                        EoT Device Images
+                        </div>
+                      </div>
+                    <div  class="extra content" >
+                      <div class="ui right labeled button" data-content="Like it!" data-variation="tiny" tabindex="0">
+                        <div class="ui red icon tiny button">
+                          <i class="thumbs outline up large icon"></i>
+                        </div>
+                        <a class="ui basic red left pointing label">
+                          365
+                        </a>
+                      </div>
+                      <div class="ui left labeled right floated button" data-content="Share it!" data-variation="tiny" tabindex="0">
+                        <a class="ui basic red right pointing label">
+                          183
+                        </a>
+                        <div class="ui red icon tiny button">
+                          <i class="external share large icon"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ALBUM ITEMS -->
+
+              <div id="album_items">
+                <button class="ui labeled icon button back">
+                 <i class="arrow lircle left icon"></i>
+                 Back
+                </button>
+                <div class="ui cards my-gallery">
+
+                </div>
+              </div>
+<!--             <div class="no-image" style="display:none;">
+              <div class="warning-msg">
+                <i class="fa fa-warning"></i>
+                No images found.
+              </div>
+            </div> -->
+          </div>
+  <!--         <nav class="nav">
           <div class="menu-ac"><i class="fa fa-bars fa-lg"></i></div>
           <div class="ac">
             <ul class="sol-menu">
@@ -91,95 +200,23 @@
               </li>
             </ul>
             <ul class="sag-menu">
-              <font class="signout">
-                <img class="circular--square" src="" alt="">
-                <a class="">
-                  <span class="profile-name"></span><i class="fa fa-sign-out" aria-hidden="true"></i>
-                </a>
-              </font>
-              <a class="integrate-evercam" href="#my-popup">
-                Settings
-              </a>
+              <div class="ui selection dropdown">
+                <input type="hidden" name="gender">
+                <i class="dropdown icon"></i>
+                <div class="default text">Gender</div>
+                <div class="menu">
+                  <div class="item" data-value="1">Male</div>
+                  <div class="item" data-value="0">Female</div>
+                </div>
+              </div>
             </ul>
             </div>
-          </nav>
+          </nav> -->
         </div>
-  <div class="no-image" style="display:none;">
-    <div class="warning-msg">
-      <i class="fa fa-warning"></i>
-      No images found.
-    </div>
-  </div>
-  <div class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
-  </div>
+<!--   <div class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+  </div> -->
 
 
-
-<!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    <!-- Background of PhotoSwipe. 
-         It's a separate element, as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
-
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
-
-        <!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
-        <!-- don't modify these 3 pswp__item elements, data is added later on. -->
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
-
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
-
-            <div class="pswp__top-bar">
-
-                <!--  Controls are self-explanatory. Order can be changed. -->
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                      <div class="pswp__preloader__cut">
-                        <div class="pswp__preloader__donut"></div>
-                      </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div> 
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-          </div>
-
-        </div>
-
-</div>
 </div>
 <script>
   window.CurrentUser = <%= @current_user.to_json.html_safe %>;
@@ -197,6 +234,24 @@
   });
 
   $(document).ready(function () {
+    $('.ui.dropdown').dropdown();
+   $('.ui.card .image').dimmer({on: 'hover'});
+    $('.ui.rating').rating({maxRating: 5});
+    $('.ui.button').popup();
+
+
+
+    $('.button.view').on('click', (function() {
+      $('#album').fadeOut("slow", function () {
+        $('#album_items').fadeIn("slow");
+      });
+    }));
+
+    $('.button.back').on('click', (function() {
+      $('#album_items').fadeOut("slow", function () {
+        $('#album').fadeIn("slow");
+      });
+    }));
     window.initializeHome();
   });
 </script>
