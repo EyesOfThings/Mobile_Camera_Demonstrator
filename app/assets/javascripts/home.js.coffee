@@ -2,12 +2,13 @@ window.storage = undefined
 window.storageRef = undefined
 auth_app = undefined
 mac_address = undefined
-iam_authenticated = undefined
+window.iam_authenticated = undefined
 globalModal = undefined
 user_email = undefined
 api_key = undefined
 api_id = undefined
 lastSyncDateIs = undefined
+window.haveLoggedIn = undefined
 allVals = []
 
 sendAJAXRequest = (settings) ->
@@ -44,6 +45,8 @@ onSignIn = ->
       console.log result.user.email
       user_email = result.user.email
       iam_authenticated = firebase
+      window.haveLoggedIn = true
+      console.log haveLoggedIn
       console.log "calling geth auth"
       getAuthWithFirebase(firebase, "#{result.user.email}")
       return
@@ -62,7 +65,10 @@ window.getAuthWithFirebase = (auth, email) ->
   db_auth = auth.database().ref()
   obliged_email = "#{email}".replace(/\./g,'|')
   console.log obliged_email
-  $("#image_processing").css('display', 'block')
+  $("#image_processing")
+    .css('display', 'block')
+    .css('z-index', "99999")
+
   $(".after-auth").css('display', 'block')
   setTimeout (->
     $("#image_processing").css('display', 'none')
@@ -75,16 +81,20 @@ window.getAuthWithFirebase = (auth, email) ->
     else
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
         console.log Object.values(snapshot.val())[1]
+        mac_address = Object.keys(snapshot.val())[0]
         if typeof Object.values(snapshot.val())[1] != 'undefined'
           $(".not-on").css('display', 'none')
           $(".already-on").css("display", "block")
+          $(".device_id").text("#{mac_address}")
+          $("#album").css("display", "block")
           lastSyncDateIs = Object.values(snapshot.val())[1].lastSyncDate
+          $(".lastSync").text("Last Sync #{moment.unix(lastSyncDateIs).format("MM/DD/YYYY")}")
           console.log Object.values(snapshot.val())[1].lastSyncDate
         else
           $(".not-on").css('display', 'block')
           $(".already-on").css("display", "none")
           lastSyncDateIs = moment().unix()
-        mac_address = Object.keys(snapshot.val())[0]
+        # mac_address = Object.keys(snapshot.val())[0]
         snapshot.forEach (childSnap) ->
           console.log childSnap
           if childSnap.val().Images != null
@@ -112,15 +122,41 @@ logImageDataOnly = (Images) ->
         tags = "all normal"
       console.log tags
       image_tag =
-        "<figure data-tags='#{tags}' itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject' class='#{tags}'>
-          <a href='#{url}' itemprop='contentUrl' data-size='480x256'>
-            <img src='#{url}' itemprop='thumbnail' alt='Image description' />
-          </a>
-          <figcaption itemprop='caption description'>Device ID: #{mac_address}, Tags: #{tags.replace(/all/g,'')}, Date & Time: #{moment.unix(timestamp).format("MM/DD/YYYY")}</figcaption>
-        </figure>"
+        "<div class='ui card #{tags}'>
+          <div class='image'>
+            <img src='#{url}'>
+          </div>
+          <div class='content'>
+            <a class='header'>Date: #{moment.unix(timestamp).format("MM/DD/YYYY")}</a>
+            <div class='meta'>
+              <span class='date'>Device ID: #{mac_address}</span>
+            </div>
+            <div class='description'>
+              Tags: #{tags.replace(/all/g,'')}
+            </div>
+          </div>
+          <div class='extra content'>
+            <a>
+              <i class='feed icon'></i>
+              #{timestamp}
+            </a>
+          </div>
+        </div>"
+        # "<div class='card'>
+        #   <div class='image'>
+        #       <img src='#{url}'>
+        #   </div>
+        #   <div class='content'>
+        #     <div class='header'>giraffes.jpg</div>
+        #     <div class='meta'>263 KB</div>
+        #   </div>
+        #   <div class='ui bottom attached basic buttons'>
+        #     <button class='ui button'><i class='pencil icon'></i></button>
+        #     <button class='ui button'><i class='trash icon'></i></button>
+        #   </div>
+        # </div>"
       $(".my-gallery").append(image_tag)
       tags = "all"
-      initPhotoSwipeFromDOM(".my-gallery")
     ).catch (error) ->
       console.log error
       return
