@@ -194,6 +194,7 @@ onSignOut = ->
       $("#page-splash").css('display', 'flex')
       $(".after-auth").css('display', 'none')
       $(".no-image").css('display', 'none')
+      $("#album_items").css('display', 'none')
       $(".my-gallery").text("")
       $(".not-on").css('display', 'block')
       $(".already-on").css("display", "none")
