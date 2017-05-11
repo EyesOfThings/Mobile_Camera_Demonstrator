@@ -39,7 +39,7 @@ onSignIn = ->
     provider = new (firebase.auth.GoogleAuthProvider)
     firebase.auth().signInWithPopup(provider).then((result) ->
       $("#page-splash").css('display', 'none')
-      $(".circular--square").attr("src", result.user.photoURL)
+      $(".profile-image").attr("src", result.user.photoURL)
       $(".profile-name").text(result.user.displayName)
       console.log result.user
       console.log result.user.email
@@ -88,7 +88,7 @@ window.getAuthWithFirebase = (auth, email) ->
           $(".device_id").text("#{mac_address}")
           $("#album").css("display", "block")
           lastSyncDateIs = Object.values(snapshot.val())[1].lastSyncDate
-          $(".lastSync").text("Last Sync #{moment.unix(lastSyncDateIs).format("MM/DD/YYYY")}")
+          $(".lastSync").text("Last Sync #{moment.unix(lastSyncDateIs).format("MM/DD/YYYY HH-mm-ss")}")
           console.log Object.values(snapshot.val())[1].lastSyncDate
         else
           $(".not-on").css('display', 'block')
@@ -127,7 +127,7 @@ logImageDataOnly = (Images) ->
             <img src='#{url}'>
           </div>
           <div class='content'>
-            <a class='header'>Date: #{moment.unix(timestamp).format("MM/DD/YYYY")}</a>
+            <a class='header pop-the-image' href='#{url}' data-time='#{timestamp}' data-mac='#{mac_address}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MM/DD/YYYY HH-mm-ss")}</a>
             <div class='meta'>
               <span class='date'>Device ID: #{mac_address}</span>
             </div>
@@ -142,19 +142,6 @@ logImageDataOnly = (Images) ->
             </a>
           </div>
         </div>"
-        # "<div class='card'>
-        #   <div class='image'>
-        #       <img src='#{url}'>
-        #   </div>
-        #   <div class='content'>
-        #     <div class='header'>giraffes.jpg</div>
-        #     <div class='meta'>263 KB</div>
-        #   </div>
-        #   <div class='ui bottom attached basic buttons'>
-        #     <button class='ui button'><i class='pencil icon'></i></button>
-        #     <button class='ui button'><i class='trash icon'></i></button>
-        #   </div>
-        # </div>"
       $(".my-gallery").append(image_tag)
       tags = "all"
     ).catch (error) ->
@@ -454,7 +441,23 @@ updateSyncDate = (auth, email, timestamp, api_key, api_id) ->
       lastSyncDate: "#{timestamp}"
   console.log "done"  
 
+popTheImage = ->
+  $(".my-gallery").on "click", ".pop-the-image", (event) ->
+    console.log "hi"
+    event.preventDefault()
+    $('.ui.modal img').attr('src', $(this).attr('href'))
+    $('.ui.modal .to-time').html(
+      "
+        #{moment.unix($(this).data('time')).format("dddd, DD MMMM YYYY hh-mm-ss A")}
+        <div class='meta'>
+          <span class='date'>Tags: #{$(this).data('tags').replace(/all/g,'')}</span>
+        </div>
+      "
+    )
+    $('.ui.modal').modal("show")
+
 window.initializeHome = ->
+  moment.locale()
   startAuth()
   onSignIn()
   onImageSearch()
@@ -462,3 +465,4 @@ window.initializeHome = ->
   onSettingTab()
   onSaveValues()
   onSignOut()
+  popTheImage()
