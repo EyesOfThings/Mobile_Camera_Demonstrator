@@ -17,7 +17,7 @@
         <div class="top-header">
           <div class="ui top attached menu">
             <div class="ui dropdown icon item">
-              <i class="wrench icon"></i>
+              <i class="tasks icon"></i>
               <div class="menu loop-it">
 <!--                 <div class="item">
                   <i class="dropdown icon"></i>
@@ -50,7 +50,7 @@
                 </div>
               </div>
             </div>
-            <div class="right menu">
+<!--             <div class="right menu">
               <div class="ui right aligned category search item">
                 <div class="ui transparent icon input">
                   <input class="prompt" type="text" placeholder="Search animals...">
@@ -58,7 +58,7 @@
                 </div>
                 <div class="results"></div>
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="ui bottom attached segment do-min">
             <div id="album" style="display: none;">
@@ -111,13 +111,64 @@
               <!-- ALBUM ITEMS -->
 
               <div id="album_items">
-                <button class="ui labeled icon button back">
-                 <i class="arrow lircle left icon"></i>
-                 Back
-                </button>
+                <div class="content">
+                  <button class="ui labeled icon button back left floated">
+                     <i class="arrow lircle left icon"></i>
+                     Back
+                  </button>
+                  <button class="ui labeled icon button left floated show-me-filter">
+                    <i class="filter lircle left icon"></i>
+                     <!-- <i class="arrow lircle left icon"></i> -->
+                     Filters
+                  </button>
+                </div>
                 <div class="ui cards my-gallery">
 
                 </div>
+                <!-- Left menu -->
+                <div class="ui left demo vertical inverted sidebar labeled icon menu">
+                  <a class="item" id="all">
+                    <i class="block layout icon"></i>
+                    All
+                  </a>
+                  <a class="item" id="normal">
+                    <i class="em em-angry layout icon"></i>
+                    Normal
+                  </a>
+                  <a class="item" id="Anger">
+                    <i class="em em-angry layout icon"></i>
+                    Anger
+                  </a>
+                  <a class="item" id="Disgust">
+                    <i class="em em-persevere layout icon"></i>
+                    Disgust
+                  </a>
+                  <a class="item" id="Fear">
+                    <i class="em em-worried layout icon"></i>
+                    Fear
+                  </a>
+                  <a class="item" id="Happiness">
+                    <i class="em em-smile layout icon"></i>
+                    Happiness
+                  </a>
+                  <a class="item" id="LargeFaceDetected">
+                    <i class="em em-suspect layout icon"></i>
+                    Large Face
+                  </a>
+                  <a class="item" id="Neutral">
+                    <i class="em em-neutral_face layout icon"></i>
+                    Neutral
+                  </a>
+                  <a class="item" id="Sadness">
+                    <i class="em em-pensive layout icon"></i>
+                    Sadness
+                  </a>
+                  <a class="item" id="Surprise">
+                    <i class="em em-open_mouth layout icon"></i>
+                    Surprise
+                  </a>
+                </div>
+                <!-- menu end -->
                 <div class="ui small modal" style="">
                   <div class="header to-time"></div>
                   <div class="content">
