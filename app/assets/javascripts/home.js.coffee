@@ -446,10 +446,18 @@ popTheImage = ->
     console.log "hi"
     event.preventDefault()
     $('.ui.modal img').attr('src', $(this).attr('href'))
-    $('.ui.modal .to-time').text("#{moment.unix($(this).data('time')).format("MM/DD/YYYY HH-mm-ss")}")
+    $('.ui.modal .to-time').html(
+      "
+        #{moment.unix($(this).data('time')).format("dddd, DD MMMM YYYY hh-mm-ss A")}
+        <div class='meta'>
+          <span class='date'>Tags: #{$(this).data('tags').replace(/all/g,'')}</span>
+        </div>
+      "
+    )
     $('.ui.modal').modal("show")
 
 window.initializeHome = ->
+  moment.locale()
   startAuth()
   onSignIn()
   onImageSearch()

@@ -20,6 +20,17 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import url('https://fonts.googleapis.com/css?family=Amaranth');
 
+
+.ui.modal .meta {
+  color: rgba(0,0,0,.68);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+// .ui.small {
+//   width: 400px;
+// }
+
 .do-min {
   min-height: 500px;
 }
