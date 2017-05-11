@@ -60,3 +60,4 @@ gem "font-awesome-rails"
 gem 'momentjs-rails'
 gem 'rest-client'
 gem 'magnific-popup-rails', '~> 1.1.0'
+gem 'semantic-ui-sass', github: 'doabit/semantic-ui-sass'

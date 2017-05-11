@@ -15,8 +15,25 @@
  *= require magnific-popup
  *= require_self
  */
+
+@import "semantic-ui";
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import url('https://fonts.googleapis.com/css?family=Amaranth');
+
+
+.ui.modal .meta {
+  color: rgba(0,0,0,.68);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+// .ui.small {
+//   width: 400px;
+// }
+
+.do-min {
+  min-height: 500px;
+}
 
 .image-section {
   display: flex;
@@ -52,6 +69,10 @@ i {
   float: none;
   overflow: hidden;
   margin: 12px 0;
+}
+
+.profile-name {
+  margin-right: 7px;
 }
 
 #image_processing{
@@ -295,7 +316,7 @@ input.search {
   border-radius: 50%;
   height: 34px;
   /* margin-top: -34px; */
-  margin-bottom: -14px;
+  margin-bottom: -9px;
   margin-right: 4px;
 }
 
@@ -320,6 +341,7 @@ input.search {
 
 .signout {
   cursor: pointer;
+  margin-top: 29px;
 }
 
 .info-msg,
@@ -445,4 +467,35 @@ label>input[type=checkbox]:before {
   max-width: 300px;
   margin: 20px auto;
   text-align: center;
+}
+
+
+.ui.cards >.card  {
+  width: 210px;
+}
+
+.ui.cards > .card > .content > .header:not(.ui) {
+  font-size: 1.1em;
+  font-weight: normal;
+}
+
+.ui.cards > .card .meta,
+.ui.card .meta {
+  font-size: 0.8em;
+}
+
+#album_items {
+  display: none;
+}
+
+#album_items .ui.cards {
+  margin: 10px;
+}
+
+.ui.menu .dropdown.item .menu {
+  min-width: 175px;
+}
+
+.ui.cards > .card {
+  width: 220px;
 }
