@@ -298,6 +298,8 @@ onImageSearch = ->
       allVals.push(".all")
     if allVals.length > 1
       allVals = removeA(allVals, ".all")
+    if $.inArray('.all', allVals) == -1
+      $("#all").css("background-color", "")
 
     console.log unique(allVals)
     $('.my-gallery > div').hide()
