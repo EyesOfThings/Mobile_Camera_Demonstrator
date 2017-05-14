@@ -31,8 +31,16 @@
   </div>
 </div>
 <%= render 'shared/integrate' %>
+<%= render 'shared/revoke' %>
 <div class="ui four column grid">
   <div class="row">
+    <div class="ui message transition heyyou" style="display: none;">
+      <i class="close icon"></i>
+      <div class="header">
+        Thanks!
+      </div>
+      <p>But you dont have any data to sync!</p>
+    </div>
     <div class="ui makeit-take cards">
       <div class="card">
         <div class="content">
@@ -40,7 +48,7 @@
             <img src="https://evercam.io/wp-content/uploads/2017/04/logo-website-5.png" width="192">
           </div>
         </div>
-        <div class="ui bottom attached button" id="integrate-me">
+        <div class="ui bottom attached button" id="integrate-me" style="display: none;">
           <i class="add icon"></i>
           integrate
         </div>
