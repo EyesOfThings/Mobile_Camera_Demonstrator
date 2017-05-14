@@ -17,3 +17,4 @@
 //= require moment
 //= require photoswipe
 //= require home.js
+//= require integrations.js

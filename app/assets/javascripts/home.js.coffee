@@ -45,10 +45,8 @@ onSignIn = ->
       console.log result.user.email
       user_email = result.user.email
       iam_authenticated = firebase
-      window.haveLoggedIn = true
-      console.log haveLoggedIn
       console.log "calling geth auth"
-      getAuthWithFirebase(firebase, "#{result.user.email}")
+      # getAuthWithFirebase(firebase, "#{result.user.email}")
       return
     ).catch (error) ->
       # Handle Errors here.
@@ -80,20 +78,26 @@ window.getAuthWithFirebase = (auth, email) ->
       console.log "hello"
     else
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
-        console.log Object.values(snapshot.val())[1]
+        # console.log Object.values(snapshot.val())[1]
         mac_address = Object.keys(snapshot.val())[0]
         if typeof Object.values(snapshot.val())[1] != 'undefined'
-          $(".not-on").css('display', 'none')
-          $(".already-on").css("display", "block")
-          $(".device_id").text("#{mac_address}")
-          $("#album").css("display", "block")
           lastSyncDateIs = Object.values(snapshot.val())[1].lastSyncDate
           $(".lastSync").text("Last Sync #{moment.unix(lastSyncDateIs).format("MM/DD/YYYY HH-mm-ss")}")
-          console.log Object.values(snapshot.val())[1].lastSyncDate
         else
-          $(".not-on").css('display', 'block')
-          $(".already-on").css("display", "none")
-          lastSyncDateIs = moment().unix()
+          $(".lastSync").text("Last Sync #{moment.unix(88787777).format("MM/DD/YYYY HH-mm-ss")}")
+        #   $(".not-on").css('display', 'none')
+        #   $(".already-on").css("display", "block")
+        $(".device_id").text("#{mac_address}")
+        $("#album").css("display", "block")
+        #   lastSyncDateIs = Object.values(snapshot.val())[1].lastSyncDate
+        #   api_key = Object.values(snapshot.val())[1].apiKey
+        #   api_id = Object.values(snapshot.val())[1].apiId
+        # $(".lastSync").text("Last Sync #{moment.unix(88787777).format("MM/DD/YYYY HH-mm-ss")}")
+        #   console.log Object.values(snapshot.val())[1].lastSyncDate
+        # else
+        #   $(".not-on").css('display', 'block')
+        #   $(".already-on").css("display", "none")
+        #   lastSyncDateIs = moment().unix()
         # mac_address = Object.keys(snapshot.val())[0]
         snapshot.forEach (childSnap) ->
           console.log childSnap
@@ -112,9 +116,9 @@ logImageDataOnly = (Images) ->
   $.each Images, (timestamp, Image) ->
     tangRef = storageRef.child("#{Image.Path}");
     tangRef.getDownloadURL().then((url) ->
-      if timestamp > lastSyncDateIs
-        updateSyncDate(iam_authenticated, user_email, timestamp, api_key, api_id)
-        sendItToSeaweedFS(url, mac_address, timestamp)
+      # if timestamp > lastSyncDateIs
+        # updateSyncDate(iam_authenticated, user_email, timestamp, api_key, api_id)
+        # sendItToSeaweedFS(url, mac_address, timestamp)
       $.each Image.Tags, (i, value) ->
         if value == 1
           tags += " #{i}"
@@ -197,37 +201,6 @@ window.getParameterByName = (name, url) ->
   if !results[2]
     return ''
   decodeURIComponent results[2].replace(/\+/g, ' ')
-
-onSettingTab = ->
-  # $(".integrate-evercam").on "click", ->
-  $('.integrate-evercam').magnificPopup
-    type: 'inline'
-    callbacks: open: ->
-      globalModal = this
-      # this part overrides "close" method in MagnificPopup object
-
-      # $.magnificPopup.instance.close = ->
-      #   if !confirm('Are you sure?')
-      #     return
-      #   # "proto" variable holds MagnificPopup class prototype
-      #   # The above change that we did to instance is not applied to the prototype, 
-      #   # which allows us to call parent method:
-      #   $.magnificPopup.proto.close.call this
-      #   return
-
-      # you may override any method like so, just note that it's applied globally
-      return
-
-onSaveValues = ->
-  $(".save-values").on "click", ->
-    api_key = $(".api_key").val()
-    api_id = $(".api_id").val()
-    addTable(iam_authenticated, user_email, api_key, api_id)
-    $(".api_key").val("")
-    $(".api_id").val("")
-    $(".not-on").css('display', 'none')
-    $(".already-on").css("display", "block")
-    $.magnificPopup.proto.close.call globalModal
 
 addTable = (auth, email, api_key, api_id) ->
   db_auth = auth.database().ref()
@@ -343,8 +316,6 @@ window.initializeHome = ->
   onSignIn()
   onImageSearch()
   onAllClicked()
-  onSettingTab()
-  onSaveValues()
   onSignOut()
   popTheImage()
   openFilters()
