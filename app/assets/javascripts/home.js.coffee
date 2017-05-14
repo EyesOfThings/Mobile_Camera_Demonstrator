@@ -74,7 +74,8 @@ window.getAuthWithFirebase = (auth, email) ->
   ), 5000
   db_auth.once 'value', (snapshot) ->
     if !snapshot.hasChild(obliged_email)
-      $(".no-image").css('display', 'block')
+      $(".heyyou").css('display', 'block')
+      $("#album").css("display", "none")
       console.log "hello"
     else
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
@@ -154,41 +155,17 @@ onSignOut = ->
   $(".signout").on "click", ->
     firebase.auth().signOut().then(->
       # Sign-out successful.
+      $(".heyyou").css('display', 'none')
       $("#page-splash").css('display', 'flex')
       $(".after-auth").css('display', 'none')
       $(".no-image").css('display', 'none')
       $("#album_items").css('display', 'none')
-      $(".my-gallery").text("")
-      $(".not-on").css('display', 'block')
-      $(".already-on").css("display", "none")
+      $(".my-gallery").html("")
       console.log "signed out"
       return
     ).catch (error) ->
       # An error happened.
       return
-
-sendItToSeaweedFS = (url, mac_address, timestamp) ->
-  data = {}
-  data.url = "#{url}"
-  data.dir_name = "#{mac_address}"
-  data.timestamp = "#{timestamp}"
-
-  onError = (response) ->
-    console.log response
-
-  onSuccess = (response) ->
-    console.log response
-
-  settings =
-    error: onError
-    success: onSuccess
-    data: data
-    cache: false
-    dataType: "json"
-    type: "GET"
-    url: "/send_to_seaweedFS"
-
-  sendAJAXRequest(settings)
 
 window.getParameterByName = (name, url) ->
   if !url
