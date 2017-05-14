@@ -1,0 +1,66 @@
+<div class="ui top attached menu">
+  <div class="ui dropdown icon item">
+    <i class="align justify icon"></i>
+    <div class="menu loop-it">
+      <div class="item signout">
+        <img class="ui avatar image profile-image" src="">
+        <span class="profile-name"></span>
+      </div>
+      <div class="divider"></div>
+      <a href="/">
+        <div class="item">
+          <i class="home layout icon"></i> Home
+        </div>
+      </a>
+      <a href="/integrations">
+        <div class="item">
+          <i class="random layout icon"></i> Integrations
+        </div>
+      </a>
+      <div class="item">
+        <i class="rocket layout icon"></i> Wizards
+      </div>
+      <div class="item">
+        <i class="announcement layout icon"></i> Notifications
+      </div>
+      <div class="divider"></div>
+      <div class="item signout">
+        <i class="sign out icon"></i> Sign Out
+      </div>
+    </div>
+  </div>
+</div>
+<%= render 'shared/integrate' %>
+<div class="ui four column grid">
+  <div class="row">
+    <div class="ui makeit-take cards">
+      <div class="card">
+        <div class="content">
+          <div class="image">
+            <img src="https://evercam.io/wp-content/uploads/2017/04/logo-website-5.png" width="192">
+          </div>
+        </div>
+        <div class="ui bottom attached button" id="integrate-me">
+          <i class="add icon"></i>
+          integrate
+        </div>
+        <div class="ui bottom attached button" id="revoke-me" style="display: none;">
+          <i class="trash icon"></i>
+          revoke
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.CurrentUser = <%= @current_user.to_json.html_safe %>;
+  window.AuthData = <%= @auth_data.to_json.html_safe %>;
+  $(document).ready(function () {
+    $('.ui.dropdown').dropdown();
+    $('.ui.radio.checkbox')
+      .checkbox()
+    ;
+    window.initializeIntegrations();
+  });
+</script
