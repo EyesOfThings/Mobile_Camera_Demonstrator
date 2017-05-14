@@ -39,7 +39,7 @@ onLoad = ->
         db_auth.once 'value', (snapshot) ->
           if !snapshot.hasChild(obliged_email)
             $("#integrate-me").css('display', 'block')
-
+            $(".makeit-take").css('display', 'block')
             console.log "No data for SYNC"
           else
             db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
@@ -52,10 +52,13 @@ onLoad = ->
                   api_id = Object.values(snapshot.val())[1].apiId
                   syncIs = Object.values(snapshot.val())[1].syncIsOn
                   $("#revoke-me").css('display', 'block')
+                  $(".makeit-take").css('display', 'block')
                 else
                   $("#integrate-me").css('display', 'block')
+                  $(".makeit-take").css('display', 'block')
               else
                 $("#integrate-me").css('display', 'block')
+                $(".makeit-take").css('display', 'block')
         $('.profile-image').attr 'src', user.photoURL
         $('.profile-name').text user.displayName
       else
