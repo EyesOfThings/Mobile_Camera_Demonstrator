@@ -11,280 +11,138 @@
     <button class="auth-with-google"></button>
   </div>
 </div>
-<%= render :partial => 'shared/integrate' %>
-<!-- <i class="em em-angry"></i> -->
 <div class="after-auth hide">
-        <div class="top-header">
-          <div class="ui top attached menu">
-            <div class="ui dropdown icon item">
-              <i class="align justify icon"></i>
-              <div class="menu loop-it">
-<!--                 <div class="item">
-                  <i class="dropdown icon"></i>
-                  <span class="text">Filters</span>
-                  <div class="menu">
-                    <div class="item">Document</div>
-                    <div class="item">Image</div>
-                  </div>
-                </div> -->
-                <div class="item signout">
-                  <img class="ui avatar image profile-image" src="">
-                  <span class="profile-name"></span>
-<!--                   <font class="signout">
-                      <img class="circular--square" src="" alt="">
-                      <a class="">
-                        <span class="profile-name"></span><i class="fa fa-sign-out" aria-hidden="true"></i>
-                      </a>
-                  </font> -->
-                </div>
-                <div class="divider"></div>
-                <div class="item">
-                  <i class="random layout icon"></i> Integrations
-                </div>
-                <div class="item">
-                  <i class="rocket layout icon"></i> Wizards
-                </div>
-                <div class="item">
-                  <i class="announcement layout icon"></i> Notifications
-                </div>
-                <div class="divider"></div>
-                <div class="item signout">
-                  <i class="sign out icon"></i> Sign Out
-                </div>
-              </div>
-            </div>
-<!--             <div class="right menu">
-              <div class="ui right aligned category search item">
-                <div class="ui transparent icon input">
-                  <input class="prompt" type="text" placeholder="Search animals...">
-                  <i class="search link icon"></i>
-                </div>
-                <div class="results"></div>
-              </div>
-            </div> -->
+  <div class="top-header">
+    <div class="ui top attached menu">
+      <div class="ui dropdown icon item">
+        <i class="align justify icon"></i>
+        <div class="menu loop-it">
+          <div class="item signout">
+            <img class="ui avatar image profile-image" src="">
+            <span class="profile-name"></span>
           </div>
-          <div class="ui bottom attached segment do-min">
-            <div id="album" style="display: none;">
-                <div class="ui piled compact segment">
-                  <!-- <div class="floating ui red label image_total">9</div> -->
-                  <div class="ui card">
-                    <div class="blurring dimmable image">
-                      <div class="ui inverted dimmer">
-                       <div class="content">
-                         <div class="center">
-                           <div class="ui red button view">VIEW</div>
-                         </div>
-                       </div>
-                       </div>
-                      <img src="http://cumbrianrun.co.uk/wp-content/uploads/2014/02/default-placeholder.png">
-                    </div>
-                      <div class="content">
-                        <!-- <div id="rate" class="ui star rating right floated" data-rating="3"></div> -->
-                        <div class="header device_id"></div>
-                        <div class="meta">
-                          <!-- <span class="date"><i class="calendar icon"></i>Created 7/27/2014</span> -->
-                          <span class="right floated date"><i class="history icon"></i><font class="lastSync"></font></span>
-                        </div>
-                        <div class="description">
-                        EoT Device Images
-                        </div>
-                      </div>
-<!--                     <div  class="extra content" >
-                      <div class="ui right labeled button" data-content="Like it!" data-variation="tiny" tabindex="0">
-                        <div class="ui red icon tiny button">
-                          <i class="thumbs outline up large icon"></i>
-                        </div>
-                        <a class="ui basic red left pointing label">
-                          365
-                        </a>
-                      </div>
-                      <div class="ui left labeled right floated button" data-content="Share it!" data-variation="tiny" tabindex="0">
-                        <a class="ui basic red right pointing label">
-                          183
-                        </a>
-                        <div class="ui red icon tiny button">
-                          <i class="external share large icon"></i>
-                        </div>
-                      </div>
-                    </div> -->
-                  </div>
-                </div>
-              </div>
-
-              <!-- ALBUM ITEMS -->
-
-              <div id="album_items">
-                <div class="content">
-                  <button class="ui labeled icon button back left floated">
-                     <i class="arrow lircle left icon"></i>
-                     Back
-                  </button>
-                  <button class="ui labeled icon button left floated show-me-filter">
-                    <i class="filter lircle left icon"></i>
-                     <!-- <i class="arrow lircle left icon"></i> -->
-                     Filters
-                  </button>
-                </div>
-                <div class="ui cards my-gallery">
-
-                </div>
-                <!-- Left menu -->
-                <div class="ui left demo vertical inverted sidebar labeled icon menu">
-                  <a class="item" id="all">
-                    <i class="block layout icon"></i>
-                    All
-                  </a>
-                  <a class="item" id="normal">
-                    <i class="em em-angry layout icon"></i>
-                    Normal
-                  </a>
-                  <a class="item" id="Anger">
-                    <i class="em em-angry layout icon"></i>
-                    Anger
-                  </a>
-                  <a class="item" id="Disgust">
-                    <i class="em em-persevere layout icon"></i>
-                    Disgust
-                  </a>
-                  <a class="item" id="Fear">
-                    <i class="em em-worried layout icon"></i>
-                    Fear
-                  </a>
-                  <a class="item" id="Happiness">
-                    <i class="em em-smile layout icon"></i>
-                    Happiness
-                  </a>
-                  <a class="item" id="LargeFaceDetected">
-                    <i class="em em-suspect layout icon"></i>
-                    Large Face
-                  </a>
-                  <a class="item" id="Neutral">
-                    <i class="em em-neutral_face layout icon"></i>
-                    Neutral
-                  </a>
-                  <a class="item" id="Sadness">
-                    <i class="em em-pensive layout icon"></i>
-                    Sadness
-                  </a>
-                  <a class="item" id="Surprise">
-                    <i class="em em-open_mouth layout icon"></i>
-                    Surprise
-                  </a>
-                </div>
-                <!-- menu end -->
-                <div class="ui small modal" style="">
-                  <div class="header to-time"></div>
-                  <div class="content">
-                    <img src="" alt="" class="ui image fluid" />
-                  </div>
-                  <div class="actions">
-                    <div class="ui positive right labeled icon button">
-                      Close
-                      <i class="checkmark icon"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-<!--             <div class="no-image" style="display:none;">
-              <div class="warning-msg">
-                <i class="fa fa-warning"></i>
-                No images found.
-              </div>
-            </div> -->
-          </div>
-  <!--         <nav class="nav">
-          <div class="menu-ac"><i class="fa fa-bars fa-lg"></i></div>
-          <div class="ac">
-            <ul class="sol-menu">
-              <li>
-                <a href="#">
-                  <label class="with-master whole-one">
-                    <input id="c_b" type="checkbox" name="r1" value="all" class="default-is">All
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="with-label">
-                    <input id="c_b" type="checkbox" name="r1" value="normal">Normal Mode
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="with-label">
-                    <input id="c_b" type="checkbox" name="r1" value="LargeFaceDetected">Large Face
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="with-label">
-                    <input id="c_b" type="checkbox" name="r1" value="Neutral" />Neutral
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="with-label">
-                    <input id="c_b" type="checkbox" name="r1" value="Sadness" />Sadness
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="with-label">
-                    <input id="c_b" type="checkbox" name="r1" value="Surprise" />Surprise
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="with-label">
-                    <input id="c_b" type="checkbox" name="r1" value="Happiness" />Happiness
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="with-label">
-                    <input id="c_b" type="checkbox" name="r1" value="Angry" />Anger
-                  </label>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="with-label">
-                    <input id="c_b" type="checkbox" name="r1" value="Fear" />Fear
-                  </label>      
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <label class="with-label">
-                    <input id="c_b" type="checkbox" name="r1" value="Disgust" />Disgust
-                  </label>
-                </a>
-              </li>
-            </ul>
-            <ul class="sag-menu">
-              <div class="ui selection dropdown">
-                <input type="hidden" name="gender">
-                <i class="dropdown icon"></i>
-                <div class="default text">Gender</div>
-                <div class="menu">
-                  <div class="item" data-value="1">Male</div>
-                  <div class="item" data-value="0">Female</div>
-                </div>
-              </div>
-            </ul>
+          <div class="divider"></div>
+          <a href="/integrations">
+            <div class="item">
+              <i class="random layout icon"></i> Integrations
             </div>
-          </nav> -->
+          </a>
+          <div class="item">
+            <i class="rocket layout icon"></i> Wizards
+          </div>
+          <div class="item">
+            <i class="announcement layout icon"></i> Notifications
+          </div>
+          <div class="divider"></div>
+          <div class="item signout">
+            <i class="sign out icon"></i> Sign Out
+          </div>
         </div>
-<!--   <div class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
-  </div> -->
+      </div>
+    </div>
+    <div class="ui bottom attached segment do-min">
+      <div id="album" style="display: none;">
+          <div class="ui piled compact segment">
+            <!-- <div class="floating ui red label image_total">9</div> -->
+            <div class="ui card">
+              <div class="blurring dimmable image">
+                <div class="ui inverted dimmer">
+                 <div class="content">
+                   <div class="center">
+                     <div class="ui red button view">VIEW</div>
+                   </div>
+                 </div>
+                 </div>
+                <img src="http://cumbrianrun.co.uk/wp-content/uploads/2014/02/default-placeholder.png">
+              </div>
+                <div class="content">
+                  <div class="header device_id"></div>
+                  <div class="meta">
+                    <span class="right floated date"><i class="history icon"></i><font class="lastSync"></font></span>
+                  </div>
+                  <div class="description">
+                  EoT Device Images
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
 
+        <!-- ALBUM ITEMS -->
 
+        <div id="album_items">
+          <div class="content">
+            <button class="ui labeled icon button back left floated">
+               <i class="arrow lircle left icon"></i>
+               Back
+            </button>
+            <button class="ui labeled icon button left floated show-me-filter">
+              <i class="filter lircle left icon"></i>
+               Filters
+            </button>
+          </div>
+          <div class="ui cards my-gallery">
+
+          </div>
+          <!-- Left menu -->
+          <div class="ui left demo vertical inverted sidebar labeled icon menu">
+            <a class="item" id="all">
+              <i class="block layout icon"></i>
+              All
+            </a>
+            <a class="item" id="normal">
+              <i class="em em-angry layout icon"></i>
+              Normal
+            </a>
+            <a class="item" id="Anger">
+              <i class="em em-angry layout icon"></i>
+              Anger
+            </a>
+            <a class="item" id="Disgust">
+              <i class="em em-persevere layout icon"></i>
+              Disgust
+            </a>
+            <a class="item" id="Fear">
+              <i class="em em-worried layout icon"></i>
+              Fear
+            </a>
+            <a class="item" id="Happiness">
+              <i class="em em-smile layout icon"></i>
+              Happiness
+            </a>
+            <a class="item" id="LargeFaceDetected">
+              <i class="em em-suspect layout icon"></i>
+              Large Face
+            </a>
+            <a class="item" id="Neutral">
+              <i class="em em-neutral_face layout icon"></i>
+              Neutral
+            </a>
+            <a class="item" id="Sadness">
+              <i class="em em-pensive layout icon"></i>
+              Sadness
+            </a>
+            <a class="item" id="Surprise">
+              <i class="em em-open_mouth layout icon"></i>
+              Surprise
+            </a>
+          </div>
+          <!-- menu end -->
+          <div class="ui small modal" style="">
+            <div class="header to-time"></div>
+            <div class="content">
+              <img src="" alt="" class="ui image fluid" />
+            </div>
+            <div class="actions">
+              <div class="ui positive right labeled icon button">
+                Close
+                <i class="checkmark icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
 </div>
 <script>
   window.CurrentUser = <%= @current_user.to_json.html_safe %>;
@@ -292,18 +150,29 @@
 
   $(window).load(function() {
     console.log(getParameterByName("email"));
-    if (getParameterByName("email")) {
-      console.log("Auth started:");
-      $("#page-splash").css('display', 'none');
-      $(".signout").css('display', 'none');
-      getAuthWithFirebase(firebase, getParameterByName("email"));
-      console.log("showing images for email.");
-    }
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        console.log(user.email);
+        $("#page-splash").css('display', 'none');
+        $(".profile-image").attr("src", user.photoURL);
+        $(".profile-name").text(user.displayName);
+        getAuthWithFirebase(firebase, user.email);
+      }else{
+        $("#page-splash").css('display', 'flex');
+      }
+    });
+    // if (getParameterByName("email")) {
+    //   console.log("Auth started:");
+    //   $("#page-splash").css('display', 'none');
+    //   $(".signout").css('display', 'none');
+    //   getAuthWithFirebase(firebase, getParameterByName("email"));
+    //   console.log("showing images for email.");
+    // }
   });
 
   $(document).ready(function () {
     $('.ui.dropdown').dropdown();
-   $('.ui.card .image').dimmer({on: 'hover'});
+    $('.ui.card .image').dimmer({on: 'hover'});
     $('.ui.rating').rating({maxRating: 5});
     $('.ui.button').popup();
 

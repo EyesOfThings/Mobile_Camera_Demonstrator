@@ -1,19 +1,32 @@
-<div id="my-popup" class="mfp-hide white-popup">
-  Evercam Integration
-  <div class="already-on hide">Evercam has already been integrated</div>
-  <table class="not-on">
-    <tbody>
-      <tr>
-        <th>Api Key</th>
-        <td><input type="text" name="" class="api_key"></td>
-      </tr>
-      <tr>
-        <th>Api Id</th>
-        <td><input type="text" name="" class="api_id"></td>
-      </tr>
-      <tr>
-        <td><button class="save-values">Save</button></td>
-      </tr>
-    </tbody>
-  </table>
+<div class="ui small modal">
+  <div class="header">
+    Evercam
+    <div class='meta'>
+      <span class='date'>Please provide your evercam information for integration.</span>
+    </div>
+  </div>
+  <div class="content">
+    <form class="ui form">
+      <div class="field">
+        <label>Api Key</label>
+        <input type="text" name="api-key" placeholder="Api Key" class="api_key">
+      </div>
+      <div class="field">
+        <label>Api Id</label>
+        <input type="text" name="api-id" placeholder="Api Id" class="api_id">
+      </div>
+    </form>
+  </div>
+  <div class="actions">
+    <div class="ui approve button lets-integrate">Approve</div>
+    <div class="ui cancel button">Cancel</div>
+  </div>
 </div>
+
+<script>
+  $(document).ready(function () {
+    $('.ui.checkbox')
+      .checkbox()
+    ;
+  });
+</script
