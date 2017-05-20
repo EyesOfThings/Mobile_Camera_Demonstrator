@@ -32,39 +32,116 @@
 </div>
 <%= render 'shared/integrate' %>
 <%= render 'shared/revoke' %>
-<div class="ui four column grid">
-  <div class="row">
-    <div class="ui message transition heyyou" style="display: none;">
-      <i class="close icon"></i>
-      <div class="header">
-        Thanks!
-      </div>
-      <p>But you dont have any data to sync!</p>
+<div class="row">
+  <div class="ui message transition heyyou" style="display: none;">
+    <i class="close icon"></i>
+    <div class="header">
+      Thanks!
     </div>
-    <div class="ui makeit-take cards" style="display: none;">
-      <div class="card">
-        <div class="content">
-          <div class="image">
-            <img src="https://evercam.io/wp-content/uploads/2017/04/logo-website-5.png" width="192">
-          </div>
-        </div>
-        <div class="ui bottom attached button" id="integrate-me" style="display: none;">
-          <i class="add icon"></i>
-          integrate
-        </div>
-        <div class="ui bottom attached button" id="revoke-me" style="display: none;">
-          <i class="trash icon"></i>
-          revoke
-        </div>
-      </div>
+    <p>But you dont have any data to sync!</p>
+  </div>
+  <div class="ui message transition ityourbutfail" style="display: none;">
+    <i class="close icon"></i>
+    <p>You have nothing to sync.</p>
+  </div>
+  <div class="ui message transition amDoneHere" style="display: none;">
+    <i class="close icon"></i>
+    <div class="header">
+      Evercam
     </div>
+    <p>Your EOT has been integrated and synched with Evercam.</p>
   </div>
 </div>
 
+<div class="row">
+
+  <div class="ui makeit-take cards" style="display: none;">
+    <div class="card">
+      <div class="content">
+        <div class="image">
+          <img src="https://evercam.io/wp-content/uploads/2017/05/EVERCAM-200x42-Transparent-2.png" width="192">
+        </div>
+      </div>
+      <div class="content etcstuff">
+        <div class="header">Elliot Fu</div>
+        <div class="description">
+          Elliot Fu is a film-maker from New York.
+        </div>
+      </div>
+      <div class="extra content am-the-sync" style="display: none;">
+        <span class="right floated">
+          <div class="ui icon button" data-tooltip="Click to sync again." data-delay="500">
+            <i class="refresh icon"></i>
+          </div>
+        </span>
+        <span id="when-sync-did">
+          Last Sync 3 days ago
+        </span>
+      </div>
+      <div class="extra content domecenter openmein">
+      </div>
+      <div class="ui bottom attached button" id="integrate-me" style="display: none;">
+        <i class="add icon"></i>
+        Integrate
+      </div>
+      <div class="ui bottom attached button" id="revoke-me" style="display: none;">
+        <i class="trash icon"></i>
+        Revoke
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="content">
+        <div class="image" style="text-align: center;">
+          <img src="https://cdn.zapier.com/static/1DbP14/images/frontend/onboarding/zapier-small-orange-logo.png" width="135">
+        </div>
+      </div>
+      <div class="content">
+        <div class="header">Elliot Fu</div>
+        <div class="description">
+          Elliot Fu is a film-maker from New York.
+        </div>
+      </div>
+      <div class="ui bottom attached button">
+        <i class="add icon"></i>
+        Integrate
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="content">
+        <div class="image" style="text-align: center;">
+          <img src="https://fst.slack-edge.com/5eb00/img/landing/where_work_happens/logo-dark-blue.png" width="155">
+        </div>
+      </div>
+      <div class="content">
+        <div class="header">Elliot Fu</div>
+        <div class="description">
+          Elliot Fu is a film-maker from New York.
+        </div>
+      </div>
+      <div class="ui bottom attached button">
+        <i class="add icon"></i>
+        Integrate
+      </div>
+    </div>
+
+
+  </div>
+
+</div>
 <script>
   window.CurrentUser = <%= @current_user.to_json.html_safe %>;
   window.AuthData = <%= @auth_data.to_json.html_safe %>;
   $(document).ready(function () {
+      $('.message .close')
+    .on('click', function() {
+      $(this)
+        .closest('.message')
+        .transition('fade')
+      ;
+    })
+  ;
     $('.ui.dropdown').dropdown();
     $('.ui.radio.checkbox')
       .checkbox()
