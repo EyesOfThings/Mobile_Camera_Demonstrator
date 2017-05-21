@@ -13,8 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require semantic-ui
-//= require magnific-popup
 //= require moment
 //= require photoswipe
+//= require jquery.timeago.js
 //= require home.js
 //= require integrations.js
