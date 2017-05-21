@@ -54,10 +54,11 @@ onLoad = ->
                   $(".am-the-sync").css("display", "block")
                   $("#when-sync-did").html(
                     "
-                      Last sync was <time class='timeago' datetime='#{moment.unix(lastSyncDateIs).toISOString()}'>Date</time>
+                      Last sync was <time class='timeago' datetime='#{moment.unix(moment().unix()).toISOString()}'>Date</time>
                     "
                   )
                   $("time.timeago").timeago()
+                  startSync(iam_authenticated, user_email)
                   mac_address = Object.keys(snapshot.val())[0]
                   api_key = Object.values(snapshot.val())[1].apiKey
                   api_id = Object.values(snapshot.val())[1].apiId
@@ -116,10 +117,12 @@ createCameraInEvercam = (api_key, api_id, mac_address) ->
     false
 
   onSuccess = (result, status, jqXHR) ->
+    $(".am-after-ajax").css("display", "")
+    $("#image_processing").css("display", "none")
     $(".am-the-sync").css("display", "block")
     $("#when-sync-did").css("display", "block").html(
       "
-        Last sync was <time class='timeago' datetime='#{moment.unix().toISOString()}'>Date</time>
+        Last sync was <time class='timeago' datetime='#{moment.unix(moment().unix()).toISOString()}'>Date</time>
       "
     )
     $("time.timeago").timeago()
@@ -172,6 +175,23 @@ deleteCameraInEvercam = (api_key, api_id, mac_address) ->
     url: "https://media.evercam.io/v1/cameras/#{mac_address.replace(/:\s*/g, "").toLowerCase()}"
 
   $.ajax(settings)
+
+
+letSyncAgain = ->
+  $(".letSyncAgain").on "click", ->
+    $("#image_processing").css("display", "block").css("z-index", 999)
+    startSync(iam_authenticated, user_email)
+    $(".am-the-sync").css("display", "block")
+    $("#when-sync-did").css("display", "block").html(
+      "
+        Last sync was <time class='timeago' datetime='#{moment.unix(moment().unix()).toISOString()}'>Date</time>
+      "
+    )
+    $("time.timeago").timeago()
+    setTimeout (->
+      $("#image_processing").css('display', 'none').css("z-index", "")
+      return
+    ), 5000
 
 
 window.startSync = (auth, email) ->
@@ -274,6 +294,8 @@ onSaveValues = ->
     $("#integrate-me").css("display", "none")
     $("#revoke-me").css("display", "block")
     $(".etcstuff").css("display", "none")
+    $(".am-after-ajax").css("display", "block")
+    $("#image_processing").css("display", "block")
     addTable(firebase, user_email, api_key, api_id)
     createCameraInEvercam(api_key, api_id, mac_address)
     startSync(firebase, user_email)
@@ -313,4 +335,5 @@ window.initializeIntegrations = ->
   onSaveValues()
   onRevoke()
   onRevokeMe()
+  letSyncAgain()
   onSignOut()
