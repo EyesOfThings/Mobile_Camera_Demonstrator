@@ -66,7 +66,7 @@ onLoad = ->
                   cameraIdIs = "#{mac_address}".replace(/:\s*/g, "").toLowerCase()
                   $(".openmein").html(
                     "
-                    <a href='https://dash.evercam.io/v1/cameras/#{cameraIdIs}?api_key=#{api_key}&api_id=#{api_id}'>
+                    <a href='https://dash.evercam.io/v1/cameras/#{cameraIdIs}?api_key=#{api_key}&api_id=#{api_id}' target='_blank'>
                       <button class='ui negative button labeled icon' data-tooltip='Open it in Evercam.' data-delay='500'>
                         <i class='camera retro icon'></i>
                         Evercam
@@ -129,7 +129,7 @@ createCameraInEvercam = (api_key, api_id, mac_address) ->
     $(".amDoneHere").css("display", "block")
     $(".openmein").css("display", "block").html(
       "
-      <a href='https://dash.evercam.io/v1/cameras/#{mac_address.replace(/:\s*/g, "").toLowerCase()}?api_key=#{api_key}&api_id=#{api_id}'>
+      <a href='https://dash.evercam.io/v1/cameras/#{mac_address.replace(/:\s*/g, "").toLowerCase()}?api_key=#{api_key}&api_id=#{api_id}' target='_blank'>
         <button class='ui negative button labeled icon' data-tooltip='Open it in Evercam.' data-delay='500'>
           <i class='camera retro icon'></i>
           Evercam
