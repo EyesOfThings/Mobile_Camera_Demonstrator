@@ -1,0 +1,121 @@
+<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+
+<div class="ui top attached menu">
+  <div class="ui dropdown icon item">
+    <i class="align justify icon"></i>
+    <div class="menu loop-it">
+      <div class="item signout">
+        <img class="ui avatar image profile-image" src="">
+        <span class="profile-name"></span>
+      </div>
+      <div class="divider"></div>
+      <a href="/">
+        <div class="item">
+          <i class="home layout icon"></i> Home
+        </div>
+      </a>
+      <a href="/integrations">
+        <div class="item">
+          <i class="random layout icon"></i> Integrations
+        </div>
+      </a>
+      <a href="/wizards">
+        <div class="item">
+          <i class="rocket layout icon"></i> Wizards
+        </div>
+      </a>
+      <div class="item">
+        <i class="announcement layout icon"></i> Notifications
+      </div>
+      <div class="divider"></div>
+      <div class="item signout">
+        <i class="sign out icon"></i> Sign Out
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render 'shared/add_wizard' %>
+
+<div class="container my-top-margin">
+  <button class="ui labeled icon button wizards">
+    <i class="rocket icon"></i>
+    Add Wizard
+  </button>
+</div>
+<div class="make-it-thin">
+  <div class="ui stacked segments">
+    <div class="ui segment" style="overflow: hidden;">
+      <div class="content" style="float: left;">
+        If <font class="make-it-20"><i class="em em-persevere layout icon"></i></font> then notify
+        <span>
+          <i class="announcement icon"></i>
+          marco@evercam.io
+        </span> 
+      </div>
+      <div class="content" style="float: right">
+        <div class="ui toggle checkbox">
+          <input type="checkbox" name="gift" tabindex="0" class="hidden">
+          <label for="toggle">On/Off</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui segment" style="overflow: hidden;">
+      <div class="content" style="float: left;">
+        If <font class="make-it-20"><i class="em em-smile layout icon"></i></font> then notify
+        <span>
+          <i class="announcement icon"></i>
+          abc@evercam.io
+        </span> 
+      </div>
+      <div class="content" style="float: right">
+        <div class="ui toggle checkbox">
+          <input type="checkbox" name="gift" tabindex="0" class="hidden">
+          <label for="toggle">On/Off</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui segment" style="overflow: hidden;">
+      <div class="content" style="float: left;">
+        If <font class="make-it-20"><i class="em em-angry layout icon"></i></font> then notify
+        <span>
+          <i class="announcement icon"></i>
+          vinnie@evercam.io
+        </span> 
+      </div>
+      <div class="content" style="float: right">
+        <div class="ui toggle checkbox">
+          <input type="checkbox" name="gift" tabindex="0" class="hidden">
+          <label for="toggle">On/Off</label>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  window.CurrentUser = <%= @current_user.to_json.html_safe %>;
+  window.AuthData = <%= @auth_data.to_json.html_safe %>;
+  $(document).ready(function () {
+      $('.message .close')
+    .on('click', function() {
+      $(this)
+        .closest('.message')
+        .transition('fade')
+      ;
+    })
+  ;
+      $('.ui.checkbox')
+        .checkbox()
+      ;
+  $('.ui.button.toggle').state();
+    $('.ui.dropdown').dropdown();
+    $('.ui.radio.checkbox')
+      .checkbox()
+    ;
+    window.initializeWizards();
+  });
+</script

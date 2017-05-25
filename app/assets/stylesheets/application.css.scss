@@ -24,6 +24,19 @@
   text-align: center
 }
 
+.show-on-wizard > card {
+  width: 300px;
+}
+
+.make-it-20 {
+  font-size: 20px;
+}
+
+.make-it-thin {
+  padding: 10px;
+  margin-top: 10px;
+}
+
 .ui.modal .meta {
   color: rgba(0,0,0,.68);
   font-size: 15px;
@@ -513,4 +526,9 @@ label>input[type=checkbox]:before {
 
 .row > .ui.cards {
   margin: 10px 15px;
+}
+
+.my-top-margin {
+  margin-top: 15px;
+  margin-left: 15px;
 }

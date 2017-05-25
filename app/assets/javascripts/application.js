@@ -18,3 +18,4 @@
 //= require jquery.timeago.js
 //= require home.js
 //= require integrations.js
+//= require wizards.js
