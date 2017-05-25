@@ -55,8 +55,24 @@ onSignOut = ->
       # An error happened.
       return
 
+onWizard = ->
+  $(".wizards-do").on "click", ->
+    $(".show-on-wizard")
+      .css("display", "block")
+      .css("margin", "10px")
+      .fadeIn("slow")
+
+onSave = ->
+  $(".can-wizard").on "click", ->
+    $(".show-on-wizard")
+      .css("display", "none")
+      .css("margin", "10px")
+      .fadeOut("slow")
+
 window.initializeWizards = ->
   moment.locale()
   startAuth()
   onLoad()
+  onWizard()
+  onSave()
   onSignOut()
