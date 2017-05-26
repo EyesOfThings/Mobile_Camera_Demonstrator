@@ -1,24 +1,14 @@
-# README
+# Mobile Camera Demonstrator for Eyes of Things (WP 4) by Evercam
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+This is the web interface to the Firebase backend of our EoT portable camera.
 
-* Ruby version
+It allows:
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* View Devices connected to your account
+* View images captured by those devices as a group & individually
+* View meta-data (tags, datetime ...)
+* Filter by tags
+* Create Integrations (Evercam, Dropbox, Slack, Google Photos...)
+* View Notifications
+* View & Create Wizards If This Then That.
