@@ -37,6 +37,17 @@ class HomeController < ApplicationController
           }
   end
 
+  def notifications
+    @current_user = current_user
+
+    @auth_data = {
+            'apiKey' => ENV["apiKey"],
+            'authDomain' => ENV["authDomain"],
+            'databaseURL' => ENV["databaseURL"],
+            'storageBucket' => ENV["storageBucket"]
+          }
+  end
+
   def send_to_seaweedfs
     date = params[:timestamp].to_i
     year = Time.at(date).utc.strftime("%Y")

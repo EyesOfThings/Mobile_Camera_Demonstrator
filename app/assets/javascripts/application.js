@@ -19,3 +19,4 @@
 //= require home.js
 //= require integrations.js
 //= require wizards.js
+//= require notifications.js
