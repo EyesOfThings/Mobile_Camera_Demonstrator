@@ -141,11 +141,20 @@ logImageDataOnly = (Images) ->
             </div>
           </div>
           <div class='extra content'>
-            <i class='feed icon'></i>
-            #{timestamp}
+            <span class='right floated'>
+              <i class='feed icon'></i>
+              #{timestamp}
+            </span>
+            <span>
+              <div class='ui checkbox'>
+                <input type='checkbox' class='am-image'>
+              </div>
+            </span>
           </div>
         </div>"
       $(".my-gallery").append(image_tag)
+      $('.ui.checkbox')
+        .checkbox()
       tags = "all"
     ).catch (error) ->
       console.log error
@@ -233,7 +242,7 @@ onFilterClick = ->
       $(this).css("background-color", "")
 
 onImageSearch = ->
-  $('.ui.left .item').on "click", ->
+  $('.ui.left > .item').on "click", ->
     if $(this).hasClass("active_for")
       $(this).removeClass("active_for")
       existed = ".#{$(this).attr("id")}"
@@ -287,6 +296,11 @@ unique = (list) ->
     return
   result
 
+onSelectAllImages = ->
+  $(".select-all-images").on "click", ->
+    console.log "hi"
+    $('input:checkbox').not(this).prop('checked', this.checked)
+
 window.initializeHome = ->
   moment.locale()
   startAuth()
@@ -297,3 +311,4 @@ window.initializeHome = ->
   popTheImage()
   openFilters()
   onFilterClick()
+  onSelectAllImages()
