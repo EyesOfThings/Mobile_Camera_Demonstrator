@@ -88,6 +88,28 @@
               <i class="filter lircle left icon"></i>
                Filters
             </button>
+            <button class="ui labeled icon button left floated dropdown">
+              <i class="dropdown lircle left icon"></i>
+               Action
+              <div class="menu ui transition hidden">
+                <div class="item select-all-images">
+                  Select All Images
+                </div>
+                <div class="item deselect-all-images" style="display: none;">
+                  Deselect All Images
+                </div>
+                <div class="item">
+                  <i class="dropdown icon"></i>
+                  <span class="text">Create Animation</span>
+                  <div class="menu">
+                    <div class="item">Document</div>
+                    <div class="item">Image</div>
+                  </div>
+                </div>
+                <div class="item">Action</div>
+                <div class="item">Another action</div>
+              </div>
+            </button>
           </div>
           <div class="ui cards my-gallery">
 
@@ -179,6 +201,9 @@
   });
 
   $(document).ready(function () {
+      $('.ui.checkbox')
+        .checkbox()
+      ;
       $('.message .close')
     .on('click', function() {
       $(this)
