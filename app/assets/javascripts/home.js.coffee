@@ -147,7 +147,7 @@ logImageDataOnly = (Images) ->
             </span>
             <span>
               <div class='ui checkbox'>
-                <input type='checkbox' class='am-image'>
+                <input type='checkbox' class='am-image' value='#{url}'>
               </div>
             </span>
           </div>
@@ -299,7 +299,16 @@ unique = (list) ->
 onSelectAllImages = ->
   $(".select-all-images").on "click", ->
     console.log "hi"
-    $('input:checkbox').not(this).prop('checked', this.checked)
+    $(".deselect-all-images").css("display", "block")
+    $(".select-all-images").css("display", "none")
+    $('input:checkbox').prop('checked', true)
+
+onDeselectAllImages = ->
+  $(".deselect-all-images").on "click", ->
+    console.log "hi"
+    $(".deselect-all-images").css("display", "none")
+    $(".select-all-images").css("display", "block")
+    $('input:checkbox').prop('checked', false)
 
 window.initializeHome = ->
   moment.locale()
@@ -312,3 +321,4 @@ window.initializeHome = ->
   openFilters()
   onFilterClick()
   onSelectAllImages()
+  onDeselectAllImages()
