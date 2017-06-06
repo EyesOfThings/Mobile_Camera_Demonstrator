@@ -147,7 +147,7 @@ logImageDataOnly = (Images) ->
             </span>
             <span>
               <div class='ui checkbox'>
-                <input type='checkbox' class='am-image' value='#{url}'>
+                <input type='checkbox' class='am-image' value='#{url}' name='animateme'>
               </div>
             </span>
           </div>
@@ -310,6 +310,38 @@ onDeselectAllImages = ->
     $(".select-all-images").css("display", "block")
     $('input:checkbox').prop('checked', false)
 
+onCreateAnimation = ->
+  $(".createAnimation").on "click", ->
+    checkValues = $('input[name=animateme]:checked').map(->
+      $(this).val()
+    ).get()
+    console.log checkValues
+    ceateAndSave(checkValues)
+
+ceateAndSave = (image_paths) ->
+  data = {}
+  data.image_paths = image_paths
+
+  onError = (result, status, jqXHR) ->
+    console.log result
+    # $.notify("#{result.responseText}", "error")
+    false
+
+  onSuccess = (result, status, jqXHR) ->
+    console.log result
+    true
+
+  settings =
+    cache: false
+    dataType: 'json'
+    data: data
+    error: onError
+    success: onSuccess
+    type: "POST"
+    url: "/create_animation"
+
+  $.ajax(settings)
+
 window.initializeHome = ->
   moment.locale()
   startAuth()
@@ -322,3 +354,4 @@ window.initializeHome = ->
   onFilterClick()
   onSelectAllImages()
   onDeselectAllImages()
+  onCreateAnimation()
