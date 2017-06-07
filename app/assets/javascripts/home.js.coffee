@@ -298,14 +298,12 @@ unique = (list) ->
 
 onSelectAllImages = ->
   $(".select-all-images").on "click", ->
-    console.log "hi"
     $(".deselect-all-images").css("display", "block")
     $(".select-all-images").css("display", "none")
     $('input:checkbox').prop('checked', true)
 
 onDeselectAllImages = ->
   $(".deselect-all-images").on "click", ->
-    console.log "hi"
     $(".deselect-all-images").css("display", "none")
     $(".select-all-images").css("display", "block")
     $('input:checkbox').prop('checked', false)
@@ -316,19 +314,24 @@ onCreateAnimation = ->
       $(this).val()
     ).get()
     console.log checkValues
-    ceateAndSave(checkValues)
+    if checkValues.length < 1
+      $(".no-images-select").css("display", "block")
+    else
+      NProgress.start()
+      ceateAndSave(checkValues)
 
 ceateAndSave = (image_paths) ->
   data = {}
   data.image_paths = image_paths
 
-  onError = (result, status, jqXHR) ->
-    console.log result
+  onError = (jqXHR, textStatus, errorThrown) ->
+    console.log jqXHR
     # $.notify("#{result.responseText}", "error")
     false
 
-  onSuccess = (result, status, jqXHR) ->
-    console.log result
+  onSuccess = (data, textStatus, jqXHR) ->
+    console.log data
+    uploadToFirebase(data)
     true
 
   settings =
@@ -341,6 +344,23 @@ ceateAndSave = (image_paths) ->
     url: "/create_animation"
 
   $.ajax(settings)
+
+uploadToFirebase = (data) ->
+  storage = firebase.storage()
+  storageRef = storage.ref("Animations/#{data.directory_name}.mp4")
+  storageRef.putString(data.base64String, 'base64').then (snapshot) ->
+    console.log 'Uploaded a base64 string!'
+  db_auth = firebase.database().ref()
+  console.log window.user_email
+  obliged_email = "#{window.user_email}".replace(/\./g,'|')
+  animateRef = db_auth.child("#{obliged_email}")
+  animateRef.update
+    animation:
+      filePath: "Animations/#{data.directory_name}.mp4"
+  console.log "done"
+  $('input:checkbox').prop('checked', false)
+  NProgress.done()
+  $(".please-see-animate").css("display", "block")
 
 window.initializeHome = ->
   moment.locale()

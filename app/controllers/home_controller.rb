@@ -51,7 +51,6 @@ class HomeController < ApplicationController
   def create_animation
     directory_name = DateTime.now.to_i
     Dir.mkdir("#{directory_name}") unless File.exists?("#{directory_name}")
-    pry
     all_images = params["image_paths"]
     count_image = 1
     all_images.each do |url|
@@ -60,18 +59,17 @@ class HomeController < ApplicationController
       end
       count_image += 1
     end
-    # begin
-    #   open(file_name, 'wb') do |file|
-    #     file << open(params[:url]).read
-    #   end
-
-    #   RestClient.post("#{ENV['seaweedFiler']}/#{dir_name}/snapshots/recordings/#{year}/#{month}/#{day}/#{hour}/",
-    #     :name_of_file_param => File.new(file_name))
-    #   File.delete(file_name)
-    #   render json: "1"
-    # rescue Exception => e
-    #   render json: e.to_json
-    # end
+    begin
+      system("cd #{directory_name} && cat *.jpg | ffmpeg -f image2pipe -r 1 -vcodec mjpeg -i - -vcodec libx264 #{directory_name}.mp4")
+      base64String = Base64.encode64(open("#{directory_name}/#{directory_name}.mp4").to_a.join)
+      @meta_data = {
+        directory_name: "#{directory_name}",
+        base64String: "#{base64String}"
+      }
+      render json: @meta_data.to_json.html_safe
+    rescue Exception => e
+      render json: "0"
+    end
   end
 
   def send_to_seaweedfs
