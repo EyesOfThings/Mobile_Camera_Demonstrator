@@ -10,7 +10,9 @@ Rails.application.routes.draw do
 
   get "/integrations" => "home#integrations"
   get "/wizards" => "home#wizards"
+  get "/notifications" => "home#notifications"
 
   get "/send_to_seaweedFS", to: "home#send_to_seaweedfs"
+  post "/create_animation", to: "home#create_animation"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -37,6 +37,41 @@ class HomeController < ApplicationController
           }
   end
 
+  def notifications
+    @current_user = current_user
+
+    @auth_data = {
+            'apiKey' => ENV["apiKey"],
+            'authDomain' => ENV["authDomain"],
+            'databaseURL' => ENV["databaseURL"],
+            'storageBucket' => ENV["storageBucket"]
+          }
+  end
+
+  def create_animation
+    directory_name = DateTime.now.to_i
+    Dir.mkdir("#{directory_name}") unless File.exists?("#{directory_name}")
+    all_images = params["image_paths"]
+    count_image = 1
+    all_images.each do |url|
+      open("#{directory_name}/#{count_image}.jpg", 'wb') do |file|
+        file << open(url).read
+      end
+      count_image += 1
+    end
+    begin
+      system("cd #{directory_name} && cat *.jpg | ffmpeg -f image2pipe -r 1 -vcodec mjpeg -i - -vcodec libx264 #{directory_name}.mp4")
+      base64String = Base64.encode64(open("#{directory_name}/#{directory_name}.mp4").to_a.join)
+      @meta_data = {
+        directory_name: "#{directory_name}",
+        base64String: "#{base64String}"
+      }
+      render json: @meta_data.to_json.html_safe
+    rescue Exception => e
+      render json: "0"
+    end
+  end
+
   def send_to_seaweedfs
     date = params[:timestamp].to_i
     year = Time.at(date).utc.strftime("%Y")

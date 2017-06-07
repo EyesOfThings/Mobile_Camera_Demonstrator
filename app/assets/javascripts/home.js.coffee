@@ -141,11 +141,20 @@ logImageDataOnly = (Images) ->
             </div>
           </div>
           <div class='extra content'>
-            <i class='feed icon'></i>
-            #{timestamp}
+            <span class='right floated'>
+              <i class='feed icon'></i>
+              #{timestamp}
+            </span>
+            <span>
+              <div class='ui checkbox'>
+                <input type='checkbox' class='am-image' value='#{url}' name='animateme'>
+              </div>
+            </span>
           </div>
         </div>"
       $(".my-gallery").append(image_tag)
+      $('.ui.checkbox')
+        .checkbox()
       tags = "all"
     ).catch (error) ->
       console.log error
@@ -233,7 +242,7 @@ onFilterClick = ->
       $(this).css("background-color", "")
 
 onImageSearch = ->
-  $('.ui.left .item').on "click", ->
+  $('.ui.left > .item').on "click", ->
     if $(this).hasClass("active_for")
       $(this).removeClass("active_for")
       existed = ".#{$(this).attr("id")}"
@@ -287,6 +296,72 @@ unique = (list) ->
     return
   result
 
+onSelectAllImages = ->
+  $(".select-all-images").on "click", ->
+    $(".deselect-all-images").css("display", "block")
+    $(".select-all-images").css("display", "none")
+    $('input:checkbox').prop('checked', true)
+
+onDeselectAllImages = ->
+  $(".deselect-all-images").on "click", ->
+    $(".deselect-all-images").css("display", "none")
+    $(".select-all-images").css("display", "block")
+    $('input:checkbox').prop('checked', false)
+
+onCreateAnimation = ->
+  $(".createAnimation").on "click", ->
+    checkValues = $('input[name=animateme]:checked').map(->
+      $(this).val()
+    ).get()
+    console.log checkValues
+    if checkValues.length < 1
+      $(".no-images-select").css("display", "block")
+    else
+      NProgress.start()
+      ceateAndSave(checkValues)
+
+ceateAndSave = (image_paths) ->
+  data = {}
+  data.image_paths = image_paths
+
+  onError = (jqXHR, textStatus, errorThrown) ->
+    console.log jqXHR
+    # $.notify("#{result.responseText}", "error")
+    false
+
+  onSuccess = (data, textStatus, jqXHR) ->
+    console.log data
+    uploadToFirebase(data)
+    true
+
+  settings =
+    cache: false
+    dataType: 'json'
+    data: data
+    error: onError
+    success: onSuccess
+    type: "POST"
+    url: "/create_animation"
+
+  $.ajax(settings)
+
+uploadToFirebase = (data) ->
+  storage = firebase.storage()
+  storageRef = storage.ref("Animations/#{data.directory_name}.mp4")
+  storageRef.putString(data.base64String, 'base64').then (snapshot) ->
+    console.log 'Uploaded a base64 string!'
+  db_auth = firebase.database().ref()
+  console.log window.user_email
+  obliged_email = "#{window.user_email}".replace(/\./g,'|')
+  animateRef = db_auth.child("#{obliged_email}")
+  animateRef.update
+    animation:
+      filePath: "Animations/#{data.directory_name}.mp4"
+  console.log "done"
+  $('input:checkbox').prop('checked', false)
+  NProgress.done()
+  $(".please-see-animate").css("display", "block")
+
 window.initializeHome = ->
   moment.locale()
   startAuth()
@@ -297,3 +372,6 @@ window.initializeHome = ->
   popTheImage()
   openFilters()
   onFilterClick()
+  onSelectAllImages()
+  onDeselectAllImages()
+  onCreateAnimation()

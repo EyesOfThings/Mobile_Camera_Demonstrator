@@ -14,8 +14,9 @@
 //= require jquery_ujs
 //= require semantic-ui
 //= require moment
-//= require photoswipe
+//= require nprogress.js
 //= require jquery.timeago.js
 //= require home.js
 //= require integrations.js
 //= require wizards.js
+//= require notifications.js
