@@ -49,6 +49,14 @@
         <i class="close icon"></i>
         <p><i class="frown icon"></i> You have no images!</p>
       </div>
+      <div class="ui message transition no-images-select" style="display: none;">
+        <i class="close icon"></i>
+        <p><i class="frown icon"></i> Please select few images first.</p>
+      </div>
+      <div class="ui message transition please-see-animate" style="display: none;">
+        <i class="close icon"></i>
+        <p><i class="play icon"></i> Please see your animation on <a href="/animations">Animations</a>.</p>
+      </div>
       <div id="album" style="display: none;">
           <div class="ui piled compact segment">
             <!-- <div class="floating ui red label image_total">9</div> -->
@@ -98,15 +106,15 @@
                 <div class="item deselect-all-images" style="display: none;">
                   Deselect All Images
                 </div>
-                <div class="item">
+<!--                 <div class="item">
                   <i class="dropdown icon"></i>
                   <span class="text">Create Animation</span>
                   <div class="menu">
                     <div class="item">Document</div>
                     <div class="item">Image</div>
                   </div>
-                </div>
-                <div class="item">Action</div>
+                </div> -->
+                <div class="item createAnimation">Create Animation</div>
                 <div class="item">Another action</div>
               </div>
             </button>
@@ -183,6 +191,7 @@
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         console.log(user.email);
+        window.user_email = user.email
         $("#page-splash").css('display', 'none');
         $(".profile-image").attr("src", user.photoURL);
         $(".profile-name").text(user.displayName);
