@@ -13,37 +13,7 @@
 </div>
 <div class="after-auth hide">
   <div class="top-header">
-    <div class="ui top attached menu">
-      <div class="ui dropdown icon item">
-        <i class="align justify icon"></i>
-        <div class="menu loop-it">
-          <div class="item signout">
-            <img class="ui avatar image profile-image" src="">
-            <span class="profile-name"></span>
-          </div>
-          <div class="divider"></div>
-          <a href="/integrations">
-            <div class="item">
-              <i class="random layout icon"></i> Integrations
-            </div>
-          </a>
-          <a href="/wizards">
-            <div class="item">
-              <i class="rocket layout icon"></i> Wizards
-            </div>
-          </a>
-          <a href="/notifications">
-            <div class="item">
-              <i class="announcement layout icon"></i> Notifications
-            </div>
-          </a>
-          <div class="divider"></div>
-          <div class="item signout">
-            <i class="sign out icon"></i> Sign Out
-          </div>
-        </div>
-      </div>
-    </div>
+    <%= render 'shared/menu' %>
     <div class="ui bottom attached segment do-min">
       <div class="ui message transition heyyou" style="display: none;">
         <i class="close icon"></i>

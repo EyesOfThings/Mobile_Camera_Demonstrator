@@ -47,10 +47,10 @@ onLoad = ->
           else
             db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
               mac_address = Object.keys(snapshot.val())[0]
-              if typeof Object.values(snapshot.val())[1] != 'undefined'
-                syncIs = Object.values(snapshot.val())[1].syncIsOn
+              if typeof Object.values(snapshot.val())[2] != 'undefined'
+                syncIs = Object.values(snapshot.val())[2].syncIsOn
                 if syncIs > 0
-                  lastSyncDateIs = Object.values(snapshot.val())[1].lastSyncDate
+                  lastSyncDateIs = Object.values(snapshot.val())[2].lastSyncDate
                   $(".am-the-sync").css("display", "block")
                   $("#when-sync-did").html(
                     "
@@ -60,9 +60,9 @@ onLoad = ->
                   $("time.timeago").timeago()
                   startSync(iam_authenticated, user_email)
                   mac_address = Object.keys(snapshot.val())[0]
-                  api_key = Object.values(snapshot.val())[1].apiKey
-                  api_id = Object.values(snapshot.val())[1].apiId
-                  syncIs = Object.values(snapshot.val())[1].syncIsOn
+                  api_key = Object.values(snapshot.val())[2].apiKey
+                  api_id = Object.values(snapshot.val())[2].apiId
+                  syncIs = Object.values(snapshot.val())[2].syncIsOn
                   cameraIdIs = "#{mac_address}".replace(/:\s*/g, "").toLowerCase()
                   $(".openmein").html(
                     "
@@ -205,11 +205,11 @@ window.startSync = (auth, email) ->
     else
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
         # if typeof Object.values(snapshot.val())[1] != 'undefined'
-        lastSyncDateIs = Object.values(snapshot.val())[1].lastSyncDate
+        lastSyncDateIs = Object.values(snapshot.val())[2].lastSyncDate
         mac_address = Object.keys(snapshot.val())[0]
-        api_key = Object.values(snapshot.val())[1].apiKey
-        api_id = Object.values(snapshot.val())[1].apiId
-        syncIs = Object.values(snapshot.val())[1].syncIsOn
+        api_key = Object.values(snapshot.val())[2].apiKey
+        api_id = Object.values(snapshot.val())[2].apiId
+        syncIs = Object.values(snapshot.val())[2].syncIsOn
         console.log syncIs
         snapshot.forEach (childSnap) ->
           console.log childSnap
