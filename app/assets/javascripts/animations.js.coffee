@@ -6,6 +6,16 @@ syncIs = undefined
 mac_address = undefined
 iam_authenticated = undefined
 
+getObjectKeyIndex = (obj, keyToFind) ->
+  i = 0
+  key = undefined
+  for key of obj
+    `key = key`
+    if key == keyToFind
+      return i
+    i++
+  null
+
 window.startAuth = ->
   config = 
     apiKey: AuthData.apiKey
@@ -45,8 +55,9 @@ onLoad = ->
             db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
               mac_address = Object.keys(snapshot.val())[0]
               console.log Object.keys(snapshot.val())[1]
-              if Object.keys(snapshot.val())[1] != "evercam"
-                animationPath = Object.values(snapshot.val())[1].filePath
+              if getObjectKeyIndex(snapshot.exportVal(), 'animations') != null
+                indexVal = getObjectKeyIndex(snapshot.exportVal(), 'animations')
+                animationPath = Object.values(snapshot.val())[indexVal].filePath
                 console.log animationPath
                 tangRef = storageRef.child("#{animationPath}")
                 tangRef.getDownloadURL().then((url) ->

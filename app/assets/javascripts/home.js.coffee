@@ -59,6 +59,16 @@ onSignIn = ->
       # ...
       return
 
+getObjectKeyIndex = (obj, keyToFind) ->
+  i = 0
+  key = undefined
+  for key of obj
+    `key = key`
+    if key == keyToFind
+      return i
+    i++
+  null
+
 window.getAuthWithFirebase = (auth, email) ->
   db_auth = auth.database().ref()
   obliged_email = "#{email}".replace(/\./g,'|')
@@ -81,8 +91,9 @@ window.getAuthWithFirebase = (auth, email) ->
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
         # console.log Object.values(snapshot.val())[1]
         mac_address = Object.keys(snapshot.val())[0]
-        if typeof Object.values(snapshot.val())[2] != 'undefined'
-          lastSyncDateIs = Object.values(snapshot.val())[2].lastSyncDate
+        if getObjectKeyIndex(snapshot.exportVal(), 'evercam') != null
+          indexVal = getObjectKeyIndex(snapshot.exportVal(), 'evercam')
+          lastSyncDateIs = Object.values(snapshot.val())[indexVal].lastSyncDate
           $(".lastSync").text("Last Sync #{moment.unix(lastSyncDateIs).format("MM/DD/YYYY HH-mm-ss")}")
         else
           $(".lastSync").text("Last Sync #{moment.unix(88787777).format("MM/DD/YYYY HH-mm-ss")}")

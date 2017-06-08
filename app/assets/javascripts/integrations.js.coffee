@@ -50,10 +50,11 @@ onLoad = ->
               console.log('animations' in snapshot.val())
               console.log getObjectKeyIndex(snapshot.exportVal(), 'lll')
               mac_address = Object.keys(snapshot.val())[0]
-              if typeof Object.values(snapshot.val())[2] != 'undefined'
-                syncIs = Object.values(snapshot.val())[2].syncIsOn
+              if getObjectKeyIndex(snapshot.exportVal(), 'evercam') != null
+                indexVal = getObjectKeyIndex(snapshot.exportVal(), 'evercam')
+                syncIs = Object.values(snapshot.val())[indexVal].syncIsOn
                 if syncIs > 0
-                  lastSyncDateIs = Object.values(snapshot.val())[2].lastSyncDate
+                  lastSyncDateIs = Object.values(snapshot.val())[indexVal].lastSyncDate
                   $(".am-the-sync").css("display", "block")
                   $("#when-sync-did").html(
                     "
@@ -63,9 +64,9 @@ onLoad = ->
                   $("time.timeago").timeago()
                   startSync(iam_authenticated, user_email)
                   mac_address = Object.keys(snapshot.val())[0]
-                  api_key = Object.values(snapshot.val())[2].apiKey
-                  api_id = Object.values(snapshot.val())[2].apiId
-                  syncIs = Object.values(snapshot.val())[2].syncIsOn
+                  api_key = Object.values(snapshot.val())[indexVal].apiKey
+                  api_id = Object.values(snapshot.val())[indexVal].apiId
+                  syncIs = Object.values(snapshot.val())[indexVal].syncIsOn
                   cameraIdIs = "#{mac_address}".replace(/:\s*/g, "").toLowerCase()
                   $(".openmein").html(
                     "
@@ -217,12 +218,13 @@ window.startSync = (auth, email) ->
       console.log "No data for SYNC"
     else
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
+        indexVal = getObjectKeyIndex(snapshot.exportVal(), 'evercam')
         # if typeof Object.values(snapshot.val())[1] != 'undefined'
-        lastSyncDateIs = Object.values(snapshot.val())[2].lastSyncDate
+        lastSyncDateIs = Object.values(snapshot.val())[indexVal].lastSyncDate
         mac_address = Object.keys(snapshot.val())[0]
-        api_key = Object.values(snapshot.val())[2].apiKey
-        api_id = Object.values(snapshot.val())[2].apiId
-        syncIs = Object.values(snapshot.val())[2].syncIsOn
+        api_key = Object.values(snapshot.val())[indexVal].apiKey
+        api_id = Object.values(snapshot.val())[indexVal].apiId
+        syncIs = Object.values(snapshot.val())[indexVal].syncIsOn
         console.log syncIs
         snapshot.forEach (childSnap) ->
           console.log childSnap

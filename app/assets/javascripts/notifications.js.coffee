@@ -6,6 +6,16 @@ syncIs = undefined
 mac_address = undefined
 iam_authenticated = undefined
 
+getObjectKeyIndex = (obj, keyToFind) ->
+  i = 0
+  key = undefined
+  for key of obj
+    `key = key`
+    if key == keyToFind
+      return i
+    i++
+  null
+
 window.startAuth = ->
   config = 
     apiKey: AuthData.apiKey
