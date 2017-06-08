@@ -48,6 +48,17 @@ class HomeController < ApplicationController
           }
   end
 
+  def animations
+    @current_user = current_user
+
+    @auth_data = {
+            'apiKey' => ENV["apiKey"],
+            'authDomain' => ENV["authDomain"],
+            'databaseURL' => ENV["databaseURL"],
+            'storageBucket' => ENV["storageBucket"]
+          }
+  end
+
   def create_animation
     directory_name = DateTime.now.to_i
     Dir.mkdir("#{directory_name}") unless File.exists?("#{directory_name}")

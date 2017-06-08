@@ -81,8 +81,8 @@ window.getAuthWithFirebase = (auth, email) ->
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
         # console.log Object.values(snapshot.val())[1]
         mac_address = Object.keys(snapshot.val())[0]
-        if typeof Object.values(snapshot.val())[1] != 'undefined'
-          lastSyncDateIs = Object.values(snapshot.val())[1].lastSyncDate
+        if typeof Object.values(snapshot.val())[2] != 'undefined'
+          lastSyncDateIs = Object.values(snapshot.val())[2].lastSyncDate
           $(".lastSync").text("Last Sync #{moment.unix(lastSyncDateIs).format("MM/DD/YYYY HH-mm-ss")}")
         else
           $(".lastSync").text("Last Sync #{moment.unix(88787777).format("MM/DD/YYYY HH-mm-ss")}")
@@ -349,18 +349,41 @@ uploadToFirebase = (data) ->
   storage = firebase.storage()
   storageRef = storage.ref("Animations/#{data.directory_name}.mp4")
   storageRef.putString(data.base64String, 'base64').then (snapshot) ->
+    $(".please-see-animate").css("display", "block")
+    NProgress.done()
     console.log 'Uploaded a base64 string!'
   db_auth = firebase.database().ref()
   console.log window.user_email
   obliged_email = "#{window.user_email}".replace(/\./g,'|')
-  animateRef = db_auth.child("#{obliged_email}")
-  animateRef.update
-    animation:
-      filePath: "Animations/#{data.directory_name}.mp4"
+  db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
+    if !snapshot.hasChild("animations")
+      animateRef = db_auth.child("#{obliged_email}")
+      animateRef.update
+        animations:
+          filePath: "Animations/#{data.directory_name}.mp4"
+    else
+      animateRef = db_auth.child("#{obliged_email}").child("animations")
+      newAnimateRef = animateRef.push().set
+        "filePath": "Animations/#{data.directory_name}.mp4"
+
+
+      # console.log "am here"
+      # postData = {
+      #   "filePath": "Animations/#{data.directory_name}.mp4"
+      # }
+      # animateRef = db_auth.child("#{obliged_email}/animations").push().key
+      # updates = {}
+      # updates["/#{obliged_email}/animations/"] = postData
+      # db_auth.push(updates)
+        # filePath: 
+
+  # if db_auth.child("#{obliged_email}/animations")
+    # animateRef = db_auth.child("#{obliged_email}/animations")
+    # animateRef.update
+    #   filePath: "Animations/#{data.directory_name}.mp4"
+    # ...
   console.log "done"
   $('input:checkbox').prop('checked', false)
-  NProgress.done()
-  $(".please-see-animate").css("display", "block")
 
 window.initializeHome = ->
   moment.locale()
