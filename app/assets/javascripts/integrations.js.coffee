@@ -46,6 +46,9 @@ onLoad = ->
             console.log "No data for SYNC"
           else
             db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
+              console.log snapshot.exportVal()
+              console.log('animations' in snapshot.val())
+              console.log getObjectKeyIndex(snapshot.exportVal(), 'lll')
               mac_address = Object.keys(snapshot.val())[0]
               if typeof Object.values(snapshot.val())[2] != 'undefined'
                 syncIs = Object.values(snapshot.val())[2].syncIsOn
@@ -176,6 +179,16 @@ deleteCameraInEvercam = (api_key, api_id, mac_address) ->
 
   $.ajax(settings)
 
+
+getObjectKeyIndex = (obj, keyToFind) ->
+  i = 0
+  key = undefined
+  for key of obj
+    `key = key`
+    if key == keyToFind
+      return i
+    i++
+  null
 
 letSyncAgain = ->
   $(".letSyncAgain").on "click", ->
