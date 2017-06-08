@@ -48,6 +48,17 @@ class HomeController < ApplicationController
           }
   end
 
+  def animations
+    @current_user = current_user
+
+    @auth_data = {
+            'apiKey' => ENV["apiKey"],
+            'authDomain' => ENV["authDomain"],
+            'databaseURL' => ENV["databaseURL"],
+            'storageBucket' => ENV["storageBucket"]
+          }
+  end
+
   def create_animation
     directory_name = DateTime.now.to_i
     Dir.mkdir("#{directory_name}") unless File.exists?("#{directory_name}")
@@ -60,7 +71,7 @@ class HomeController < ApplicationController
       count_image += 1
     end
     begin
-      system("cd #{directory_name} && cat *.jpg | ffmpeg -f image2pipe -r 1 -vcodec mjpeg -i - -vcodec libx264 #{directory_name}.mp4")
+      system("cat #{directory_name}/*.jpg | ffmpeg -f image2pipe -r 1 -vcodec mjpeg -i - -vcodec libx264 #{directory_name}/#{directory_name}.mp4")
       base64String = Base64.encode64(open("#{directory_name}/#{directory_name}.mp4").to_a.join)
       @meta_data = {
         directory_name: "#{directory_name}",
