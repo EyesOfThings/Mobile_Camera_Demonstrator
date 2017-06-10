@@ -7,6 +7,7 @@ globalModal = undefined
 user_email = undefined
 api_key = undefined
 api_id = undefined
+image_count_ani = undefined
 lastSyncDateIs = undefined
 window.haveLoggedIn = undefined
 allVals = []
@@ -328,8 +329,14 @@ onCreateAnimation = ->
     if checkValues.length < 1
       $(".no-images-select").css("display", "block")
     else
+      image_count_ani = checkValues.length
       NProgress.start()
       ceateAndSave(checkValues)
+      $.notify("Your Animation is being processed.", "info");
+      # $(".please-see-animate").css("display", "block")
+      $('input:checkbox').prop('checked', false)
+      NProgress.done()
+
 
 ceateAndSave = (image_paths) ->
   data = {}
@@ -360,41 +367,39 @@ uploadToFirebase = (data) ->
   storage = firebase.storage()
   storageRef = storage.ref("Animations/#{data.directory_name}.mp4")
   storageRef.putString(data.base64String, 'base64').then (snapshot) ->
-    $(".please-see-animate").css("display", "block")
-    NProgress.done()
     console.log 'Uploaded a base64 string!'
-  db_auth = firebase.database().ref()
   console.log window.user_email
   obliged_email = "#{window.user_email}".replace(/\./g,'|')
-  db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
-    if !snapshot.hasChild("animations")
-      animateRef = db_auth.child("#{obliged_email}")
-      animateRef.update
-        animations:
-          filePath: "Animations/#{data.directory_name}.mp4"
-    else
-      animateRef = db_auth.child("#{obliged_email}").child("animations")
-      newAnimateRef = animateRef.push().set
-        "filePath": "Animations/#{data.directory_name}.mp4"
-
-
-      # console.log "am here"
-      # postData = {
-      #   "filePath": "Animations/#{data.directory_name}.mp4"
-      # }
-      # animateRef = db_auth.child("#{obliged_email}/animations").push().key
-      # updates = {}
-      # updates["/#{obliged_email}/animations/"] = postData
-      # db_auth.push(updates)
-        # filePath: 
-
-  # if db_auth.child("#{obliged_email}/animations")
-    # animateRef = db_auth.child("#{obliged_email}/animations")
-    # animateRef.update
-    #   filePath: "Animations/#{data.directory_name}.mp4"
-    # ...
   console.log "done"
-  $('input:checkbox').prop('checked', false)
+  console.log "Uploading to DB PATH"
+  saveMePath(obliged_email, "Animations/#{data.directory_name}.mp4")
+
+saveMePath = (user_email, path) ->
+  data = {}
+  data.user_email = user_email
+  data.path = path
+  data.image_count = image_count_ani
+
+  onError = (jqXHR, textStatus, errorThrown) ->
+    console.log jqXHR
+    # $.notify("#{result.responseText}", "error")
+    false
+
+  onSuccess = (data, textStatus, jqXHR) ->
+    console.log data
+    $.notify("Your Animation is ready.", "success");
+    true
+
+  settings =
+    cache: false
+    dataType: 'json'
+    data: data
+    error: onError
+    success: onSuccess
+    type: "POST"
+    url: "/save_animation_path"
+
+  $.ajax(settings)
 
 window.initializeHome = ->
   moment.locale()

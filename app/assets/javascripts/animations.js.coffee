@@ -41,6 +41,7 @@ onLoad = ->
     firebase.auth().onAuthStateChanged (user) ->
       if user
         NProgress.start()
+        console.log user
         console.log user.email
         user_email = user.email
         iam_authenticated = firebase
@@ -52,50 +53,68 @@ onLoad = ->
             $(".no-animations").css('display', 'block')
             console.log "No data for show."
           else
-            db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
-              mac_address = Object.keys(snapshot.val())[0]
-              console.log Object.keys(snapshot.val())[1]
-              if getObjectKeyIndex(snapshot.exportVal(), 'animations') != null
-                indexVal = getObjectKeyIndex(snapshot.exportVal(), 'animations')
-                animationPath = Object.values(snapshot.val())[indexVal].filePath
-                console.log animationPath
-                tangRef = storageRef.child("#{animationPath}")
-                tangRef.getDownloadURL().then((url) ->
-                  console.log url
-                  videoJSHtml = "
-                    <div class='ui card'>
-                      <div class='content'>
-                        <div class='header'>Animation</div>
-                        <div class='meta'>2 days ago</div>
-                        <div class='description'>
-                          <video
-                              id='my-player'
-                              class='video-js'
-                              controls
-                              preload='auto'
-                              poster=''
-                              data-setup='{}'>
-                            <source src='#{url}' type='video/mp4'></source>
-                          </video>
-                        </div>
-                      </div>
-                    </div>
-                  "
-                  $(".row-10").html(videoJSHtml)
-                  videojs('my-player')
-                  NProgress.done()
-                ).catch (error) ->
-                  console.log error
-                  return
-              else
-                $(".no-animations").css('display', 'block')
-
+            getAllPathsForEmail(obliged_email)
         $('.profile-image').attr 'src', user.photoURL
         $('.profile-name').text user.displayName
       else
         window.location = '/'
       return
     return
+
+getAllPathsForEmail = (email) ->
+  data = {}
+  data.user_email = email
+
+  onError = (jqXHR, textStatus, errorThrown) ->
+    console.log jqXHR
+    # $.notify("#{result.responseText}", "error")
+    false
+
+  onSuccess = (data, textStatus, jqXHR) ->
+    console.log data
+    # console.log animationPath
+    storageRef = iam_authenticated.storage().ref()
+    data.forEach (animation) ->
+      tangRef = storageRef.child("#{animation.path}")
+      tangRef.getDownloadURL().then((url) ->
+        console.log url
+        videoJSHtml = "
+          <div class='card'>
+            <div class='content'>
+              <div class='header'>Animation</div>
+              <div class='meta'>Frames: #{animation.image_count}</div>
+              <div class='description'>
+                <video
+                    id='my-player-#{animation.id}'
+                    class='video-js my-animate'
+                    controls
+                    preload='auto'
+                    poster=''
+                    data-setup='{}'>
+                  <source src='#{url}' type='video/mp4'></source>
+                </video>
+              </div>
+            </div>
+          </div>
+        "
+        $(".row-10 > .ui").append(videoJSHtml)
+        videojs("my-player-#{animation.id}")
+      ).catch (error) ->
+        console.log error
+        return
+    NProgress.done()
+    true
+
+  settings =
+    cache: false
+    dataType: 'json'
+    data: data
+    error: onError
+    success: onSuccess
+    type: "GET"
+    url: "/load_animation_path"
+
+  $.ajax(settings)
 
 onSignOut = ->
   $(".signout").on "click", ->
