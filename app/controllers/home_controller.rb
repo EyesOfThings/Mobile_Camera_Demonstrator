@@ -59,6 +59,19 @@ class HomeController < ApplicationController
           }
   end
 
+  def save_animation_path
+    @animation =  Animation.new
+    @animation.user_email = params['user_email']
+    @animation.path = params['path']
+    @animation.image_count = params['image_count']
+    @animation.save
+  end
+
+  def load_animation_path
+    @animations = Animation.where(user_email: params['user_email'])
+    render json: @animations.to_json.html_safe
+  end
+
   def create_animation
     directory_name = DateTime.now.to_i
     Dir.mkdir("#{directory_name}") unless File.exists?("#{directory_name}")

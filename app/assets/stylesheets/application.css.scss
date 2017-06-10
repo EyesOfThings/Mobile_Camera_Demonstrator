@@ -22,11 +22,16 @@
   margin: 10px;
 }
 
-.row-10 > .ui.card {
+.row-10 > .ui.cards > .card {
   width: 500px;
+  float: left;
 }
 
-#my-player {
+.row-10 > .ui.cards {
+  overflow: hidden
+}
+
+.my-animate {
   width: 100%;
 }
 
