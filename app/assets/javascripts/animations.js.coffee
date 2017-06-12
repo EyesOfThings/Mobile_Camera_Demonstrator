@@ -53,7 +53,7 @@ onLoad = ->
             $(".no-animations").css('display', 'block')
             console.log "No data for show."
           else
-            getAllPathsForEmail(obliged_email)
+            getAllPathsForEmail(user_email)
         $('.profile-image').attr 'src', user.photoURL
         $('.profile-name').text user.displayName
       else
@@ -73,16 +73,27 @@ getAllPathsForEmail = (email) ->
   onSuccess = (data, textStatus, jqXHR) ->
     console.log data
     # console.log animationPath
-    storageRef = iam_authenticated.storage().ref()
     if data.length > 0
       data.forEach (animation) ->
-        tangRef = storageRef.child("#{animation.path}")
-        tangRef.getDownloadURL().then((url) ->
-          console.log url
+        if animation.progress == 1
+          console.log animation.progress
           videoJSHtml = "
             <div class='card'>
               <div class='content'>
-                <div class='header'>Animation</div>
+                <div class='header'>#{animation.name}</div>
+                <div class='meta'>Frames: #{animation.image_count}</div>
+                <div class='description'>
+                  <div class='ui active centered inline loader'></div>
+                </div>
+              </div>
+            </div>
+          "
+          $(".row-10 > .ui").append(videoJSHtml) 
+        else
+          videoJSHtml = "
+            <div class='card'>
+              <div class='content'>
+                <div class='header'>#{animation.name}</div>
                 <div class='meta'>Frames: #{animation.image_count}</div>
                 <div class='description'>
                   <video
@@ -92,7 +103,7 @@ getAllPathsForEmail = (email) ->
                       preload='auto'
                       poster=''
                       data-setup='{}'>
-                    <source src='#{url}' type='video/mp4'></source>
+                    <source src='#{animation.path}' type='video/mp4'></source>
                   </video>
                 </div>
               </div>
@@ -100,9 +111,6 @@ getAllPathsForEmail = (email) ->
           "
           $(".row-10 > .ui").append(videoJSHtml)
           videojs("my-player-#{animation.id}")
-        ).catch (error) ->
-          console.log error
-          return
     else
       $.notify("You have no animations.", "info");
     NProgress.done()

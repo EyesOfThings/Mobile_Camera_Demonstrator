@@ -11,6 +11,7 @@ image_count_ani = undefined
 lastSyncDateIs = undefined
 window.haveLoggedIn = undefined
 allVals = []
+imagePaths = undefined
 
 sendAJAXRequest = (settings) ->
   token = $('meta[name="csrf-token"]')
@@ -327,20 +328,30 @@ onCreateAnimation = ->
     ).get()
     console.log checkValues
     if checkValues.length < 1
-      $(".no-images-select").css("display", "block")
+      $.notify("Please select few images.", "info")
+      # $(".no-images-select").css("display", "block")
     else
+      imagePaths = checkValues
       image_count_ani = checkValues.length
-      NProgress.start()
-      ceateAndSave(checkValues)
-      $.notify("Your Animation is being processed.", "info");
-      # $(".please-see-animate").css("display", "block")
-      $('input:checkbox').prop('checked', false)
-      NProgress.done()
+      $('.ui.animation-name').modal("show")
+
+onNameSave = ->
+  $(".save-animate-name").on "click", ->
+    console.log "hi"
+    NProgress.start()
+    animationName = $("#animation-name").val()
+    ceateAndSave(imagePaths, animationName)
+    $.notify("Your Animation is being processed.", "info");
+    # $(".please-see-animate").css("display", "block")
+    $('input:checkbox').prop('checked', false)
+    NProgress.done()
 
 
-ceateAndSave = (image_paths) ->
+ceateAndSave = (image_paths, animation_name) ->
   data = {}
   data.image_paths = image_paths
+  data.animation_name = animation_name
+  data.user_email = window.user_email
 
   onError = (jqXHR, textStatus, errorThrown) ->
     console.log jqXHR
@@ -349,7 +360,7 @@ ceateAndSave = (image_paths) ->
 
   onSuccess = (data, textStatus, jqXHR) ->
     console.log data
-    uploadToFirebase(data)
+    # uploadToFirebase(data)
     true
 
   settings =
@@ -372,13 +383,14 @@ uploadToFirebase = (data) ->
   obliged_email = "#{window.user_email}".replace(/\./g,'|')
   console.log "done"
   console.log "Uploading to DB PATH"
-  saveMePath(obliged_email, "Animations/#{data.directory_name}.mp4")
+  saveMePath(obliged_email, "Animations/#{data.directory_name}.mp4", data.animationId)
 
-saveMePath = (user_email, path) ->
+saveMePath = (user_email, path, animationId) ->
   data = {}
   data.user_email = user_email
   data.path = path
   data.image_count = image_count_ani
+  data.animation_id = animationId
 
   onError = (jqXHR, textStatus, errorThrown) ->
     console.log jqXHR
@@ -409,6 +421,7 @@ window.initializeHome = ->
   onAllClicked()
   onSignOut()
   popTheImage()
+  onNameSave()
   openFilters()
   onFilterClick()
   onSelectAllImages()

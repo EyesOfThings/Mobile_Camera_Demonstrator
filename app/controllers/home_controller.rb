@@ -60,10 +60,11 @@ class HomeController < ApplicationController
   end
 
   def save_animation_path
-    @animation =  Animation.new
+    @animation =  Animation.find(params['animation_id'])
     @animation.user_email = params['user_email']
     @animation.path = params['path']
     @animation.image_count = params['image_count']
+    @animation.progress = 3
     @animation.save
   end
 
@@ -73,10 +74,15 @@ class HomeController < ApplicationController
   end
 
   def create_animation
+    @animation = Animation.new
+    @animation.user_email = "#{params['user_email']}"
+    @animation.name = params["animation_name"]
+    @animation.progress = 1
+    @animation.save
     directory_name = DateTime.now.to_i
     Dir.mkdir("#{directory_name}") unless File.exists?("#{directory_name}")
     all_images = params["image_paths"]
-    count_image = 1
+    count_image = 0
     all_images.each do |url|
       open("#{directory_name}/#{count_image}.jpg", 'wb') do |file|
         file << open(url).read
@@ -85,12 +91,14 @@ class HomeController < ApplicationController
     end
     begin
       system("cat #{directory_name}/*.jpg | ffmpeg -f image2pipe -r 1 -vcodec mjpeg -i - -vcodec libx264 #{directory_name}/#{directory_name}.mp4")
-      base64String = Base64.encode64(open("#{directory_name}/#{directory_name}.mp4").to_a.join)
-      @meta_data = {
-        directory_name: "#{directory_name}",
-        base64String: "#{base64String}"
-      }
-      render json: @meta_data.to_json.html_safe
+      RestClient.post("#{ENV['seaweedFiler']}/#{params['user_email']}/",
+        :name_of_file_param => File.new("#{directory_name}/#{directory_name}.mp4"))
+      system("rm -rf #{directory_name}")
+      @animation.path = "#{ENV['seaweedFiler']}/#{params['user_email']}/#{directory_name}.mp4"
+      @animation.image_count = "#{count_image}"
+      @animation.progress = 3
+      @animation.save
+      render json: @animation.to_json.html_safe
     rescue Exception => e
       render json: "0"
     end
