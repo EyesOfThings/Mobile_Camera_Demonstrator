@@ -3,6 +3,7 @@ class HomeController < ApplicationController
   require 'open-uri'
   require 'uri'
   require 'rest_client'
+  require 'filesize'
 
   def show
     @current_user = current_user
@@ -74,12 +75,14 @@ class HomeController < ApplicationController
   end
 
   def create_animation
+    directory_name = DateTime.now.to_i
     @animation = Animation.new
     @animation.user_email = "#{params['user_email']}"
     @animation.name = params["animation_name"]
     @animation.progress = 1
+    @animation.unix_time = directory_name
     @animation.save
-    directory_name = DateTime.now.to_i
+    # directory_name = DateTime.now.to_i
     Dir.mkdir("#{directory_name}") unless File.exists?("#{directory_name}")
     all_images = params["image_paths"]
     count_image = 0
@@ -93,10 +96,13 @@ class HomeController < ApplicationController
       system("cat #{directory_name}/*.jpg | ffmpeg -f image2pipe -r 1 -vcodec mjpeg -i - -vcodec libx264 #{directory_name}/#{directory_name}.mp4")
       RestClient.post("#{ENV['seaweedFiler']}/#{params['user_email']}/",
         :name_of_file_param => File.new("#{directory_name}/#{directory_name}.mp4"))
+      file_size = File.size("#{directory_name}/#{directory_name}.mp4")
+      human_file_size = Filesize.from("#{file_size} b").pretty
       system("rm -rf #{directory_name}")
       @animation.path = "#{ENV['seaweedFiler']}/#{params['user_email']}/#{directory_name}.mp4"
       @animation.image_count = "#{count_image}"
       @animation.progress = 3
+      @animation.file_size = "#{human_file_size}"
       @animation.save
       render json: @animation.to_json.html_safe
     rescue Exception => e
