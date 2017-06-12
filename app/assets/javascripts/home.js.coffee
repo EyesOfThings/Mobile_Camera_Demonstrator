@@ -344,6 +344,8 @@ onNameSave = ->
     $.notify("Your Animation is being processed.", "info");
     # $(".please-see-animate").css("display", "block")
     $('input:checkbox').prop('checked', false)
+    $(".deselect-all-images").css("display", "none")
+    $(".select-all-images").css("display", "block")
     NProgress.done()
 
 
@@ -360,6 +362,7 @@ ceateAndSave = (image_paths, animation_name) ->
 
   onSuccess = (data, textStatus, jqXHR) ->
     console.log data
+    $.notify("Your Animation is ready.", "success");
     # uploadToFirebase(data)
     true
 
