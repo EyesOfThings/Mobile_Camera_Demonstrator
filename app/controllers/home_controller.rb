@@ -4,6 +4,7 @@ class HomeController < ApplicationController
   require 'uri'
   require 'rest_client'
   require 'filesize'
+  require 'streamio-ffmpeg'
 
   def show
     @current_user = current_user
@@ -96,6 +97,7 @@ class HomeController < ApplicationController
       system("cat #{directory_name}/*.jpg | ffmpeg -f image2pipe -r 1 -vcodec mjpeg -i - -vcodec libx264 #{directory_name}/#{directory_name}.mp4")
       RestClient.post("#{ENV['seaweedFiler']}/#{params['user_email']}/",
         :name_of_file_param => File.new("#{directory_name}/#{directory_name}.mp4"))
+      movie = FFMPEG::Movie.new("#{directory_name}/#{directory_name}.mp4")
       file_size = File.size("#{directory_name}/#{directory_name}.mp4")
       human_file_size = Filesize.from("#{file_size} b").pretty
       system("rm -rf #{directory_name}")
@@ -103,6 +105,7 @@ class HomeController < ApplicationController
       @animation.image_count = "#{count_image}"
       @animation.progress = 3
       @animation.file_size = "#{human_file_size}"
+      @animation.fps = movie.frame_rate
       @animation.save
       render json: @animation.to_json.html_safe
     rescue Exception => e

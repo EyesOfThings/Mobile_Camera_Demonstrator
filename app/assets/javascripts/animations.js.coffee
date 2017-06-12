@@ -94,7 +94,7 @@ getAllPathsForEmail = (email) ->
             <div class='card'>
               <div class='content'>
                 <div class='header'>#{animation.name}</div>
-                <div class='meta'>Frames: #{animation.image_count}, Date: #{moment.unix(animation.unix_time).format("MM/DD/YYYY HH-mm-ss")}, File size: #{animation.file_size}</div>
+                <div class='meta'>Frames: #{animation.image_count}, Date: #{moment.unix(animation.unix_time).format("MM/DD/YYYY HH-mm-ss")}, File size: #{animation.file_size}, FPS: #{animation.fps}</div>
                 <div class='description'>
                   <video
                       id='my-player-#{animation.id}'
