@@ -74,34 +74,37 @@ getAllPathsForEmail = (email) ->
     console.log data
     # console.log animationPath
     storageRef = iam_authenticated.storage().ref()
-    data.forEach (animation) ->
-      tangRef = storageRef.child("#{animation.path}")
-      tangRef.getDownloadURL().then((url) ->
-        console.log url
-        videoJSHtml = "
-          <div class='card'>
-            <div class='content'>
-              <div class='header'>Animation</div>
-              <div class='meta'>Frames: #{animation.image_count}</div>
-              <div class='description'>
-                <video
-                    id='my-player-#{animation.id}'
-                    class='video-js my-animate'
-                    controls
-                    preload='auto'
-                    poster=''
-                    data-setup='{}'>
-                  <source src='#{url}' type='video/mp4'></source>
-                </video>
+    if data.length > 0
+      data.forEach (animation) ->
+        tangRef = storageRef.child("#{animation.path}")
+        tangRef.getDownloadURL().then((url) ->
+          console.log url
+          videoJSHtml = "
+            <div class='card'>
+              <div class='content'>
+                <div class='header'>Animation</div>
+                <div class='meta'>Frames: #{animation.image_count}</div>
+                <div class='description'>
+                  <video
+                      id='my-player-#{animation.id}'
+                      class='video-js my-animate'
+                      controls
+                      preload='auto'
+                      poster=''
+                      data-setup='{}'>
+                    <source src='#{url}' type='video/mp4'></source>
+                  </video>
+                </div>
               </div>
             </div>
-          </div>
-        "
-        $(".row-10 > .ui").append(videoJSHtml)
-        videojs("my-player-#{animation.id}")
-      ).catch (error) ->
-        console.log error
-        return
+          "
+          $(".row-10 > .ui").append(videoJSHtml)
+          videojs("my-player-#{animation.id}")
+        ).catch (error) ->
+          console.log error
+          return
+    else
+      $.notify("You have no animations.", "info");
     NProgress.done()
     true
 
