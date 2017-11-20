@@ -141,11 +141,13 @@ logImageDataOnly = (Images) ->
       console.log tags
       image_tag =
         "<div class='ui card #{tags}'>
-          <div class='image'>
-            <img src='#{url}'>
-          </div>
+          <a class='pop-the-image' href='#{url}' data-time='#{timestamp}' data-mac='#{mac_address}' data-tags='#{tags}'>
+            <div class='image'>
+              <img src='#{url}'>
+            </div>
+          </a>
           <div class='content'>
-            <a class='header pop-the-image' href='#{url}' data-time='#{timestamp}' data-mac='#{mac_address}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MM/DD/YYYY HH-mm-ss")}</a>
+            <a class='header' href='#' data-time='#{timestamp}' data-mac='#{mac_address}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MM/DD/YYYY HH-mm-ss")}</a>
             <div class='meta'>
               <span class='date'>Device ID: #{mac_address}</span>
             </div>
@@ -228,8 +230,8 @@ popTheImage = ->
   $(".my-gallery").on "click", ".pop-the-image", (event) ->
     console.log "hi"
     event.preventDefault()
-    $('.ui.modal img').attr('src', $(this).attr('href'))
-    $('.ui.modal .to-time').html(
+    $('.ui.imagepage img').attr('src', $(this).attr('href'))
+    $('.ui.imagepage .to-time').html(
       "
         #{moment.unix($(this).data('time')).format("dddd, DD MMMM YYYY hh-mm-ss A")}
         <div class='meta'>
@@ -237,7 +239,7 @@ popTheImage = ->
         </div>
       "
     )
-    $('.ui.modal').modal("show")
+    $('.ui.imagepage').modal("show")
 
 openFilters = ->
  $(".show-me-filter").on "click", ->
