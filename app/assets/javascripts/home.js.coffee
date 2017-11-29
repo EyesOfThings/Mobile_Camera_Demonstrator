@@ -426,18 +426,12 @@ saveMePath = (user_email, path, animationId) ->
 startCalendar = ->
   dateFilter = $('#date-filter-for').calendar
     type: 'date',
-    # formatter:
-    #   datetime: (date, settings) ->
-    #     return moment(date).format("MM/DD/YYYY HH-mm-ss")
-    #     # //return a formatted string representing the date & time of 'date'
     onChange: (date, text, mode) ->
-      # $("div[data-timefilter='#{text}']").hide();
       $('.datetime-filter').hide().filter("[data-timefilter='#{text}']").show();
 
 removeDateFilter = ->
   $(".clean-show-all").on "click", ->
     $('.datetime-filter').show()
-    console.log "hehhh"
 
 window.initializeHome = ->
   moment.locale()
