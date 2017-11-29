@@ -249,11 +249,15 @@ openFilters = ->
 
 onFilterClick = ->
   $(".ui.left .item").on "click", ->
-    actual_color = "rgba(255, 255, 255, 0.0784314)"
+    console.log $(this).css("background-color")
+
+    actual_color = "rgba(255, 255, 255, 0.08)"
     clicked_color = "rgb(94, 94, 94)"
     if $(this).css("background-color") == actual_color
+      console.log "hwere"
       $(this).css("background-color", clicked_color)
     else
+      console.log "no color"
       $(this).css("background-color", "")
 
 onImageSearch = ->
