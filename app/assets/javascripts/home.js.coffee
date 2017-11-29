@@ -12,6 +12,7 @@ lastSyncDateIs = undefined
 window.haveLoggedIn = undefined
 allVals = []
 imagePaths = undefined
+window.dateFilter = undefined
 
 sendAJAXRequest = (settings) ->
   token = $('meta[name="csrf-token"]')
@@ -140,14 +141,14 @@ logImageDataOnly = (Images) ->
         tags = "all normal"
       console.log tags
       image_tag =
-        "<div class='ui card #{tags}'>
-          <a class='pop-the-image' href='#{url}' data-time='#{timestamp}' data-mac='#{mac_address}' data-tags='#{tags}'>
+        "<div class='datetime-filter ui card #{tags}' data-timefilter='#{moment.unix(timestamp).format("MMMM M, YYYY")}'>
+          <a class='pop-the-image filer-on-date' href='#{url}' data-mac='#{mac_address}' data-tags='#{tags}'>
             <div class='image'>
               <img src='#{url}'>
             </div>
           </a>
           <div class='content'>
-            <a class='header' href='#' data-time='#{timestamp}' data-mac='#{mac_address}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MM/DD/YYYY HH-mm-ss")}</a>
+            <a class='header' href='#' data-time='#{timestamp}' data-mac='#{mac_address}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MMMM M, YYYY, HH-mm-ss")}</a>
             <div class='meta'>
               <span class='date'>Device ID: #{mac_address}</span>
             </div>
@@ -422,6 +423,22 @@ saveMePath = (user_email, path, animationId) ->
 
   $.ajax(settings)
 
+startCalendar = ->
+  dateFilter = $('#date-filter-for').calendar
+    type: 'date',
+    # formatter:
+    #   datetime: (date, settings) ->
+    #     return moment(date).format("MM/DD/YYYY HH-mm-ss")
+    #     # //return a formatted string representing the date & time of 'date'
+    onChange: (date, text, mode) ->
+      # $("div[data-timefilter='#{text}']").hide();
+      $('.datetime-filter').hide().filter("[data-timefilter='#{text}']").show();
+
+removeDateFilter = ->
+  $(".clean-show-all").on "click", ->
+    $('.datetime-filter').show()
+    console.log "hehhh"
+
 window.initializeHome = ->
   moment.locale()
   startAuth()
@@ -429,6 +446,7 @@ window.initializeHome = ->
   onImageSearch()
   onAllClicked()
   onSignOut()
+  startCalendar()
   popTheImage()
   onNameSave()
   openFilters()
@@ -436,3 +454,4 @@ window.initializeHome = ->
   onSelectAllImages()
   onDeselectAllImages()
   onCreateAnimation()
+  removeDateFilter()

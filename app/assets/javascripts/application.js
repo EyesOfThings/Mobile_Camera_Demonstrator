@@ -15,6 +15,7 @@
 //= require semantic-ui
 //= require moment
 //= require nprogress.js
+//= require calendar.js
 //= require notify.js
 //= require jquery.timeago.js
 //= require home.js
