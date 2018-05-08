@@ -142,13 +142,13 @@ logImageDataOnly = (Images) ->
       console.log tags
       image_tag =
         "<div class='datetime-filter ui card #{tags}' data-timefilter='#{moment.unix(timestamp).format("MMMM M, YYYY")}'>
-          <a class='pop-the-image filer-on-date' href='#{url}' data-mac='#{mac_address}' data-tags='#{tags}'>
+          <a class='pop-the-image filer-on-date' href='#{url}' data-mac='#{mac_address}' data-tags='#{tags}' data-time='#{timestamp}'>
             <div class='image'>
               <img src='#{url}'>
             </div>
           </a>
           <div class='content'>
-            <a class='header' href='#' data-time='#{timestamp}' data-mac='#{mac_address}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MMMM M, YYYY, HH-mm-ss")}</a>
+            <a class='header' data-time='#{timestamp}' data-mac='#{mac_address}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MMMM M, YYYY, HH-mm-ss")}</a>
             <div class='meta'>
               <span class='date'>Device ID: #{mac_address}</span>
             </div>
