@@ -94,7 +94,7 @@ class HomeController < ApplicationController
       count_image += 1
     end
     begin
-      system("cat #{directory_name}/*.jpg | ffmpeg -f image2pipe -r 1 -vcodec mjpeg -i - -vcodec libx264 #{directory_name}/#{directory_name}.mp4")
+      system("cat #{directory_name}/*.jpg | ffmpeg -f image2pipe -r 5 -vcodec mjpeg -i - -vcodec libx264 #{directory_name}/#{directory_name}.mp4")
       RestClient.post("#{ENV['seaweedFiler']}/#{params['user_email']}/",
         :name_of_file_param => File.new("#{directory_name}/#{directory_name}.mp4"))
       movie = FFMPEG::Movie.new("#{directory_name}/#{directory_name}.mp4")
