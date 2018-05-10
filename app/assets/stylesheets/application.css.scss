@@ -212,6 +212,26 @@ i {
   box-shadow: 0 0 0px #ebebeb; 
 }
 
+#image_processing_db{
+  bottom: 0;
+  color: #3d3d3d;
+  font-size: 16px;
+  height: 15px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+  width: 100px;
+  display: none;
+}
+
+.loading-one_db {
+  border: 0px solid #ebebeb;
+  box-shadow: 0 0 0px #ebebeb; 
+}
+
 #show-hide {
   background: rgba(255,255,255,0.1);
   border: none;

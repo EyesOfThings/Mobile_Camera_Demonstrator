@@ -3,6 +3,8 @@ lastSyncDateIs = undefined
 api_key = undefined
 api_id = undefined
 syncIs = undefined
+dropBoxSync = undefined
+accessToken = undefined
 mac_address = undefined
 iam_authenticated = undefined
 
@@ -62,7 +64,6 @@ onLoad = ->
                     "
                   )
                   $("time.timeago").timeago()
-                  startSync(iam_authenticated, user_email)
                   mac_address = Object.keys(snapshot.val())[0]
                   api_key = Object.values(snapshot.val())[indexVal].apiKey
                   api_id = Object.values(snapshot.val())[indexVal].apiId
@@ -93,6 +94,36 @@ onLoad = ->
                 $(".etcstuff").css("display", "block")
                 $(".openmein").html("").css("display", "none")
                 $(".makeit-take").css('display', '')
+
+              if getObjectKeyIndex(snapshot.exportVal(), 'dropbox') != null
+                indexVal = getObjectKeyIndex(snapshot.exportVal(), 'dropbox')
+                dropBoxSync = Object.values(snapshot.val())[indexVal].syncIsOn
+                if dropBoxSync > 0
+                  lastSyncDateIs = Object.values(snapshot.val())[indexVal].lastSyncDate
+                  $(".am-the-db-sync").css("display", "block")
+                  $("#when-db-sync-did").html(
+                    "
+                      Last sync was <time class='timeago-db' datetime='#{moment.unix(moment().unix()).toISOString()}'>Date</time>
+                    "
+                  )
+                  $("time.timeago-db").timeago()
+                  mac_address = Object.keys(snapshot.val())[0]
+                  accessToken = Object.values(snapshot.val())[indexVal].accessToken
+                  dropBoxSync = Object.values(snapshot.val())[indexVal].syncIsOn
+                  $("#revoke-db-me").css('display', 'block')
+                  $(".makeit-take").css('display', '')
+                  $(".etcstuffdb").css("display", "none")
+                else
+                  $(".etcstuffdb").css("display", "block")
+                  $(".am-the-db-sync").css("display", "none")
+                  $("#drop-box-integrate").css('display', 'block')
+                  $(".makeit-take").css('display', '')
+              else
+                $("#drop-box-integrate").css('display', 'block')
+                $(".am-the-db-sync").css("display", "none")
+                $(".etcstuff").css("display", "block")
+                $(".makeit-take").css('display', '')
+
         $('.profile-image').attr 'src', user.photoURL
         $('.profile-name').text user.displayName
       else
@@ -107,7 +138,7 @@ createCameraInEvercam = (api_key, api_id, mac_address) ->
   data.id = "#{mac_address.replace(/:\s*/g, "").toLowerCase()}"
   data.vendor = "other"
   data.model = "other"
-  data.jpg_url = "imag.jpg"
+  data.jpg_url = "image.jpg"
   data.external_http_port = 80
   data.external_host = "125.25.222.2"
   data.is_public = false
@@ -207,6 +238,21 @@ letSyncAgain = ->
       return
     ), 5000
 
+letSyncDBAgain = -> 
+  $(".letSyncDBAgain").on "click", ->
+    $("#image_processing_db").css("display", "block").css("z-index", 999)
+    uploadToDropBox(iam_authenticated, user_email)
+    $(".am-the-db-sync").css("display", "block")
+    $("#when-db-sync-did").css("display", "block").html(
+      "
+        Last sync was <time class='timeago_db' datetime='#{moment.unix(moment().unix()).toISOString()}'>Date</time>
+      "
+    )
+    $("time.timeago_db").timeago()
+    setTimeout (->
+      $("#image_processing_db").css('display', 'none').css("z-index", "")
+      return
+    ), 5000
 
 window.startSync = (auth, email) ->
   db_auth = auth.database().ref()
@@ -252,6 +298,23 @@ logImageDataOnly = (Images) ->
       console.log error
       return
 
+logImageDataOnlyDB = (Images) ->
+  $.each Images, (timestamp, Image) ->
+    tangRef = storageRef.child("#{Image.Path}")
+    tangRef.getDownloadURL().then((url) ->
+      if dropBoxSync > 0
+        console.log lastSyncDateIs
+        console.log timestamp
+        if timestamp > lastSyncDateIs
+          updateDBSyncDate(iam_authenticated, user_email, timestamp, accessToken, dropBoxSync)
+          console.log "upload to DB"
+          sendItToDB(url, mac_address, timestamp, accessToken)
+      else
+        console.log "dropBoxSync is off"
+    ).catch (error) ->
+      console.log error
+      return
+
 updateSyncDate = (auth, email, timestamp, api_key, api_id, syncIs) ->
   db_auth = auth.database().ref()
   obliged_email = "#{email}".replace(/\./g,'|')
@@ -263,6 +326,41 @@ updateSyncDate = (auth, email, timestamp, api_key, api_id, syncIs) ->
       lastSyncDate: "#{timestamp}"
       syncIsOn: "#{syncIs}"
   console.log "done"
+
+updateDBSyncDate = (auth, email, timestamp, accessToken, syncIs) ->
+  db_auth = auth.database().ref()
+  obliged_email = "#{email}".replace(/\./g,'|')
+  dropboxRef = db_auth.child("#{obliged_email}")
+  dropboxRef.update
+    dropbox:
+      accessToken: "#{accessToken}"
+      lastSyncDate: "#{timestamp}"
+      syncIsOn: "#{syncIs}"
+  console.log "done"
+
+sendItToDB = (url, mac_address, timestamp, accessToken) ->
+  data = {}
+  data.url = "#{url}"
+  data.dir_name = "#{mac_address}"
+  data.timestamp = "#{timestamp}"
+  data.accessToken = "#{accessToken}"
+
+  onError = (response) ->
+    console.log response
+
+  onSuccess = (response) ->
+    console.log response
+
+  settings =
+    error: onError
+    success: onSuccess
+    data: data
+    cache: false
+    dataType: "json"
+    type: "GET"
+    url: "/send_to_DB"
+
+  sendAJAXRequest(settings)
 
 sendItToSeaweedFS = (url, mac_address, timestamp) ->
   data = {}
@@ -302,6 +400,10 @@ onIntegrate = ->
   $("#integrate-me").on "click", ->
     $('.small.modal.integration').modal('show')
 
+onDropBox = ->
+  $("#drop-box-integrate").on "click", ->
+    $('.small.modal.db-integration').modal('show')
+
 onSaveValues = ->
   $(".lets-integrate").on "click", ->
     api_key = $(".api_key").val()
@@ -315,6 +417,41 @@ onSaveValues = ->
     createCameraInEvercam(api_key, api_id, mac_address)
     startSync(firebase, user_email)
 
+onDBSaveValues = ->
+  $(".lets-db-integrate").on "click", ->
+    accessToken = $(".DROPBOX_ACCESS_TOKEN").val()
+    $("#drop-box-integrate").css("display", "none")
+    $(".etcstuffdb").css("display", "none")
+    $("#revoke-db-me").css("display", "block")
+    $(".am-after-ajax").css("display", "block")
+    $("#image_processing_db").css("display", "block")
+    addDBTokenToTable(firebase, user_email, accessToken)
+    uploadToDropBox(firebase, user_email)
+
+uploadToDropBox = (auth, email) ->
+  db_auth = auth.database().ref()
+  obliged_email = "#{email}".replace(/\./g,'|')
+  console.log obliged_email
+  db_auth.once 'value', (snapshot) ->
+    if !snapshot.hasChild(obliged_email)
+      $(".heyyou").css('display', 'block')
+      console.log "No data for SYNC"
+    else
+      db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
+        indexVal = getObjectKeyIndex(snapshot.exportVal(), 'dropbox')
+        # if typeof Object.values(snapshot.val())[1] != 'undefined'
+        lastSyncDateIs = Object.values(snapshot.val())[indexVal].lastSyncDate
+        mac_address = Object.keys(snapshot.val())[0]
+        accessToken = Object.values(snapshot.val())[indexVal].accessToken
+        dropBoxSync = Object.values(snapshot.val())[indexVal].syncIsOn
+        console.log dropBoxSync
+        snapshot.forEach (childSnap) ->
+          console.log childSnap
+
+          if childSnap.val().Images != null
+            logImageDataOnlyDB(childSnap.val().Images)
+            return
+
 onRevoke = ->
   $(".yesrevoke").on "click", ->
     deleteCameraInEvercam(api_key, api_id, mac_address)
@@ -325,9 +462,21 @@ onRevoke = ->
     $(".am-the-sync").css("display", "none")
     updateSyncDate(firebase, user_email, lastSyncDateIs, api_key, api_id, "0")
 
+onRevokeDB = ->
+  $(".yesrevokedb").on "click", ->
+    $("#drop-box-integrate").css("display", "block")
+    $(".etcstuffdb").css("display", "block")
+    $("#revoke-db-me").css("display", "none")
+    $(".am-the-db-sync").css("display", "none")
+    updateDBSyncDate(firebase, user_email, lastSyncDateIs, accessToken, "0")
+
 onRevokeMe = ->
   $("#revoke-me").on "click", ->
-    $('.small.modal.revoke').modal('show')  
+    $('.small.modal.revoke').modal('show')
+
+onRevokeDBMe = ->
+  $("#revoke-db-me").on "click", ->
+    $('.small.modal.revokedb').modal('show')
 
 addTable = (auth, email, api_key, api_id) ->
   db_auth = auth.database().ref()
@@ -342,6 +491,26 @@ addTable = (auth, email, api_key, api_id) ->
 
   console.log "done"
 
+addDBTokenToTable = (auth, email, accessToken) ->
+  db_auth = auth.database().ref()
+  obliged_email = "#{email}".replace(/\./g,'|')
+  dropboxRef = db_auth.child("#{obliged_email}")
+  dropboxRef.update
+    dropbox:
+      accessToken: "#{accessToken}"
+      syncIsOn: "1"
+      lastSyncDate: '1293916756'
+
+  console.log "done"
+  $("#image_processing_db").css("display", "none")
+  $(".am-the-db-sync").css("display", "block")
+  $("#when-db-sync-did").html(
+    "
+      Last sync was <time class='timeago-db' datetime='#{moment.unix(moment().unix()).toISOString()}'>Date</time>
+    "
+  )
+  $("time.timeago-db").timeago()
+
 window.initializeIntegrations = ->
   moment.locale()
   startAuth()
@@ -351,4 +520,9 @@ window.initializeIntegrations = ->
   onRevoke()
   onRevokeMe()
   letSyncAgain()
+  onDropBox()
+  onDBSaveValues()
+  onRevokeDBMe()
+  onRevokeDB()
+  letSyncDBAgain()
   onSignOut()

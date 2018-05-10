@@ -1,6 +1,8 @@
 <%= render 'shared/menu' %>
 <%= render 'shared/integrate' %>
+<%= render 'shared/dropbox' %>
 <%= render 'shared/revoke' %>
+<%= render 'shared/revokedb' %>
 <div class="row">
   <div class="ui message transition heyyou" style="display: none;">
     <i class="close icon"></i>
@@ -65,76 +67,37 @@
     <div class="card">
       <div class="content">
         <div class="image" style="text-align: center;">
-          <img src="https://cdn.zapier.com/static/1DbP14/images/frontend/onboarding/zapier-small-orange-logo.png" width="135">
-        </div>
-      </div>
-      <div class="content">
-        <div class="header">Zapier</div>
-        <div class="description">
-          Connect Your Apps and Automate Workflows.
-        </div>
-      </div>
-      <div class="ui bottom attached button">
-        <i class="add icon"></i>
-        Integrate
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="content">
-        <div class="image" style="text-align: center;">
-          <img src="https://fst.slack-edge.com/5eb00/img/landing/where_work_happens/logo-dark-blue.png" width="155">
-        </div>
-      </div>
-      <div class="content">
-        <div class="header">Slack</div>
-        <div class="description">
-          Where work happens.
-        </div>
-      </div>
-      <div class="ui bottom attached button">
-        <i class="add icon"></i>
-        Integrate
-      </div>
-    </div>
-
-
-    <div class="card">
-      <div class="content">
-        <div class="image" style="text-align: center;">
           <img src="https://cfl.dropboxstatic.com/static/images/about/dropbox_logo_text_2015-vfld7_dJ8.svg" width="155">
         </div>
       </div>
+      <div id="image_processing_db">
+        <img class="loading-one_db" src="/assets/loading.gif"/>
+      </div>
       <div class="content">
         <div class="header">DropBox</div>
-        <div class="description">
+        <div class="description etcstuffdb">
           Introducing Dropbox Paper and Smart Sync — a simpler way to work together.
         </div>
       </div>
-      <div class="ui bottom attached button">
+      <div class="extra content am-the-db-sync" style="display: none;">
+        <span class="right floated">
+          <div class="ui icon button letSyncDBAgain" data-tooltip="Click to sync again." data-delay="500">
+            <i class="refresh icon"></i>
+          </div>
+        </span>
+        <span id="when-db-sync-did">
+          Last Sync 3 days ago
+        </span>
+      </div>
+      <div class="ui bottom attached button" id="drop-box-integrate" style="display: none;">
         <i class="add icon"></i>
         Integrate
       </div>
-    </div>
-
-    <div class="card">
-      <div class="content">
-        <div class="image" style="text-align: center;">
-          <img src="https://blog.ring.com/wp-content/uploads/2016/02/IFTTT_Logo.svg_.png" width="155">
-        </div>
-      </div>
-      <div class="content">
-        <div class="header">IFTTT</div>
-        <div class="description">
-          Do more with the services you love.
-        </div>
-      </div>
-      <div class="ui bottom attached button">
-        <i class="add icon"></i>
-        Integrate
+      <div class="ui bottom attached button" id="revoke-db-me" style="display: none;">
+        <i class="trash icon"></i>
+        Revoke
       </div>
     </div>
-
   </div>
 
 </div>
