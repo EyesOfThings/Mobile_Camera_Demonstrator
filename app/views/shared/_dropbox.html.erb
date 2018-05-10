@@ -1,0 +1,28 @@
+<div class="ui small modal db-integration">
+  <div class="header">
+    DropBox
+    <div class='meta'>
+      <span class='date'>Please provide your dropbox information for integration.</span>
+    </div>
+  </div>
+  <div class="content">
+    <form class="ui form">
+      <div class="field">
+        <label>Dropbox Access Token</label>
+        <input type="text" name="DROPBOX_ACCESS_TOKEN" placeholder="DROPBOX_ACCESS_TOKEN" class="DROPBOX_ACCESS_TOKEN">
+      </div>
+    </form>
+  </div>
+  <div class="actions">
+    <div class="ui approve button lets-db-integrate">Create</div>
+    <div class="ui cancel button">Cancel</div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $('.ui.checkbox')
+      .checkbox()
+    ;
+  });
+</script>
