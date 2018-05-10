@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get "/animations" => "home#animations"
 
   get "/send_to_seaweedFS", to: "home#send_to_seaweedfs"
+  get "/send_to_DB", to: "home#send_to_db"
   post "/create_animation", to: "home#create_animation"
   post "/save_animation_path", to: "home#save_animation_path"
   get "/load_animation_path", to: "home#load_animation_path"

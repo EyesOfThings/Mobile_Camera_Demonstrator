@@ -5,6 +5,7 @@ class HomeController < ApplicationController
   require 'rest_client'
   require 'filesize'
   require 'streamio-ffmpeg'
+  require 'dropbox'
 
   def show
     @current_user = current_user
@@ -131,6 +132,32 @@ class HomeController < ApplicationController
 
       RestClient.post("#{ENV['seaweedFiler']}/#{dir_name}/snapshots/recordings/#{year}/#{month}/#{day}/#{hour}/",
         :name_of_file_param => File.new(file_name))
+      File.delete(file_name)
+      render json: "1"
+    rescue Exception => e
+      render json: e.to_json
+    end
+  end
+
+  def send_to_db
+    date = params[:timestamp].to_i
+    year = Time.at(date).utc.strftime("%Y")
+    month = Time.at(date).utc.strftime("%m")
+    day = Time.at(date).utc.strftime("%d")
+    hour = Time.at(date).utc.strftime("%H")
+    minutes = Time.at(date).utc.strftime("%M")
+    seconds = Time.at(date).utc.strftime("%S")
+
+    file_name = "#{year}-#{month}-#{day}-#{hour}-#{minutes}_#{seconds}_000.jpg"
+    dir_name = params[:dir_name].tr(':', '').downcase
+    client = Dropbox::Client.new(params[:accessToken])
+    begin
+      open(file_name, 'wb') do |file|
+        file << open(params[:url]).read
+      end
+
+      client.upload("/#{dir_name}/#{file_name}", file_name)
+
       File.delete(file_name)
       render json: "1"
     rescue Exception => e
