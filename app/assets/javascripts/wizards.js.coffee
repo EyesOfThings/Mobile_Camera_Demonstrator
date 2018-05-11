@@ -47,7 +47,7 @@ onLoad = ->
         obliged_email = "#{user_email}".replace(/\./g,'|')
         console.log obliged_email
 
-        $('.profile-image').attr 'src', user.photoURL
+        # $('.profile-image').attr 'src', "http://eot.evercam.io/eot.jpg"
         $('.profile-name').text user.displayName
       else
         window.location = '/'

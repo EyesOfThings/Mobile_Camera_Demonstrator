@@ -124,7 +124,7 @@ onLoad = ->
                 $(".etcstuff").css("display", "block")
                 $(".makeit-take").css('display', '')
 
-        $('.profile-image').attr 'src', user.photoURL
+        # $('.profile-image').attr 'src', "http://eot.evercam.io/eot.jpg"
         $('.profile-name').text user.displayName
       else
         window.location = '/'

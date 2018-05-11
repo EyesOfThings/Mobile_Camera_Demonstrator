@@ -186,7 +186,7 @@
         console.log(user.email);
         window.user_email = user.email
         $("#page-splash").css('display', 'none');
-        $(".profile-image").attr("src", user.photoURL);
+        // $(".profile-image").attr("src", "http://eot.evercam.io/eot.jpg");
         $(".profile-name").text(user.displayName);
         getAuthWithFirebase(firebase, user.email);
       }else{

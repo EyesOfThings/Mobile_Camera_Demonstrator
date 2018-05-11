@@ -54,7 +54,7 @@ onLoad = ->
             console.log "No data for show."
           else
             getAllPathsForEmail(user_email)
-        $('.profile-image').attr 'src', user.photoURL
+        # $('.profile-image').attr 'src', "http://eot.evercam.io/eot.jpg"
         $('.profile-name').text user.displayName
       else
         window.location = '/'

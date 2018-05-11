@@ -42,7 +42,7 @@ onSignIn = ->
     provider = new (firebase.auth.GoogleAuthProvider)
     firebase.auth().signInWithPopup(provider).then((result) ->
       $("#page-splash").css('display', 'none')
-      $(".profile-image").attr("src", result.user.photoURL)
+      # $(".profile-image").attr("src", "http://eot.evercam.io/eot.jpg")
       $(".profile-name").text(result.user.displayName)
       console.log result.user
       console.log result.user.email
