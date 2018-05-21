@@ -35,7 +35,7 @@
                 <div class="ui inverted dimmer">
                  <div class="content">
                    <div class="center">
-                     <div class="ui red button view">VIEW</div>
+                     <div class="ui red button view whole-view">VIEW</div>
                    </div>
                  </div>
                  </div>
@@ -218,8 +218,6 @@
     $('.ui.card .image').dimmer({on: 'hover'});
     $('.ui.rating').rating({maxRating: 5});
     $('.ui.button').popup();
-
-
 
     $('.button.view').on('click', (function() {
       $('#album').fadeOut("slow", function () {

@@ -18,5 +18,6 @@ Rails.application.routes.draw do
   post "/create_animation", to: "home#create_animation"
   post "/save_animation_path", to: "home#save_animation_path"
   get "/load_animation_path", to: "home#load_animation_path"
+  get "/feed" => "home#feeds"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

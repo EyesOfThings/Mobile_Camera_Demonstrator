@@ -127,9 +127,23 @@ capitalizeFirstLetter = (string) ->
   string.charAt(0).toUpperCase() + string.slice(1)
 
 logImageDataOnly = (Images) ->
+  spanTagFeed = ""
   tags = "all"
   $.each Images, (timestamp, Image) ->
-    tangRef = storageRef.child("#{Image.Path}");
+    tangRef = storageRef.child("#{Image.Path}")
+    tangRef.getMetadata().then((metadata) ->
+      if metadata.customMetadata && metadata.customMetadata.isPublic == "true"
+        spanTagFeed = ""
+        console.log "heuuuryyy"
+      else
+        spanTagFeed =
+          "<span class='right floated poping-up' data-content='Add this to your public feed.' data-meta='#{Image.Path}'>
+            <i class='share icon'></i>
+          </span>"
+        console.log "chalbay"
+    ).catch (error) ->
+      console.log error
+    # console.log metaValues
     tangRef.getDownloadURL().then((url) ->
       # if timestamp > lastSyncDateIs
         # updateSyncDate(iam_authenticated, user_email, timestamp, api_key, api_id)
@@ -157,10 +171,7 @@ logImageDataOnly = (Images) ->
             </div>
           </div>
           <div class='extra content'>
-            <span class='right floated'>
-              <i class='feed icon'></i>
-              #{timestamp}
-            </span>
+            #{spanTagFeed}
             <span>
               <div class='ui checkbox'>
                 <input type='checkbox' class='am-image' value='#{url}' name='animateme'>
@@ -175,6 +186,13 @@ logImageDataOnly = (Images) ->
     ).catch (error) ->
       console.log error
       return
+
+window.giveMetaData = (path) ->
+  snapRef = storageRef.child("#{path}")
+  setValuesMeta = snapRef.getMetadata().then((metaData) ->
+    return metaData.customMetadata
+  ).catch (error) ->
+    return
 
 onSignOut = ->
   $(".signout").on "click", ->
@@ -433,6 +451,29 @@ removeDateFilter = ->
   $(".clean-show-all").on "click", ->
     $('.datetime-filter').show()
 
+onViewClick = ->
+  $(".whole-view").on "click", ->  
+    $('.poping-up').popup on: 'hover'
+
+onPopUpClick = ->
+  $(".my-gallery").on "click", ".poping-up", ->
+    NProgress.start()
+    thisIs = $(this)
+    forMetaData = $(this).data('meta')
+    newMetaData = 
+      customMetadata:
+        isPublic: 'true'
+        pFeedDate: "#{moment().unix()}"
+
+    storageRef.child("#{forMetaData}").updateMetadata(newMetaData).then((metadata) ->
+      console.log metadata
+      $.notify("Added to your public feed.", "info");
+      NProgress.done()
+      thisIs.addClass("hide")
+      return
+    ).catch (error) ->
+      return
+
 window.initializeHome = ->
   moment.locale()
   startAuth()
@@ -449,3 +490,5 @@ window.initializeHome = ->
   onDeselectAllImages()
   onCreateAnimation()
   removeDateFilter()
+  onViewClick()
+  onPopUpClick()
