@@ -172,17 +172,17 @@ logImageDataOnly = (Images) ->
           </div>
           <div class='extra content'>
             #{spanTagFeed}
-            <span class='right floated' data-meta='#{Image.Path}'>
-              <i class='twitter square icon'></i>
+            <span class='right floated social-twitter' data-surl='#{url}'>
+              <i class='twitter square icon' style='font-size: 20px;'></i>
             </span>
-            <span class='right floated' data-meta='#{Image.Path}'>
-              <i class='facebook square icon'></i>
+            <span class='right floated social-facebook' data-surl='#{url}'>
+              <i class='facebook square icon' style='font-size: 20px;'></i>
             </span>
-            <span class='right floated' data-meta='#{Image.Path}'>
-              <i class='whatsapp icon'></i>
+            <span class='right floated social-whatsapp' data-surl='#{url}'>
+              <i class='whatsapp icon' style='font-size: 20px;'></i>
             </span>
-            <span class='right floated' data-meta='#{Image.Path}'>
-              <i class='linkedin icon'></i>
+            <span class='right floated social-linkedin' data-surl='#{url}'>
+              <i class='linkedin icon' style='font-size: 20px;'></i>
             </span>
             <span>
               <div class='ui checkbox'>
@@ -516,6 +516,81 @@ onDropUpClick = ->
     ).catch (error) ->
       return
 
+onTwitterSharingClick = ->
+  $(".my-gallery").on 'click', ".social-twitter", ->
+    longUrl = $(this).data('surl')
+    shrtUrl = ""
+    $("#image_processing")
+      .css('display', 'block')
+      .css('z-index', "99999")
+
+    setTimeout (->
+      $("#image_processing").css('display', 'none')
+      get_short_url longUrl, "o_48fmt0av2s", "R_babbcf09f1e946eb98907531b6d7c13a", (short_url) ->
+        window.open 'http://twitter.com/share?url=' + short_url + '&text=This is a photo from evercam&via=evrcm', '_blank'
+      $("#image_processing").css('display', 'none')
+      return
+    ), 1000
+
+onWhatsAppSharingClick = ->
+  $(".my-gallery").on 'click', ".social-whatsapp", ->
+    longUrl = $(this).data('surl')
+    shrtUrl = ""
+    $("#image_processing")
+      .css('display', 'block')
+      .css('z-index', "99999")
+
+    setTimeout (->
+      $("#image_processing").css('display', 'none')
+      get_short_url longUrl, "o_48fmt0av2s", "R_babbcf09f1e946eb98907531b6d7c13a", (short_url) ->
+        window.open("https://web.whatsapp.com/send?text=" + short_url, "_blank");
+      $("#image_processing").css('display', 'none')
+      return
+    ), 1000
+
+onLinkedInSharingClick = ->
+  $(".my-gallery").on 'click', ".social-linkedin", ->
+    longUrl = $(this).data('surl')
+    shrtUrl = ""
+    $("#image_processing")
+      .css('display', 'block')
+      .css('z-index', "99999")
+
+    setTimeout (->
+      $("#image_processing").css('display', 'none')
+      get_short_url longUrl, "o_48fmt0av2s", "R_babbcf09f1e946eb98907531b6d7c13a", (short_url) ->
+        window.open("http://www.linkedin.com/shareArticle?url=#{short_url}&title=Eyes Of Things&summary=This is a photo from evercam", "_blank");
+      $("#image_processing").css('display', 'none')
+      return
+    ), 1000
+
+onFBSharingClick = ->
+  $(".my-gallery").on 'click', ".social-facebook", ->
+    longUrl = $(this).data('surl')
+    shrtUrl = ""
+    $("#image_processing")
+      .css('display', 'block')
+      .css('z-index', "99999")
+
+    setTimeout (->
+      $("#image_processing").css('display', 'none')
+      get_short_url longUrl, "o_48fmt0av2s", "R_babbcf09f1e946eb98907531b6d7c13a", (short_url) ->
+        window.open("http://www.facebook.com/sharer.php?u=#{short_url}", "_blank");
+      $("#image_processing").css('display', 'none')
+      return
+    ), 1000
+
+get_short_url = (long_url, login, api_key, func) ->
+  $.getJSON 'http://api.bitly.com/v3/shorten?callback=?', {
+    'format': 'json'
+    'apiKey': api_key
+    'login': login
+    'longUrl': long_url
+  }, (response) ->
+    func response.data.url
+    return
+  return
+
 window.initializeHome = ->
   moment.locale()
   startAuth()
@@ -535,3 +610,7 @@ window.initializeHome = ->
   onViewClick()
   onPopUpClick()
   onDropUpClick()
+  onTwitterSharingClick()
+  onWhatsAppSharingClick()
+  onLinkedInSharingClick()
+  onFBSharingClick()
