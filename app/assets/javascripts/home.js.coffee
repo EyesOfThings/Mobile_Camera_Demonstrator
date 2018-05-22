@@ -133,7 +133,10 @@ logImageDataOnly = (Images) ->
     tangRef = storageRef.child("#{Image.Path}")
     tangRef.getMetadata().then((metadata) ->
       if metadata.customMetadata && metadata.customMetadata.isPublic == "true"
-        spanTagFeed = ""
+        spanTagFeed =
+          "<span class='right floated droping-up' data-content='Remove this from public feed.' data-meta='#{Image.Path}'>
+            <i class='undo icon'></i>
+          </span>"
       else
         spanTagFeed =
           "<span class='right floated poping-up' data-content='Add this to your public feed.' data-meta='#{Image.Path}'>
@@ -451,6 +454,7 @@ removeDateFilter = ->
 onViewClick = ->
   $(".whole-view").on "click", ->  
     $('.poping-up').popup on: 'hover'
+    $('.droping-up').popup on: 'hover'
 
 onPopUpClick = ->
   $(".my-gallery").on "click", ".poping-up", ->
@@ -466,7 +470,36 @@ onPopUpClick = ->
       console.log metadata
       $.notify("Added to your public feed.", "info");
       NProgress.done()
-      thisIs.addClass("hide")
+      # thisIs.addClass("hide")
+      thisIs
+        .attr('data-content', 'Remove this from public feed.')
+        .html("<i class='undo icon'></i>")
+        .addClass("droping-up")
+        .removeClass("poping-up")
+      return
+    ).catch (error) ->
+      return
+
+onDropUpClick = ->
+  $(".my-gallery").on "click", ".droping-up", ->
+    NProgress.start()
+    thisIs = $(this)
+    forMetaData = $(this).data('meta')
+    newMetaData = 
+      customMetadata:
+        isPublic: 'false'
+        pFeedDate: "#{moment().unix()}"
+
+    storageRef.child("#{forMetaData}").updateMetadata(newMetaData).then((metadata) ->
+      console.log metadata
+      $.notify("Removed from your public feed.", "info");
+      NProgress.done()
+      # thisIs.addClass("hide")
+      thisIs
+        .html("<i class='share icon'></i>")
+        .removeClass("droping-up")
+        .addClass("poping-up")
+        .attr('data-content', 'Add this to your public feed.')
       return
     ).catch (error) ->
       return
@@ -489,3 +522,4 @@ window.initializeHome = ->
   removeDateFilter()
   onViewClick()
   onPopUpClick()
+  onDropUpClick()

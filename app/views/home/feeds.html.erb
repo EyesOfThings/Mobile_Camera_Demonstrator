@@ -1,5 +1,7 @@
 <%= render 'shared/menu' %>
-
+<div id="image_processing">
+  <img class="loading-one" src="/assets/loading.gif"/>
+</div>
 <div class="row">
   <div id="album">
     <div id="album_items" style="display: block;">
@@ -33,12 +35,17 @@
         .closest('.message')
         .transition('fade')
       ;
-    })
-  ;
+    });
+
     $('.ui.dropdown').dropdown();
     $('.ui.radio.checkbox')
       .checkbox()
     ;
+
+    if ($(".public-gallery").html() == "") {
+      console.log("ye khali hai bhai");
+    }
+
     window.initializeFeeds();
   });
 </script

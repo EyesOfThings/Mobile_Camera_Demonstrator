@@ -25,6 +25,9 @@ onLoad = ->
                 console.log childSnap
                 if childSnap.val().Images != null
                   # console.log childSnap.val().Images
+                  $("#image_processing")
+                    .css('display', 'block')
+                    .css('z-index', "99999")
                   showPublicFeed(childSnap.val().Images)
                   return
             NProgress.done()
@@ -68,12 +71,12 @@ showPublicFeed = (Images) ->
           $(".public-gallery").append(image_tag)
           tags = "all"
         ).catch (error) ->
-          console.log error
+          console.log "error"
           return
       else
-        console.log error
+        console.log "error"
     ).catch (error) ->
-      console.log error
+      console.log "error"
 
 feedTheImage = ->
   $(".public-gallery").on "click", ".pop-the-image", (event) ->
