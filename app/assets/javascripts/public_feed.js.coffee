@@ -25,9 +25,6 @@ onLoad = ->
                 console.log childSnap
                 if childSnap.val().Images != null
                   # console.log childSnap.val().Images
-                  $("#image_processing")
-                    .css('display', 'block')
-                    .css('z-index', "99999")
                   showPublicFeed(childSnap.val().Images)
                   return
             NProgress.done()
