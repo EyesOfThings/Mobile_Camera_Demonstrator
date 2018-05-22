@@ -172,6 +172,18 @@ logImageDataOnly = (Images) ->
           </div>
           <div class='extra content'>
             #{spanTagFeed}
+            <span class='right floated' data-meta='#{Image.Path}'>
+              <i class='twitter square icon'></i>
+            </span>
+            <span class='right floated' data-meta='#{Image.Path}'>
+              <i class='facebook square icon'></i>
+            </span>
+            <span class='right floated' data-meta='#{Image.Path}'>
+              <i class='whatsapp icon'></i>
+            </span>
+            <span class='right floated' data-meta='#{Image.Path}'>
+              <i class='linkedin icon'></i>
+            </span>
             <span>
               <div class='ui checkbox'>
                 <input type='checkbox' class='am-image' value='#{url}' name='animateme'>
