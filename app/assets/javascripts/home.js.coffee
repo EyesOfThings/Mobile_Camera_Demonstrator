@@ -144,6 +144,12 @@ logImageDataOnly = (Images) ->
           </span>"
     ).catch (error) ->
       console.log error
+    if spanTagFeed is ""
+      spanTagFeed =
+        "<span class='right floated poping-up' data-content='Add this to your public feed.' data-meta='#{Image.Path}'>
+          <i class='share icon'></i>
+        </span>"
+    
     tangRef.getDownloadURL().then((url) ->
       # if timestamp > lastSyncDateIs
         # updateSyncDate(iam_authenticated, user_email, timestamp, api_key, api_id)
