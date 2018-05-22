@@ -23,3 +23,4 @@
 //= require wizards.js
 //= require notifications.js
 //= require animations.js
+//= require public_feed.js

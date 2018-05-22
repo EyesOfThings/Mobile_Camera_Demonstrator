@@ -62,6 +62,17 @@ class HomeController < ApplicationController
           }
   end
 
+  def feeds
+    @current_user = current_user
+
+    @auth_data = {
+            'apiKey' => ENV["apiKey"],
+            'authDomain' => ENV["authDomain"],
+            'databaseURL' => ENV["databaseURL"],
+            'storageBucket' => ENV["storageBucket"]
+          }
+  end
+
   def save_animation_path
     @animation =  Animation.find(params['animation_id'])
     @animation.user_email = params['user_email']

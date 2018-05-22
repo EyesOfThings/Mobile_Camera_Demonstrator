@@ -1,0 +1,44 @@
+<%= render 'shared/menu' %>
+
+<div class="row">
+  <div id="album">
+    <div id="album_items" style="display: block;">
+      <div class="ui cards public-gallery">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ui small modal feedImage" style="">
+  <div class="header to-time"></div>
+  <div class="content">
+    <img src="" alt="" class="ui image fluid" />
+  </div>
+  <div class="actions">
+    <div class="ui positive right labeled icon button">
+      Close
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.CurrentUser = <%= @current_user.to_json.html_safe %>;
+  window.AuthData = <%= @auth_data.to_json.html_safe %>;
+  $(document).ready(function () {
+      $('.message .close')
+    .on('click', function() {
+      $(this)
+        .closest('.message')
+        .transition('fade')
+      ;
+    })
+  ;
+    $('.ui.dropdown').dropdown();
+    $('.ui.radio.checkbox')
+      .checkbox()
+    ;
+    window.initializeFeeds();
+  });
+</script
