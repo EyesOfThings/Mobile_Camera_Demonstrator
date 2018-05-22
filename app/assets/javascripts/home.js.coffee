@@ -135,19 +135,19 @@ logImageDataOnly = (Images) ->
       if metadata.customMetadata && metadata.customMetadata.isPublic == "true"
         spanTagFeed =
           "<span class='right floated droping-up' data-content='Remove this from public feed.' data-meta='#{Image.Path}'>
-            <i class='undo icon'></i>
+            <i class='undo icon' style='font-size: 20px;'></i>
           </span>"
       else
         spanTagFeed =
           "<span class='right floated poping-up' data-content='Add this to your public feed.' data-meta='#{Image.Path}'>
-            <i class='share icon'></i>
+            <i class='share icon' style='font-size: 20px;'></i>
           </span>"
     ).catch (error) ->
       console.log error
     if spanTagFeed is ""
       spanTagFeed =
         "<span class='right floated poping-up' data-content='Add this to your public feed.' data-meta='#{Image.Path}'>
-          <i class='share icon'></i>
+          <i class='share icon' style='font-size: 20px;'></i>
         </span>"
     
     tangRef.getDownloadURL().then((url) ->
