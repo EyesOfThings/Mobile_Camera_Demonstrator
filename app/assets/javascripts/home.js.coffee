@@ -134,16 +134,13 @@ logImageDataOnly = (Images) ->
     tangRef.getMetadata().then((metadata) ->
       if metadata.customMetadata && metadata.customMetadata.isPublic == "true"
         spanTagFeed = ""
-        console.log "heuuuryyy"
       else
         spanTagFeed =
           "<span class='right floated poping-up' data-content='Add this to your public feed.' data-meta='#{Image.Path}'>
             <i class='share icon'></i>
           </span>"
-        console.log "chalbay"
     ).catch (error) ->
       console.log error
-    # console.log metaValues
     tangRef.getDownloadURL().then((url) ->
       # if timestamp > lastSyncDateIs
         # updateSyncDate(iam_authenticated, user_email, timestamp, api_key, api_id)
