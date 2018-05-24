@@ -166,8 +166,8 @@ class HomeController < ApplicationController
       open(file_name, 'wb') do |file|
         file << open(params[:url]).read
       end
-
-      client.upload("/#{dir_name}/#{file_name}", file_name)
+      read_file = File.open(file_name, 'rb') { |file| file.read }
+      client.upload("/#{dir_name}/#{file_name}", read_file)
 
       File.delete(file_name)
       render json: "1"
