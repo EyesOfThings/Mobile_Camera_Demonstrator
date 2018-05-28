@@ -173,7 +173,7 @@ logImageDataOnly = (Images) ->
               <span class='date'>Device ID: #{mac_address}</span>
             </div>
             <div class='description'>
-              Tags: #{tags.replace(/all/g,'')}
+              #{returnTagsWithLabel(tags.replace(/all/g,''))}
             </div>
           </div>
           <div class='extra content'>
@@ -204,6 +204,16 @@ logImageDataOnly = (Images) ->
     ).catch (error) ->
       console.log error
       return
+
+returnTagsWithLabel = (tagings) ->
+  labels = ""
+  tags = tagings.split(" ")
+  $.each tags, (i, value) ->
+    if value is ""
+      # Ignore this value if its nil
+    else
+      labels += "<div class='ui label'>#{value}</div>"
+  return labels
 
 window.giveMetaData = (path) ->
   snapRef = storageRef.child("#{path}")
