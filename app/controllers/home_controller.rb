@@ -40,6 +40,22 @@ class HomeController < ApplicationController
           }
   end
 
+  def create_wizard
+    @wizard =  Wizard.new
+    @wizard.email = params['email']
+    @wizard.state = params['state']
+    @wizard.is_working = params['is_working']
+    @wizard.save
+    render json: @wizard.to_json.html_safe
+  end
+
+  def update_wizards
+    @wizard =  Wizard.find(params["id"])
+    @wizard.is_working = params['is_working']
+    @wizard.save
+    render json: "0"
+  end
+
   def notifications
     @current_user = current_user
 
@@ -85,6 +101,11 @@ class HomeController < ApplicationController
   def load_animation_path
     @animations = Animation.where(user_email: params['user_email'])
     render json: @animations.to_json.html_safe
+  end
+
+  def load_wizards
+    @wizards = Wizard.all
+    render json: @wizards.to_json.html_safe
   end
 
   def create_animation

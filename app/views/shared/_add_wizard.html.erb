@@ -8,21 +8,26 @@
           <div class="fields">
             <div class="field">
               <label>State</label>
-              <select name="" id="">
-                <option value="">Happy</i></option>
-                <option value="">Anger</i></option>
-                <option value="">Danger</option>
+              <select name="" id="wizard_state">
+                <option value="Happiness">Happy</i></option>
+                <option value="Anger">Anger</i></option>
+                <option value="Sadness">Sad</option>
+                <option value="Disgust">Disgust</option>
+                <option value="Fear">Fear</option>
+                <option value="Surprise">Surprise</option>
+                <option value="MotionDetected">MotionDetected</option>
+                <option value="LargeFaceDetected">Large Face</option>
               </select>
             </div>
             <div class="field">
               <label>Email</label>
-              <input type="text" placeholder="Email">
+              <input type="text" placeholder="Email" id="wizard_email">
             </div>
           </div>
           <div class="ui buttons">
             <button class="ui button can-wizard">Cancel</button>
             <div class="or"></div>
-            <button class="ui positive button can-wizard">Save</button>
+            <button class="ui positive button can-wizard wizard_save">Save</button>
           </div>
         </div>
       </div>

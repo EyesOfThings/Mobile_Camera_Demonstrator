@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  state: MyString
+  email: MyString
+  is_working: false
+
+two:
+  state: MyString
+  email: MyString
+  is_working: false
