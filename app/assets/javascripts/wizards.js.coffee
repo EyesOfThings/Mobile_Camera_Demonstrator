@@ -75,6 +75,7 @@ onWizard = ->
 
 onCancel = ->
   $(".can-wizard").on "click", ->
+    clearWizards()
     $(".show-on-wizard")
       .css("display", "none")
       .css("margin", "10px")
@@ -100,6 +101,7 @@ onWizardSave = ->
       false
 
     onSuccess = (wizard, textStatus, jqXHR) ->
+      clearWizards()
       wizadData = "
       <div class='ui segment' style='overflow: hidden;'>
         <div class='content' style='float: left;'>
@@ -253,6 +255,9 @@ loadWizards = ->
     url: "/load_wizards"
 
   $.ajax(settings)
+
+clearWizards = ->
+  $("#wizard_email").val("")
 
 window.initializeWizards = ->
   moment.locale()
