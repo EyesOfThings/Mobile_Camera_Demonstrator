@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   get "/send_to_DB", to: "home#send_to_db"
   post "/create_animation", to: "home#create_animation"
   post "/save_animation_path", to: "home#save_animation_path"
+  post "/create_wizard", to: "home#create_wizard"
+  post "/update_wizards", to: "home#update_wizards"
+  get "/load_wizards", to: "home#load_wizards"
   get "/load_animation_path", to: "home#load_animation_path"
   get "/feed" => "home#feeds"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
