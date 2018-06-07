@@ -45,6 +45,7 @@ onSignIn = ->
       # $(".profile-image").attr("src", "http://eot.evercam.io/eot.jpg")
       $(".profile-name").text(result.user.displayName)
       console.log result.user
+      $("#feed_of_user").attr("href", "/feed/#{result.user.uid}")
       console.log result.user.email
       user_email = result.user.email
       iam_authenticated = firebase
@@ -192,7 +193,7 @@ logImageDataOnly = (Images) ->
             </span>
             <span>
               <div class='ui checkbox'>
-                <input type='checkbox' class='am-image' value='#{url}' name='animateme'>
+                <input type='checkbox' class='checkBx am-image' value='#{url}' name='animateme'>
               </div>
             </span>
           </div>
@@ -366,13 +367,13 @@ onSelectAllImages = ->
   $(".select-all-images").on "click", ->
     $(".deselect-all-images").css("display", "block")
     $(".select-all-images").css("display", "none")
-    $('input:checkbox').prop('checked', true)
+    $('.checkBx:visible').prop('checked', true)
 
 onDeselectAllImages = ->
   $(".deselect-all-images").on "click", ->
     $(".deselect-all-images").css("display", "none")
     $(".select-all-images").css("display", "block")
-    $('input:checkbox').prop('checked', false)
+    $('.checkBx:visible').prop('checked', false)
 
 onCreateAnimation = ->
   $(".createAnimation").on "click", ->
@@ -543,7 +544,7 @@ onTwitterSharingClick = ->
     setTimeout (->
       $("#image_processing").css('display', 'none')
       get_short_url longUrl, "o_48fmt0av2s", "R_babbcf09f1e946eb98907531b6d7c13a", (short_url) ->
-        window.open 'http://twitter.com/share?url=' + short_url + '&text=This is a photo from evercam&via=evrcm', '_blank'
+        window.open 'http://twitter.com/share?url=' + short_url + '&text=This is a photo from Eyes of Things: ', '_blank'
       $("#image_processing").css('display', 'none')
       return
     ), 1000
@@ -575,7 +576,7 @@ onLinkedInSharingClick = ->
     setTimeout (->
       $("#image_processing").css('display', 'none')
       get_short_url longUrl, "o_48fmt0av2s", "R_babbcf09f1e946eb98907531b6d7c13a", (short_url) ->
-        window.open("http://www.linkedin.com/shareArticle?url=#{short_url}&title=Eyes Of Things&summary=This is a photo from evercam", "_blank");
+        window.open("http://www.linkedin.com/shareArticle?url=#{short_url}&title=Eyes Of Things&summary=This is a photo from Eyes of Things.", "_blank");
       $("#image_processing").css('display', 'none')
       return
     ), 1000
