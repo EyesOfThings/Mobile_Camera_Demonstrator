@@ -16,10 +16,12 @@ class Wizard < ApplicationRecord
     end
   end
 
-  def self.on_click_create(wizard)
+  def self.on_click_create
     paths = get_with_path(extract_images(fetch_database()))
-    jpegs_only = extract_wizard_state_from_db(paths, wizard)
+    wizards = get_first_run_wizards
+    jpegs_only = extract_wizard_state_from_db(paths, wizards)
     get_jpegs_from_state_and_email(jpegs_only)
+    update_run_count_wizards()
   end
 
   def self.fetch_database
@@ -41,8 +43,21 @@ class Wizard < ApplicationRecord
     end
   end
 
+  def self.get_first_run_wizards
+    Wizard.where(is_working: true, run_count: 1).map do |wizard|
+      {
+        state: wizard.state,
+        email: wizard.email
+      }
+    end
+  end
+
+  def self.update_run_count_wizards
+    Wizard.where(run_count: 1).update_all(run_count: 2)
+  end
+
   def self.get_working_wizards_states
-    Wizard.where(is_working: true).map do |wizard|
+    Wizard.where(is_working: true, run_count: 2).map do |wizard|
       {
         state: wizard.state,
         email: wizard.email
@@ -93,9 +108,9 @@ class Wizard < ApplicationRecord
     data = {}
     data[:from] = "Eyes Of Things <support@evercam.io>"
     data[:to] = "#{email}"
-    data[:subject] = "Eyes Of Things."
+    data[:subject] = "This is getting emotional: 😀😓😡🙂😥😝."
     data[:text] = "Your Wizard has been arrived!"
-    data[:html] = "<html>Your Wizard has been arrived.</html>"
+    data[:html] = "<html>EoT found the following images that match your settings. (See Attached). <br><br> To change your settings, click <a href='http://eot.evercam.io/wizards'>here</a></html>"
     data[:attachment] = []
     jpeg_paths.each do |file_path|
       data[:attachment] << File.new(file_path)

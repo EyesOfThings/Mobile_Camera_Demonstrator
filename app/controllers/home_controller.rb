@@ -45,11 +45,8 @@ class HomeController < ApplicationController
     @wizard.email = params['email']
     @wizard.state = params['state']
     @wizard.is_working = params['is_working']
+    @wizard.run_count = 1
     @wizard.save
-    wizard_state = [{
-        state: @wizard.state,
-        email: @wizard.email
-      }]
     render json: @wizard.to_json.html_safe
   end
 
@@ -57,6 +54,12 @@ class HomeController < ApplicationController
     @wizard =  Wizard.find(params["id"])
     @wizard.is_working = params['is_working']
     @wizard.save
+    render json: "0"
+  end
+
+  def delete_wizard
+    @wizard =  Wizard.find(params["id"])
+    @wizard.delete
     render json: "0"
   end
 
