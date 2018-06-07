@@ -193,7 +193,7 @@ logImageDataOnly = (Images) ->
             </span>
             <span>
               <div class='ui checkbox'>
-                <input type='checkbox' class='am-image' value='#{url}' name='animateme'>
+                <input type='checkbox' class='checkBx am-image' value='#{url}' name='animateme'>
               </div>
             </span>
           </div>
@@ -367,13 +367,13 @@ onSelectAllImages = ->
   $(".select-all-images").on "click", ->
     $(".deselect-all-images").css("display", "block")
     $(".select-all-images").css("display", "none")
-    $('input:checkbox').prop('checked', true)
+    $('.checkBx:visible').prop('checked', true)
 
 onDeselectAllImages = ->
   $(".deselect-all-images").on "click", ->
     $(".deselect-all-images").css("display", "none")
     $(".select-all-images").css("display", "block")
-    $('input:checkbox').prop('checked', false)
+    $('.checkBx:visible').prop('checked', false)
 
 onCreateAnimation = ->
   $(".createAnimation").on "click", ->
