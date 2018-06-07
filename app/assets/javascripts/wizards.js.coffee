@@ -112,6 +112,11 @@ onWizardSave = ->
             #{wizard.email}
           </span> 
         </div>
+        <div class='content' style='float: right;margin-right: 6px;font-size: 23px;margin-top: 1px;'>
+          <div data-id='#{wizard.id}' class='deleteWizard' style='cursor: pointer;'>
+            <i class='trash icon'></i>
+          </div>
+        </div>
         <div class='content' style='float: right'>
           <div data-content='#{wizardText(wizard.is_working)}' data-id='#{wizard.id}' id='toggleIsWorking' class='wizardPopUp ui toggle button #{isWorking(wizard.is_working)}'>
           </div>
@@ -167,6 +172,34 @@ isWorking = (is_working) ->
     "active"
   else
     ""
+
+deleteWizard = ->
+  $("#wizard_attachment").on "click", ".deleteWizard", ->
+
+    data = {}
+    data.id = $(this).data('id')
+
+    onError = (jqXHR, textStatus, errorThrown) ->
+      console.log jqXHR
+      $.notify("#{result.responseText}", "error")
+      false
+
+    onSuccess = (data, textStatus, jqXHR) ->
+      console.log data
+      $.notify("Wizard has been deleted.", "success");
+      location.reload()
+      true
+
+    settings =
+      cache: false
+      dataType: 'json'
+      data: data
+      error: onError
+      success: onSuccess
+      type: "DELETE"
+      url: "/delete_wizard"
+
+    $.ajax(settings)
 
 toggleIsWorking = ->
   $("#wizard_attachment").on "click", "#toggleIsWorking", ->
@@ -228,6 +261,11 @@ loadWizards = ->
               #{wizard.email}
             </span> 
           </div>
+          <div class='content' style='float: right;margin-right: 6px;font-size: 23px;margin-top: 1px;'>
+            <div data-id='#{wizard.id}' class='deleteWizard' style='cursor: pointer;'>
+              <i class='trash icon'></i>
+            </div>
+          </div>
           <div class='content' style='float: right'>
             <div data-content='#{wizardText(wizard.is_working)}' data-id='#{wizard.id}' id='toggleIsWorking' class='wizardPopUp ui toggle button #{isWorking(wizard.is_working)}'>
             </div>
@@ -269,3 +307,4 @@ window.initializeWizards = ->
   onSignOut()
   onWizardSave()
   toggleIsWorking()
+  deleteWizard()

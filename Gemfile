@@ -65,3 +65,5 @@ gem 'semantic-ui-sass', github: 'doabit/semantic-ui-sass'
 gem "filesize"
 gem "streamio-ffmpeg"
 gem "dropbox-sdk-v2"
+gem "google-cloud-storage"
+gem 'mailgun-ruby', '~>1.1.6'
