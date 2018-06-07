@@ -50,7 +50,6 @@ class HomeController < ApplicationController
         state: @wizard.state,
         email: @wizard.email
       }]
-    Wizard.on_click_create(wizard_state)
     render json: @wizard.to_json.html_safe
   end
 

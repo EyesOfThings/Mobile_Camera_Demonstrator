@@ -9,7 +9,7 @@ class Wizard < ApplicationRecord
     new_jpegs = compare_stored_and_new_hash(path_jpegs)
     if new_jpegs.length > 0
       store_json(path_jpegs)
-      new_path_jpegs = new_jpegs.map {|key| path_jpegs.fetch(key)}
+      new_path_jpegs = path_jpegs.select { |k, _| new_jpegs.include? k }
       states = get_working_wizards_states
       jpegs_only = extract_wizard_state_from_db(new_path_jpegs, states)
       get_jpegs_from_state_and_email(jpegs_only)
