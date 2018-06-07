@@ -11,6 +11,7 @@ onLoad = ->
         iam_authenticated = firebase
         db_auth = firebase.database().ref()
         obliged_email = "#{user_email}".replace(/\./g,'|')
+        $("#feed_of_user").attr("href", "/feed/#{user.uid}")
         console.log obliged_email
         db_auth.once 'value', (snapshot) ->
           if !snapshot.hasChild(obliged_email)
@@ -24,8 +25,10 @@ onLoad = ->
               snapshot.forEach (childSnap) ->
                 console.log childSnap
                 if childSnap.val().Images != null
-                  # console.log childSnap.val().Images
-                  showPublicFeed(childSnap.val().Images)
+                  if getLastPart() == user.uid
+                    showPublicFeed(childSnap.val().Images)
+                  else
+                    $.notify("This user doesn't exist.", "info")
                   return
             NProgress.done()
         $('.profile-name').text user.displayName
@@ -33,6 +36,11 @@ onLoad = ->
         window.location = '/'
       return
     return
+
+getLastPart = ->
+  url = $(location).attr('href')
+  parts = url.split('/')
+  parts[parts.length - 1]
 
 showPublicFeed = (Images) ->
   spanTagFeed = ""

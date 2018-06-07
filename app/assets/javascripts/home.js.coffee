@@ -45,6 +45,7 @@ onSignIn = ->
       # $(".profile-image").attr("src", "http://eot.evercam.io/eot.jpg")
       $(".profile-name").text(result.user.displayName)
       console.log result.user
+      $("#feed_of_user").attr("href", "/feed/#{result.user.uid}")
       console.log result.user.email
       user_email = result.user.email
       iam_authenticated = firebase

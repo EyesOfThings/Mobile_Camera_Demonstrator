@@ -188,6 +188,7 @@
         $("#page-splash").css('display', 'none');
         // $(".profile-image").attr("src", "http://eot.evercam.io/eot.jpg");
         $(".profile-name").text(user.displayName);
+        $("#feed_of_user").attr("href", "/feed/" + user.uid + "");
         getAuthWithFirebase(firebase, user.email);
       }else{
         $("#page-splash").css('display', 'flex');
