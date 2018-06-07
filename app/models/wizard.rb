@@ -6,9 +6,14 @@ class Wizard < ApplicationRecord
 
   def self.start
     path_jpegs = get_with_path(extract_images(fetch_database()))
-    states = get_working_wizards_states
-    jpegs_only = extract_wizard_state_from_db(paths, wizard)
-    get_jpegs_from_state_and_email(jpegs_only)
+    new_jpegs = compare_stored_and_new_hash(path_jpegs)
+    if new_jpegs.length > 0
+      store_json(path_jpegs)
+      new_path_jpegs = new_jpegs.map {|key| path_jpegs.fetch(key)}
+      states = get_working_wizards_states
+      jpegs_only = extract_wizard_state_from_db(new_path_jpegs, states)
+      get_jpegs_from_state_and_email(jpegs_only)
+    end
   end
 
   def self.on_click_create(wizard)

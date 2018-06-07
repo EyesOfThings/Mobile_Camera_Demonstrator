@@ -46,12 +46,10 @@ class HomeController < ApplicationController
     @wizard.state = params['state']
     @wizard.is_working = params['is_working']
     @wizard.save
-    wizard_state = @wizard.map do |wiz|
-      {
-        state: wiz.state,
-        email: wiz.email
-      }
-    end
+    wizard_state = [{
+        state: @wizard.state,
+        email: @wizard.email
+      }]
     Wizard.on_click_create(wizard_state)
     render json: @wizard.to_json.html_safe
   end
