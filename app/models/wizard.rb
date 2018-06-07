@@ -1,11 +1,20 @@
 class Wizard < ApplicationRecord
   require 'net/http'
   require "google/cloud/storage"
+  require "pry"
+  require 'fileutils'
 
   def self.start
     path_jpegs = get_with_path(extract_images(fetch_database()))
-    # store_json(get_with_path(extract_images(fetch_database())))
-    # keys = compare_stored_and_new_hash(path_jpegs)
+    states = get_working_wizards_states
+    jpegs_only = extract_wizard_state_from_db(paths, wizard)
+    get_jpegs_from_state_and_email(jpegs_only)
+  end
+
+  def self.on_click_create(wizard)
+    paths = get_with_path(extract_images(fetch_database()))
+    jpegs_only = extract_wizard_state_from_db(paths, wizard)
+    get_jpegs_from_state_and_email(jpegs_only)
   end
 
   def self.fetch_database
@@ -59,16 +68,40 @@ class Wizard < ApplicationRecord
     key_file   = "service-account.json"
     storage = Google::Cloud::Storage.new project: project_id, keyfile: key_file
     bucket  = storage.bucket "wearableeot-39e6a.appspot.com"
+    FileUtils::mkdir_p("images")
     jpeg_objects_and_emails.each do |objective|
-      objective[:state_object].each do |file_name|
-        file = bucket.file file_name
-        file.download file_name
-        puts "Downloaded #{file.name}"
+      if objective[:state_object] == []
+        puts "has nothing to do."
+      else
+        objective[:state_object].each do |file_name|
+          file = bucket.file file_name
+          file.download file_name
+          puts "Downloaded #{file.name}"
+        end
+        send_email_with_attach(objective[:state_object], objective[:email])
       end
     end
+    FileUtils.rm_rf('images')
   end
 
-  # def self.send_email_with_attach(jpeg_paths, email)
-    
-  # end
+  def self.send_email_with_attach(jpeg_paths, email)
+    data = {}
+    data[:from] = "Eyes Of Things <support@evercam.io>"
+    data[:to] = "#{email}"
+    data[:subject] = "Eyes Of Things."
+    data[:text] = "Your Wizard has been arrived!"
+    data[:html] = "<html>Your Wizard has been arrived.</html>"
+    data[:attachment] = []
+    jpeg_paths.each do |file_path|
+      data[:attachment] << File.new(file_path)
+    end
+    puts data
+    begin
+      puts "sending_email"
+      RestClient.post "https://api:#{ENV['mailgun_key']}"\
+          "@#{ENV['mailgun_domain']}", data
+    rescue RestClient::ExceptionWithResponse => e
+      puts e.response
+    end
+  end
 end
