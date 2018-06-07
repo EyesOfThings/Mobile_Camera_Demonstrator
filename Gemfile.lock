@@ -136,6 +136,8 @@ GEM
     magnific-popup-rails (1.1.0)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
+    mailgun-ruby (1.1.9)
+      rest-client (~> 2.0)
     memoist (0.16.0)
     method_source (0.8.2)
     mime-types (3.1)
@@ -283,6 +285,7 @@ DEPENDENCIES
   jquery-rails
   listen (~> 3.0.5)
   magnific-popup-rails (~> 1.1.0)
+  mailgun-ruby (~> 1.1.6)
   momentjs-rails
   omniauth-google-oauth2 (~> 0.2.1)
   pg
