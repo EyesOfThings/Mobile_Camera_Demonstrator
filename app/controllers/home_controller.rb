@@ -253,6 +253,25 @@ class HomeController < ApplicationController
     end
   end
 
+  def upload_feed_to_db
+    client = Dropbox::Client.new(params[:tokenValue])
+    params[:imagePaths].each do |url|
+      begin
+        parts = url.split(" ")
+        file_name = "#{Time.now.to_i}.#{parts[1]}"
+        open(file_name, 'wb') do |file|
+          file << open(parts[0]).read
+        end
+        read_file = File.open(file_name, 'rb') { |file| file.read }
+        client.upload("/#{params[:whoUserEmail]}/#{file_name}", read_file)
+
+        File.delete(file_name)
+      rescue Exception => e
+        puts e
+      end
+    end
+  end
+
   private
 
   def save_animation_to_storage(upload_to, local_path)

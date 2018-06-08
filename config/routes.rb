@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   post "/save_animation_path", to: "home#save_animation_path"
   post "/create_wizard", to: "home#create_wizard"
   post "/update_wizards", to: "home#update_wizards"
+  post "/upload_feed_to_db", to: "home#upload_feed_to_db"
   delete "/delete_wizard", to: "home#delete_wizard"
   get "/load_wizards", to: "home#load_wizards"
   get "/load_animation_path", to: "home#load_animation_path"
