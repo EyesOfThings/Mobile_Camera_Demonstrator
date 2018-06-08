@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180607095626) do
+ActiveRecord::Schema.define(version: 20180608052500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,14 +18,15 @@ ActiveRecord::Schema.define(version: 20180607095626) do
   create_table "animations", force: :cascade do |t|
     t.string   "user_email"
     t.string   "path"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.string   "image_count"
     t.integer  "progress"
     t.string   "name"
     t.integer  "unix_time"
     t.integer  "fps"
     t.string   "file_size"
+    t.boolean  "is_public",   default: false
   end
 
   create_table "users", force: :cascade do |t|
