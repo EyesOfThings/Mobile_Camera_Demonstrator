@@ -178,7 +178,7 @@ onTwitterSharingClick = ->
     setTimeout (->
       $("#image_processing").css('display', 'none')
       get_short_url longUrl, "o_48fmt0av2s", "R_babbcf09f1e946eb98907531b6d7c13a", (short_url) ->
-        window.open 'http://twitter.com/share?url=' + short_url + '&text=This is a photo from Eyes of Things: ', '_blank'
+        window.open 'http://twitter.com/share?url=' + short_url + '&text=This is an animation from Eyes of Things: ', '_blank'
       $("#image_processing").css('display', 'none')
       return
     ), 1000
@@ -210,7 +210,7 @@ onLinkedInSharingClick = ->
     setTimeout (->
       $("#image_processing").css('display', 'none')
       get_short_url longUrl, "o_48fmt0av2s", "R_babbcf09f1e946eb98907531b6d7c13a", (short_url) ->
-        window.open("http://www.linkedin.com/shareArticle?url=#{short_url}&title=Eyes Of Things&summary=This is a photo from Eyes of Things.", "_blank");
+        window.open("http://www.linkedin.com/shareArticle?url=#{short_url}&title=Eyes Of Things&summary=This is an animation from Eyes of Things.", "_blank");
       $("#image_processing").css('display', 'none')
       return
     ), 1000
