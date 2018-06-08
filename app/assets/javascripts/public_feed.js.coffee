@@ -1,4 +1,7 @@
 mac_address = undefined
+db_auth = undefined
+whoUserEmail = undefined
+imagePaths = undefined
 
 onLoad = ->
   $(window).load ->
@@ -8,6 +11,7 @@ onLoad = ->
         console.log user
         console.log user.email
         user_email = user.email
+        whoUserEmail = user_email
         iam_authenticated = firebase
         db_auth = firebase.database().ref()
         obliged_email = "#{user_email}".replace(/\./g,'|')
@@ -74,9 +78,18 @@ getAllPathsForEmail = (email) ->
                 </video>
               </div>
             </div>
+            <div class='extra content'>
+              <span>
+                <div class='ui checkbox'>
+                  <input type='checkbox' class='checkBx am-image' value='#{animation.path} mp4' name='forDropBox'>
+                </div>
+              </span>
+            </div>
           </div>
         "
         $(".row-26 > .ui").append(videoJSHtml)
+        $('.ui.checkbox')
+        .checkbox()
         videojs("my-player-#{animation.id}")
     else
       $.notify("You have no animations.", "info");
@@ -124,8 +137,17 @@ showPublicFeed = (Images) ->
                   #{returnTagsWithLabel(tags.replace(/all/g,''))}
                 </div>
               </div>
+              <div class='extra content'>
+                <span>
+                  <div class='ui checkbox'>
+                    <input type='checkbox' class='checkBx am-image' value='#{url} jpeg' name='forDropBox'>
+                  </div>
+                </span>
+              </div>
             </div>"
           $(".public-gallery").append(image_tag)
+          $('.ui.checkbox')
+            .checkbox()
           tags = "all"
         ).catch (error) ->
           console.log "error"
@@ -134,6 +156,65 @@ showPublicFeed = (Images) ->
         console.log "error"
     ).catch (error) ->
       console.log "error"
+
+onSelectAllImages = ->
+  $(".select-all-images").on "click", ->
+    $(".deselect-all-images").css("display", "block")
+    $(".select-all-images").css("display", "none")
+    $('.checkBx:visible').prop('checked', true)
+
+onDeselectAllImages = ->
+  $(".deselect-all-images").on "click", ->
+    $(".deselect-all-images").css("display", "none")
+    $(".select-all-images").css("display", "block")
+    $('.checkBx:visible').prop('checked', false)
+
+onSendToDB = ->
+  $(".sendToDB").on "click", ->
+    checkValues = $('input[name=forDropBox]:checked').map(->
+      $(this).val()
+    ).get()
+    console.log checkValues
+    if checkValues.length < 1
+      $.notify("Please select few images.", "info")
+      # $(".no-images-select").css("display", "block")
+    else
+      imagePaths = checkValues
+      image_count_ani = checkValues.length
+      $('.ui.dropboxcode-name').modal("show")
+
+onTokenAdd = ->
+  $(".save-dropbox-token").on "click", ->
+    $('.ui.dropboxcode-name').modal("hide")
+    $('input:checkbox').prop('checked', false)
+    $.notify("Feed has been sent to Dropbox.", "info")
+
+    tokenValue = $("#dropbox-name").val()
+
+    data = {}
+    data.tokenValue = tokenValue
+    data.whoUserEmail = whoUserEmail
+    data.imagePaths = imagePaths
+
+    onError = (jqXHR, textStatus, errorThrown) ->
+      console.log jqXHR
+      # $.notify("#{result.responseText}", "error")
+      false
+
+    onSuccess = (data, textStatus, jqXHR) ->
+      console.log data
+      true
+
+    settings =
+      cache: false
+      dataType: 'json'
+      data: data
+      error: onError
+      success: onSuccess
+      type: "POST"
+      url: "/upload_feed_to_db"
+
+    $.ajax(settings)
 
 returnTagsWithLabel = (tagings) ->
   labels = ""
@@ -165,3 +246,7 @@ window.initializeFeeds = ->
   startAuth()
   onLoad()
   feedTheImage()
+  onSendToDB()
+  onSelectAllImages()
+  onDeselectAllImages()
+  onTokenAdd()

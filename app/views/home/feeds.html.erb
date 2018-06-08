@@ -6,6 +6,22 @@
 <div class="row">
   <div id="album">
     <div id="album_items" style="display: block;">
+      <div class="content">
+        <div class="ui labeled icon button left floated dropdown" style="margin-left: 26px;margin-top: 12px;">
+          <i class="dropdown lircle left icon"></i>
+           Action
+          <div class="menu ui transition hidden">
+            <div class="item select-all-images">
+              Select All
+            </div>
+            <div class="item deselect-all-images" style="display: none;">
+              Deselect All
+            </div>
+            <div class="item sendToDB">Send to Dropbox</div>
+          </div>
+        </div>
+      </div>
+
       <div class="ui cards public-gallery">
 
       </div>
@@ -28,6 +44,24 @@
     <div class="ui positive right labeled icon button">
       Close
       <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>
+
+<div class="ui small modal dropboxcode-name" style="">
+  <div class="header">Please enter DropBox AccessToken.</div>
+  <div class="content">
+    <div class="ui form">
+      <div class="field">
+        <label>AccessToken</label>
+        <input type="text" id="dropbox-name" name="dropbox-name" placeholder="Dropbox AccessToken">
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="ui approve button right save-dropbox-token">Send To Dropbox</div>
+    <div class="ui cancel button right">
+      Cancel
     </div>
   </div>
 </div>
