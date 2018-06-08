@@ -11,6 +11,7 @@ onLoad = ->
         iam_authenticated = firebase
         db_auth = firebase.database().ref()
         obliged_email = "#{user_email}".replace(/\./g,'|')
+        getAllPathsForEmail(user_email)
         $("#feed_of_user").attr("href", "/feed/#{user.uid}")
         console.log obliged_email
         db_auth.once 'value', (snapshot) ->
@@ -42,6 +43,57 @@ getLastPart = ->
   parts = url.split('/')
   parts[parts.length - 1]
 
+getAllPathsForEmail = (email) ->
+  data = {}
+  data.user_email = email
+
+  onError = (jqXHR, textStatus, errorThrown) ->
+    console.log jqXHR
+    # $.notify("#{result.responseText}", "error")
+    false
+
+  onSuccess = (data, textStatus, jqXHR) ->
+    console.log data
+    # console.log animationPath
+    if data.length > 0
+      data.forEach (animation) ->
+        videoJSHtml = "
+          <div class='card'>
+            <div class='content'>
+              <div class='header'>#{animation.name}</div>
+              <div class='meta'>Frames: #{animation.image_count}, Date: #{moment.unix(animation.unix_time).format("MM/DD/YYYY HH-mm-ss")}, File size: #{animation.file_size}, FPS: #{animation.fps}</div>
+              <div class='description'>
+                <video
+                    id='my-player-#{animation.id}'
+                    class='video-js my-animate'
+                    controls
+                    preload='auto'
+                    poster=''
+                    data-setup='{}'>
+                  <source src='#{animation.path}' type='video/mp4'></source>
+                </video>
+              </div>
+            </div>
+          </div>
+        "
+        $(".row-26 > .ui").append(videoJSHtml)
+        videojs("my-player-#{animation.id}")
+    else
+      $.notify("You have no animations.", "info");
+    NProgress.done()
+    true
+
+  settings =
+    cache: false
+    dataType: 'json'
+    data: data
+    error: onError
+    success: onSuccess
+    type: "GET"
+    url: "/load_public_animation_path"
+
+  $.ajax(settings)
+
 showPublicFeed = (Images) ->
   spanTagFeed = ""
   tags = "all"
@@ -69,7 +121,7 @@ showPublicFeed = (Images) ->
                   <span class='date'>Device ID: #{mac_address}</span>
                 </div>
                 <div class='description'>
-                  Tags: #{tags.replace(/all/g,'')}
+                  #{returnTagsWithLabel(tags.replace(/all/g,''))}
                 </div>
               </div>
             </div>"
@@ -82,6 +134,16 @@ showPublicFeed = (Images) ->
         console.log "error"
     ).catch (error) ->
       console.log "error"
+
+returnTagsWithLabel = (tagings) ->
+  labels = ""
+  tags = tagings.split(" ")
+  $.each tags, (i, value) ->
+    if value is ""
+      # Ignore this value if its nil
+    else
+      labels += "<div class='ui label'>#{value}</div>"
+  return labels
 
 feedTheImage = ->
   $(".public-gallery").on "click", ".pop-the-image", (event) ->

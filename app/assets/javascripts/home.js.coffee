@@ -481,7 +481,7 @@ removeDateFilter = ->
     $('.datetime-filter').show()
 
 onViewClick = ->
-  $(".whole-view").on "click", ->  
+  $(".whole-view").on "click", ->
     $('.poping-up').popup on: 'hover'
     $('.droping-up').popup on: 'hover'
 

@@ -33,6 +33,10 @@
   margin: 10px;
 }
 
+.row-26 {
+  margin: 26px;
+}
+
 .clean-show-all {
   cursor: pointer;
 }
@@ -51,6 +55,14 @@
   overflow: hidden
 }
 
+.row-26 > .ui.cards > .card {
+  width: 500px;
+  float: left;
+}
+
+.row-26 > .ui.cards {
+  overflow: hidden
+}
 .my-animate {
   width: 100%;
 }

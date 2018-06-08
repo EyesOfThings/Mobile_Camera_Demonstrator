@@ -5,6 +5,7 @@ class HomeController < ApplicationController
   require 'rest_client'
   require 'filesize'
   require 'streamio-ffmpeg'
+  require "google/cloud/storage"
   require 'dropbox'
 
   def show
@@ -107,7 +108,53 @@ class HomeController < ApplicationController
 
   def load_animation_path
     @animations = Animation.where(user_email: params['user_email'])
-    render json: @animations.to_json.html_safe
+    if @animations.count > 0
+      all_animations = @animations.map do |animation|
+        {
+          name: animation.name,
+          image_count: animation.image_count,
+          fps: animation.fps,
+          file_size: animation.file_size,
+          unix_time: animation.unix_time,
+          id: animation.id,
+          path: get_signed_path(animation.path),
+          is_public: animation.is_public,
+          progress: animation.progress
+        }
+      end
+    else
+      all_animations = @animations
+    end
+    render json: all_animations.to_json.html_safe
+  end
+
+  def load_public_animation_path
+    @animations = Animation.where(user_email: params['user_email'], is_public: true, progress: 3)
+    if @animations.count > 0
+      all_animations = @animations.map do |animation|
+        {
+          name: animation.name,
+          image_count: animation.image_count,
+          fps: animation.fps,
+          file_size: animation.file_size,
+          unix_time: animation.unix_time,
+          id: animation.id,
+          path: get_signed_path(animation.path),
+          is_public: animation.is_public,
+          progress: animation.progress
+        }
+      end
+    else
+      all_animations = @animations
+    end
+    render json: all_animations.to_json.html_safe
+  end
+
+  def change_animation_public
+    @animation =  Animation.find(params['id'])
+    @animation.is_public = params['is_public']
+    @animation.save
+    render json: "1"
   end
 
   def load_wizards
@@ -135,13 +182,15 @@ class HomeController < ApplicationController
     end
     begin
       system("cat #{directory_name}/*.jpg | ffmpeg -f image2pipe -r 5 -vcodec mjpeg -i - -vcodec libx264 #{directory_name}/#{directory_name}.mp4")
-      RestClient.post("#{ENV['seaweedFiler']}/#{params['user_email']}/",
-        :name_of_file_param => File.new("#{directory_name}/#{directory_name}.mp4"))
+      upload_to = "#{params['user_email']}/#{directory_name}.mp4"
+      local_to = "#{directory_name}/#{directory_name}.mp4"
+      save_animation_to_storage(upload_to, local_to)
+
       movie = FFMPEG::Movie.new("#{directory_name}/#{directory_name}.mp4")
       file_size = File.size("#{directory_name}/#{directory_name}.mp4")
       human_file_size = Filesize.from("#{file_size} b").pretty
       system("rm -rf #{directory_name}")
-      @animation.path = "#{ENV['seaweedFiler']}/#{params['user_email']}/#{directory_name}.mp4"
+      @animation.path = "#{params['user_email']}/#{directory_name}.mp4"
       @animation.image_count = "#{count_image}"
       @animation.progress = 3
       @animation.file_size = "#{human_file_size}"
@@ -202,5 +251,25 @@ class HomeController < ApplicationController
     rescue Exception => e
       render json: e.to_json
     end
+  end
+
+  private
+
+  def save_animation_to_storage(upload_to, local_path)
+    project_id = "wearableeot-39e6a"
+    key_file   = "service-account.json"
+    storage = Google::Cloud::Storage.new project: project_id, keyfile: key_file
+    bucket  = storage.bucket "wearableeot-39e6a.appspot.com"
+    file = bucket.create_file local_path, upload_to
+    puts "Uploaded #{file.name}"
+  end
+
+  def get_signed_path(file_name)
+    project_id = "wearableeot-39e6a"
+    key_file   = "service-account.json"
+    storage = Google::Cloud::Storage.new project: project_id, keyfile: key_file
+    bucket  = storage.bucket "wearableeot-39e6a.appspot.com"
+    file    = bucket.file file_name
+    file.signed_url
   end
 end
