@@ -74,7 +74,8 @@ class Wizard < ApplicationRecord
     state_and_email.map do |wiz|
       {
         state_object: fetch_path_from_state(path_jpegs.select { |key, value| value['Path'] && value['Tags'] && (value['Tags'][wiz[:state]] == 1)}),
-        email: wiz[:email]
+        email: wiz[:email],
+        emotion: wiz[:state]
       }
     end
   end
@@ -98,19 +99,19 @@ class Wizard < ApplicationRecord
           file.download file_name
           puts "Downloaded #{file.name}"
         end
-        send_email_with_attach(objective[:state_object], objective[:email])
+        send_email_with_attach(objective[:state_object], objective[:email], objective[:emotion])
       end
     end
     FileUtils.rm_rf('images')
   end
 
-  def self.send_email_with_attach(jpeg_paths, email)
+  def self.send_email_with_attach(jpeg_paths, email, emotion)
     data = {}
     data[:from] = "Eyes Of Things <support@evercam.io>"
     data[:to] = "#{email}"
     data[:subject] = "This is getting emotional: 😀😓😡🙂😥😝."
     data[:text] = "Your Wizard has been arrived!"
-    data[:html] = "<html>EoT found the following images that match your settings. (See Attached). <br><br> To change your settings, click <a href='http://eot.evercam.io/wizards'>here</a></html>"
+    data[:html] = "<html>EoT found the following images that match your settings: Emotion = #{emotion} (See Attached). <br><br> To change your settings, click <a href='http://eot.evercam.io/wizards'>here</a></html>"
     data[:attachment] = []
     jpeg_paths.each do |file_path|
       data[:attachment] << File.new(file_path)
