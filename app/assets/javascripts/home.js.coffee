@@ -177,7 +177,7 @@ logImageDataOnly = (Images) ->
               #{returnTagsWithLabel(tags.replace(/all/g,''))}
             </div>
           </div>
-          <div class='extra content'>
+          <div class='extra content replacingFirstSpan'>
             #{spanTagFeed}
             <span class='right floated social-twitter' data-surl='#{url}'>
               <i class='twitter square icon' style='font-size: 20px;'></i>
@@ -193,7 +193,7 @@ logImageDataOnly = (Images) ->
             </span>
             <span>
               <div class='ui checkbox'>
-                <input type='checkbox' class='checkBx am-image' value='#{url}' name='animateme'>
+                <input type='checkbox' class='checkBx am-image' value='#{url}' name='animateme' data-meta='#{Image.Path}'>
               </div>
             </span>
           </div>
@@ -490,7 +490,7 @@ onPopUpClick = ->
     NProgress.start()
     thisIs = $(this)
     forMetaData = $(this).data('meta')
-    newMetaData = 
+    newMetaData =
       customMetadata:
         isPublic: 'true'
         pFeedDate: "#{moment().unix()}"
@@ -608,6 +608,29 @@ get_short_url = (long_url, login, api_key, func) ->
     return
   return
 
+shareToPublicFeed = ->
+  $(".goesToPublicFeed").on "click", ->
+    checkValues = $('input[name=animateme]:checked').map(->
+      $(this).data('meta')
+    ).get()
+    console.log checkValues
+    if checkValues.length < 1
+      $.notify("Please select few images.", "info")
+    else
+      imagePaths = checkValues
+      $.notify("Images are added to your Public Feed.", "info")
+      $('input:checkbox').prop('checked', false)
+      imagePaths.forEach (MetaPath) ->
+        newMetaData =
+          customMetadata:
+            isPublic: 'true'
+            pFeedDate: "#{moment().unix()}"
+
+        storageRef.child("#{MetaPath}").updateMetadata(newMetaData).then((metadata) ->
+          return
+        ).catch (error) ->
+          return
+
 window.initializeHome = ->
   moment.locale()
   startAuth()
@@ -631,3 +654,4 @@ window.initializeHome = ->
   onWhatsAppSharingClick()
   onLinkedInSharingClick()
   onFBSharingClick()
+  shareToPublicFeed()
