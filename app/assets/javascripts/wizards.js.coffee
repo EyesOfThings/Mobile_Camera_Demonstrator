@@ -106,7 +106,7 @@ onWizardSave = ->
       wizadData = "
       <div class='ui segment' style='overflow: hidden;'>
         <div class='content' style='float: left;'>
-          If <font class='make-it-20'><i class='em em-#{giveState(wizard.state)} layout icon'></i></font> then notify
+          If <font class='make-it-20'><i class='em em-#{giveState(wizard.state)} layout icon'></i></font> (#{wizard.state}) then notify
           <span>
             <i class='announcement icon'></i>
             #{wizard.email}
@@ -255,7 +255,7 @@ loadWizards = ->
         wizadData = "
         <div class='ui segment' style='overflow: hidden;'>
           <div class='content' style='float: left;'>
-            If <font class='make-it-20'><i class='em em-#{giveState(wizard.state)} layout icon'></i></font> then notify
+            If <font class='make-it-20'><i class='em em-#{giveState(wizard.state)} layout icon'></i></font> (#{wizard.state}) then notify
             <span>
               <i class='announcement icon'></i>
               #{wizard.email}
