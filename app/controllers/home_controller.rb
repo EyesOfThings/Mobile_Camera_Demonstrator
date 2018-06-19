@@ -8,6 +8,11 @@ class HomeController < ApplicationController
   require "google/cloud/storage"
   require 'dropbox'
 
+  def list_emotions
+    emotions = ["Anger", "Disgust", "FaceDetected", "Fear", "Happiness", "LargeFaceDetected", "MotionDetected", "Neutral", "Sadness", "Surpise"]
+    render json: {emotions: emotions}
+  end
+
   def show
     @current_user = current_user
 

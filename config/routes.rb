@@ -26,5 +26,7 @@ Rails.application.routes.draw do
   post "/change_animation_public", to: "home#change_animation_public"
   get "/load_public_animation_path", to: "home#load_public_animation_path"
   get "/feed/:uid" => "home#feeds"
+
+  get "/v1/emotions" => "home#list_emotions"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
