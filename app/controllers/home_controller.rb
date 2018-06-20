@@ -50,6 +50,8 @@ class HomeController < ApplicationController
     @wizard =  Wizard.new
     @wizard.email = params['email']
     @wizard.state = params['state']
+    @wizard.email_tree = params['email_tree'].sub(".", "%7C")
+    @wizard.mac = params['mac']
     @wizard.is_working = params['is_working']
     @wizard.run_count = 1
     @wizard.save

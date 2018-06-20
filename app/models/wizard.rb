@@ -5,40 +5,52 @@ class Wizard < ApplicationRecord
   require 'fileutils'
 
   def self.start
-    path_jpegs = get_with_path(extract_images(fetch_database()))
-    new_jpegs = compare_stored_and_new_hash(path_jpegs)
-    if new_jpegs.length > 0
-      store_json(path_jpegs)
-      new_path_jpegs = path_jpegs.select { |k, _| new_jpegs.include? k }
-      states = get_working_wizards_states
-      jpegs_only = extract_wizard_state_from_db(new_path_jpegs, states)
-      get_jpegs_from_state_and_email(jpegs_only)
+    states = get_working_wizards_states
+    states.each do |state|
+      path_jpegs = get_with_path(extract_images(fetch_database(state[:email_tree]), state[:mac]))
+      new_jpegs = compare_stored_and_new_hash(path_jpegs, state[:mac])
+      if new_jpegs.length > 0
+        store_json(path_jpegs, state[:mac])
+        new_path_jpegs = path_jpegs.select { |k, _| new_jpegs.include? k }
+
+        jpegs_only = extract_wizard_state_from_db(new_path_jpegs, [state])
+        get_jpegs_from_state_and_email(jpegs_only)
+      else
+        puts "Nothing new found."
+      end
     end
   end
 
   def self.on_click_create
-    paths = get_with_path(extract_images(fetch_database()))
     wizards = get_first_run_wizards
-    jpegs_only = extract_wizard_state_from_db(paths, wizards)
-    get_jpegs_from_state_and_email(jpegs_only)
-    update_run_count_wizards()
+    if wizards != []
+      wizards.each do |wizard|
+        paths = get_with_path(extract_images(fetch_database(wizard[:email_tree]), wizard[:mac]))
+        store_json(paths, wizard[:mac])
+        jpegs_only = extract_wizard_state_from_db(paths, [wizard])
+        get_jpegs_from_state_and_email(jpegs_only)
+        update_run_count_wizards()
+      end
+    else
+      puts "No Newly created Wizards"
+    end
   end
 
-  def self.fetch_database
-    result = Net::HTTP.get(URI.parse("https://wearableeot-39e6a.firebaseio.com/visilabeot@gmail%7Ccom.json?auth=#{ENV['auth']}"))
+  def self.fetch_database(email_tree)
+    result = Net::HTTP.get(URI.parse("https://wearableeot-39e6a.firebaseio.com/#{email_tree}.json?auth=#{ENV['auth']}"))
     JSON.parse result
   end
 
-  def self.extract_images(json)
-    json["D0:5F:B8:4D:3B:58"]["Images"]
+  def self.extract_images(json, mac)
+    json["#{mac}"]["Images"]
   end
 
   def self.get_with_path(images)
     images.select { |key, value| value['Path'] }
   end
 
-  def self.store_json(json)
-    File.open("temp.json", "w") do |f|
+  def self.store_json(json, mac)
+    File.open("#{mac}.json", "w") do |f|
       f.write(json.to_json)
     end
   end
@@ -47,7 +59,9 @@ class Wizard < ApplicationRecord
     Wizard.where(is_working: true, run_count: 1).map do |wizard|
       {
         state: wizard.state,
-        email: wizard.email
+        email: wizard.email,
+        email_tree: wizard.email_tree,
+        mac: wizard.mac
       }
     end
   end
@@ -60,13 +74,15 @@ class Wizard < ApplicationRecord
     Wizard.where(is_working: true, run_count: 2).map do |wizard|
       {
         state: wizard.state,
-        email: wizard.email
+        email: wizard.email,
+        email_tree: wizard.email_tree,
+        mac: wizard.mac
       }
     end
   end
 
-  def self.compare_stored_and_new_hash(new_hash)
-    stored_hash = JSON.parse(File.read('temp.json'))
+  def self.compare_stored_and_new_hash(new_hash, mac)
+    stored_hash = JSON.parse(File.read("#{mac}.json"))
     stored_hash.merge(new_hash){ |k, v1, v2| v1 == v2 ? :equal : [v1, v2] }.reject { |_, v| v == :equal }.keys
   end
 

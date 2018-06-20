@@ -45,6 +45,10 @@ onLoad = ->
         iam_authenticated = firebase
         db_auth = firebase.database().ref()
         obliged_email = "#{user_email}".replace(/\./g,'|')
+        db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
+          console.log Object.keys(snapshot.val())
+          # console.log Object.values(snapshot.val())[1]
+          mac_address = Object.keys(snapshot.val())[0]
         $("#feed_of_user").attr("href", "/feed/#{user.uid}")
         console.log obliged_email
 
@@ -94,6 +98,8 @@ onWizardSave = ->
     data = {}
     data.state = wizardState
     data.email = wizardEmail
+    data.email_tree = user_email
+    data.mac = mac_address
     data.is_working = true
 
     onError = (jqXHR, textStatus, errorThrown) ->
