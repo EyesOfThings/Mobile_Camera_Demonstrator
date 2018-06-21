@@ -27,11 +27,15 @@ onLoad = ->
             console.log "hrurr"
             db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
               mac_address = Object.keys(snapshot.val())[0]
+              globalDeviceKeys = Object.keys(snapshot.val())
+              deletedIntegrations = subtractarrays(globalDeviceKeys, ["evercam", "dropbox"])
+              indexDevice = 0
               snapshot.forEach (childSnap) ->
                 console.log childSnap
                 if childSnap.val().Images != null
                   if getLastPart() == user.uid
-                    showPublicFeed(childSnap.val().Images)
+                    showPublicFeed(childSnap.val().Images, deletedIntegrations[indexDevice])
+                    indexDevice++
                   else
                     $.notify("This user doesn't exist.", "info")
                   return
@@ -41,6 +45,15 @@ onLoad = ->
         window.location = '/'
       return
     return
+
+subtractarrays = (array1, array2) ->
+  difference = []
+  i = 0
+  while i < array1.length
+    if $.inArray(array1[i], array2) == -1
+      difference.push array1[i]
+    i++
+  difference
 
 getLastPart = ->
   url = $(location).attr('href')
@@ -107,7 +120,7 @@ getAllPathsForEmail = (email) ->
 
   $.ajax(settings)
 
-showPublicFeed = (Images) ->
+showPublicFeed = (Images, deviceMac) ->
   spanTagFeed = ""
   tags = "all"
   $.each Images, (timestamp, Image) ->
@@ -123,15 +136,15 @@ showPublicFeed = (Images) ->
           console.log tags
           image_tag =
             "<div class='datetime-filter ui card #{tags}' data-timefilter='#{moment.unix(timestamp).format("MMMM M, YYYY")}'>
-              <a class='pop-the-image filer-on-date' href='#{url}' data-mac='#{mac_address}' data-tags='#{tags}' data-time='#{timestamp}'>
+              <a class='pop-the-image filer-on-date' href='#{url}' data-mac='#{deviceMac}' data-tags='#{tags}' data-time='#{timestamp}'>
                 <div class='image'>
                   <img src='#{url}'>
                 </div>
               </a>
               <div class='content'>
-                <a class='header' data-time='#{timestamp}' data-mac='#{mac_address}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MMMM M, YYYY, HH-mm-ss")}</a>
+                <a class='header' data-time='#{timestamp}' data-mac='#{deviceMac}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MMMM M, YYYY, HH-mm-ss")}</a>
                 <div class='meta'>
-                  <span class='date'>Device ID: #{mac_address}</span>
+                  <span class='date'>Device ID: #{deviceMac}</span>
                 </div>
                 <div class='description'>
                   #{returnTagsWithLabel(tags.replace(/all/g,''))}

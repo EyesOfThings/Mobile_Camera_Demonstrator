@@ -27,41 +27,21 @@
         <i class="close icon"></i>
         <p><i class="play icon"></i> Your animation will be available shortly on <a href="/animations">Animations</a>.</p>
       </div>
-      <div id="album" style="display: none;">
-          <div class="ui piled compact segment">
-            <!-- <div class="floating ui red label image_total">9</div> -->
-            <div class="ui card">
-              <div class="blurring dimmable image">
-                <div class="ui inverted dimmer">
-                 <div class="content">
-                   <div class="center">
-                     <div class="ui red button view whole-view">VIEW</div>
-                   </div>
-                 </div>
-                 </div>
-                <img src="/eot.jpg">
-              </div>
-                <div class="content">
-                  <div class="header device_id"></div>
-                  <div class="meta">
-                    <span class="right floated date"><i class="history icon"></i><font class="lastSync"></font></span>
-                  </div>
-                  <div class="description">
-                  EoT Device Images
-                  </div>
-                </div>
-            </div>
-          </div>
-        </div>
 
         <!-- ALBUM ITEMS -->
 
         <div id="album_items">
           <div class="content">
-            <button class="ui labeled icon button back left floated">
-               <i class="arrow lircle left icon"></i>
-               Back
-            </button>
+            <div class="ui labeled icon button left floated dropdown">
+              <i class="dropdown lircle left icon"></i>
+               Devices
+              <div class="menu ui transition hidden pushMacs">
+                <div class="ui radio checkbox item deviceArea">
+                  <input type="radio" name="radio" checked="checked">
+                  <label for="macValue">All</label>
+                </div>
+              </div>
+            </div>
             <button class="ui labeled icon button left floated show-me-filter">
               <i class="filter lircle left icon"></i>
                Filters

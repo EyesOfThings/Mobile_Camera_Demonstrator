@@ -13,6 +13,8 @@ window.haveLoggedIn = undefined
 allVals = []
 imagePaths = undefined
 window.dateFilter = undefined
+globalDeviceKeys = undefined
+globalDeviceVals = undefined
 
 sendAJAXRequest = (settings) ->
   token = $('meta[name="csrf-token"]')
@@ -93,7 +95,10 @@ window.getAuthWithFirebase = (auth, email) ->
       console.log "hello"
     else
       db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
-        # console.log Object.values(snapshot.val())[1]
+        # console.log Object.keys(snapshot.val())
+        # console.log Object.values(snapshot.val())
+        globalDeviceKeys = Object.keys(snapshot.val())
+        globalDeviceVals = Object.values(snapshot.val())
         mac_address = Object.keys(snapshot.val())[0]
         if getObjectKeyIndex(snapshot.exportVal(), 'evercam') != null
           indexVal = getObjectKeyIndex(snapshot.exportVal(), 'evercam')
@@ -101,33 +106,46 @@ window.getAuthWithFirebase = (auth, email) ->
           $(".lastSync").text("Last Sync #{moment.unix(lastSyncDateIs).format("MM/DD/YYYY HH-mm-ss")}")
         else
           $(".lastSync").text("Last Sync #{moment.unix(88787777).format("MM/DD/YYYY HH-mm-ss")}")
-        #   $(".not-on").css('display', 'none')
-        #   $(".already-on").css("display", "block")
-        $(".device_id").text("#{mac_address}")
-        $("#album").css("display", "block")
-        #   lastSyncDateIs = Object.values(snapshot.val())[1].lastSyncDate
-        #   api_key = Object.values(snapshot.val())[1].apiKey
-        #   api_id = Object.values(snapshot.val())[1].apiId
-        # $(".lastSync").text("Last Sync #{moment.unix(88787777).format("MM/DD/YYYY HH-mm-ss")}")
-        #   console.log Object.values(snapshot.val())[1].lastSyncDate
-        # else
-        #   $(".not-on").css('display', 'block')
-        #   $(".already-on").css("display", "none")
-        #   lastSyncDateIs = moment().unix()
-        # mac_address = Object.keys(snapshot.val())[0]
+        # $(".device_id").text("#{mac_address}")
+        deletedIntegrations = subtractarrays(globalDeviceKeys, ["evercam", "dropbox"])
+        addMacsToDorpdown(deletedIntegrations)
+        $("#album_items").css("display", "block")
+        indExing = 0
         snapshot.forEach (childSnap) ->
-          console.log childSnap
           if childSnap.val().Images != null
-            logImageDataOnly(childSnap.val().Images)
+            console.log childSnap.val().Images
+            logImageDataOnly(childSnap.val().Images, deletedIntegrations[indExing])
+            indExing++
             return
 
 isset = (variable) ->
   if typeof variable != typeof undefined then true else false
 
+addMacsToDorpdown = (macArray) ->
+  tagMac = ''
+  macArray.forEach (mac) ->
+    tagMac = "
+      <div class='ui radio checkbox item deviceArea'>
+        <input type='radio' name='radio'>
+        <label>#{mac}</label>
+      </div>
+    "
+    $(".pushMacs").append(tagMac)
+
+subtractarrays = (array1, array2) ->
+  difference = []
+  i = 0
+  while i < array1.length
+    if $.inArray(array1[i], array2) == -1
+      difference.push array1[i]
+    i++
+  difference
+
 capitalizeFirstLetter = (string) ->
   string.charAt(0).toUpperCase() + string.slice(1)
 
-logImageDataOnly = (Images) ->
+logImageDataOnly = (Images, deviceMac) ->
+  console.log deviceMac
   spanTagFeed = ""
   tags = "all"
   $.each Images, (timestamp, Image) ->
@@ -152,9 +170,6 @@ logImageDataOnly = (Images) ->
         </span>"
     
     tangRef.getDownloadURL().then((url) ->
-      # if timestamp > lastSyncDateIs
-        # updateSyncDate(iam_authenticated, user_email, timestamp, api_key, api_id)
-        # sendItToSeaweedFS(url, mac_address, timestamp)
       $.each Image.Tags, (i, value) ->
         if value == 1
           tags += " #{i}"
@@ -162,16 +177,16 @@ logImageDataOnly = (Images) ->
         tags = "all normal"
       console.log tags
       image_tag =
-        "<div class='datetime-filter ui card #{tags}' data-timefilter='#{moment.unix(timestamp).format("MMMM M, YYYY")}'>
-          <a class='pop-the-image filer-on-date' href='#{url}' data-mac='#{mac_address}' data-tags='#{tags}' data-time='#{timestamp}'>
+        "<div class='deviceHolds datetime-filter ui card #{tags}' data-mac='#{deviceMac}' data-timefilter='#{moment.unix(timestamp).format("MMMM M, YYYY")}'>
+          <a class='pop-the-image filer-on-date' href='#{url}' data-mac='#{deviceMac}' data-tags='#{tags}' data-time='#{timestamp}'>
             <div class='image'>
               <img src='#{url}'>
             </div>
           </a>
           <div class='content'>
-            <a class='header' data-time='#{timestamp}' data-mac='#{mac_address}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MMMM M, YYYY, HH-mm-ss")}</a>
+            <a class='header' data-time='#{timestamp}' data-mac='#{deviceMac}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MMMM M, YYYY, HH-mm-ss")}</a>
             <div class='meta'>
-              <span class='date'>Device ID: #{mac_address}</span>
+              <span class='date'>Device ID: #{deviceMac}</span>
             </div>
             <div class='description'>
               #{returnTagsWithLabel(tags.replace(/all/g,''))}
@@ -205,6 +220,19 @@ logImageDataOnly = (Images) ->
     ).catch (error) ->
       console.log error
       return
+
+showAndHideDevices = ->
+  $("#album_items").on "click", ".deviceArea", ->
+    deviceMac = $($(this).html()).filter('label').text()
+    if deviceMac is "All"
+      $('.deviceHolds').each ->
+        $(this).show()
+    else
+      $('.deviceHolds').each ->
+        $(this).hide()
+        if $(this).data('mac') == "#{deviceMac}"
+          $(this).show()
+        return
 
 returnTagsWithLabel = (tagings) ->
   labels = ""
@@ -655,3 +683,4 @@ window.initializeHome = ->
   onLinkedInSharingClick()
   onFBSharingClick()
   shareToPublicFeed()
+  showAndHideDevices()

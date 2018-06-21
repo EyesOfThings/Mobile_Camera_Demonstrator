@@ -46,7 +46,9 @@ onLoad = ->
         db_auth = firebase.database().ref()
         obliged_email = "#{user_email}".replace(/\./g,'|')
         db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
-          console.log Object.keys(snapshot.val())
+          globalDeviceKeys = Object.keys(snapshot.val())
+          deletedIntegrations = subtractarrays(globalDeviceKeys, ["evercam", "dropbox"])
+          addMacsToDorpdown(deletedIntegrations)
           # console.log Object.values(snapshot.val())[1]
           mac_address = Object.keys(snapshot.val())[0]
         $("#feed_of_user").attr("href", "/feed/#{user.uid}")
@@ -59,6 +61,23 @@ onLoad = ->
         window.location = '/'
       return
     return
+
+addMacsToDorpdown = (macArray) ->
+  tagMac = ''
+  macArray.forEach (mac) ->
+    tagMac = "
+      <option value='#{mac}'>#{mac}</option>
+    "
+    $("#deviceWizard").append(tagMac)
+
+subtractarrays = (array1, array2) ->
+  difference = []
+  i = 0
+  while i < array1.length
+    if $.inArray(array1[i], array2) == -1
+      difference.push array1[i]
+    i++
+  difference
 
 onSignOut = ->
   $(".signout").on "click", ->
@@ -99,7 +118,7 @@ onWizardSave = ->
     data.state = wizardState
     data.email = wizardEmail
     data.email_tree = user_email
-    data.mac = mac_address
+    data.mac = $("#deviceWizard").val()
     data.is_working = true
 
     onError = (jqXHR, textStatus, errorThrown) ->
