@@ -69,7 +69,7 @@ onLoad = ->
                   api_key = Object.values(snapshot.val())[indexVal].apiKey
                   api_id = Object.values(snapshot.val())[indexVal].apiId
                   syncIs = Object.values(snapshot.val())[indexVal].syncIsOn
-                  cameraIdIs = "#{mac_address}".replace(/:\s*/g, "").toLowerCase()
+                  cameraIdIs = "ever-#{user_email.substring(0, 4)}"
                   $(".openmein").html(
                     "
                     <a href='https://dash.evercam.io/v1/cameras/#{cameraIdIs}?api_key=#{api_key}&api_id=#{api_id}' target='_blank'>
@@ -132,11 +132,11 @@ onLoad = ->
       return
     return
 
-createCameraInEvercam = (api_key, api_id, mac_address) ->
+createCameraInEvercam = (api_key, api_id, email) ->
   data = {}
   data.name = "EOT Evercam"
   data.mac_address = "#{mac_address}"
-  data.id = "#{mac_address.replace(/:\s*/g, "").toLowerCase()}"
+  data.id = "ever-#{email.substring(0, 4)}"
   data.vendor = "other"
   data.model = "other"
   data.jpg_url = "image.jpg"
@@ -187,7 +187,7 @@ createCameraInEvercam = (api_key, api_id, mac_address) ->
 
   $.ajax(settings)
 
-deleteCameraInEvercam = (api_key, api_id, mac_address) ->
+deleteCameraInEvercam = (api_key, api_id, email) ->
   data = {}
   data.api_id = "#{api_id}"
   data.api_key = "#{api_key}"
@@ -208,7 +208,7 @@ deleteCameraInEvercam = (api_key, api_id, mac_address) ->
     error: onError
     success: onSuccess
     type: "DELETE"
-    url: "https://media.evercam.io/v1/cameras/#{mac_address.replace(/:\s*/g, "").toLowerCase()}"
+    url: "https://media.evercam.io/v1/cameras/ever-#{email.substring(0, 4)}"
 
   $.ajax(settings)
 
@@ -292,7 +292,7 @@ logImageDataOnly = (Images) ->
         console.log timestamp
         if timestamp > lastSyncDateIs
           updateSyncDate(iam_authenticated, user_email, timestamp, api_key, api_id, syncIs)
-          sendItToSeaweedFS(url, mac_address, timestamp)
+          sendItToSeaweedFS(url, user_email, timestamp)
       else
         console.log "sync is off"
     ).catch (error) ->
@@ -309,7 +309,7 @@ logImageDataOnlyDB = (Images) ->
         if timestamp > lastSyncDateIs
           updateDBSyncDate(iam_authenticated, user_email, timestamp, accessToken, dropBoxSync)
           console.log "upload to DB"
-          sendItToDB(url, mac_address, timestamp, accessToken)
+          sendItToDB(url, user_email, timestamp, accessToken)
       else
         console.log "dropBoxSync is off"
     ).catch (error) ->
@@ -339,10 +339,10 @@ updateDBSyncDate = (auth, email, timestamp, accessToken, syncIs) ->
       syncIsOn: "#{syncIs}"
   console.log "done"
 
-sendItToDB = (url, mac_address, timestamp, accessToken) ->
+sendItToDB = (url, email, timestamp, accessToken) ->
   data = {}
   data.url = "#{url}"
-  data.dir_name = "#{mac_address}"
+  data.dir_name = "db-#{email.substring(0, 4)}"
   data.timestamp = "#{timestamp}"
   data.accessToken = "#{accessToken}"
 
@@ -363,10 +363,10 @@ sendItToDB = (url, mac_address, timestamp, accessToken) ->
 
   sendAJAXRequest(settings)
 
-sendItToSeaweedFS = (url, mac_address, timestamp) ->
+sendItToSeaweedFS = (url, email, timestamp) ->
   data = {}
   data.url = "#{url}"
-  data.dir_name = "#{mac_address}"
+  data.dir_name = "ever-#{email.substring(0, 4)}"
   data.timestamp = "#{timestamp}"
 
   onError = (response) ->
@@ -415,7 +415,7 @@ onSaveValues = ->
     $(".am-after-ajax").css("display", "block")
     $("#image_processing").css("display", "block")
     addTable(firebase, user_email, api_key, api_id)
-    createCameraInEvercam(api_key, api_id, mac_address)
+    createCameraInEvercam(api_key, api_id, user_email)
     startSync(firebase, user_email)
 
 onDBSaveValues = ->
@@ -455,7 +455,7 @@ uploadToDropBox = (auth, email) ->
 
 onRevoke = ->
   $(".yesrevoke").on "click", ->
-    deleteCameraInEvercam(api_key, api_id, mac_address)
+    deleteCameraInEvercam(api_key, api_id, user_email)
     $("#integrate-me").css("display", "block")
     $(".etcstuff").css("display", "block")
     $("#revoke-me").css("display", "none")

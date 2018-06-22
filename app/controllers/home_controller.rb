@@ -219,7 +219,7 @@ class HomeController < ApplicationController
     seconds = Time.at(date).utc.strftime("%S")
 
     file_name = "#{minutes}_#{seconds}_000.jpg"
-    dir_name = params[:dir_name].tr(':', '').downcase
+    dir_name = params[:dir_name]
     begin
       open(file_name, 'wb') do |file|
         file << open(params[:url]).read
@@ -244,7 +244,7 @@ class HomeController < ApplicationController
     seconds = Time.at(date).utc.strftime("%S")
 
     file_name = "#{year}-#{month}-#{day}-#{hour}-#{minutes}_#{seconds}_000.jpg"
-    dir_name = params[:dir_name].tr(':', '').downcase
+    dir_name = params[:dir_name]
     client = Dropbox::Client.new(params[:accessToken])
     begin
       open(file_name, 'wb') do |file|
