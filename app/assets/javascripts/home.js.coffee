@@ -214,6 +214,8 @@ logImageDataOnly = (Images, deviceMac) ->
           </div>
         </div>"
       $(".my-gallery").append(image_tag)
+      $('.poping-up').popup on: 'hover'
+      $('.droping-up').popup on: 'hover'
       $('.ui.checkbox')
         .checkbox()
       tags = "all"
