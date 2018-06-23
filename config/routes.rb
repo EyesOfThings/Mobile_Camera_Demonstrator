@@ -28,7 +28,7 @@ Rails.application.routes.draw do
   get "/feed/:uid" => "home#feeds"
 
   get "/v1/emotions" => "home#list_emotions"
-  get "/v1/device/:device_id/images/" => "home#list_device_images"
+  get "/v1/devices/:device_id/images/" => "home#list_device_images"
 
   get "/v1/devices" => "home#all_devices"
   get "/v1/:user/devices" => "home#get_user_devices"
