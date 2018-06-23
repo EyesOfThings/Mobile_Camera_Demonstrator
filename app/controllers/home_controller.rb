@@ -25,6 +25,22 @@ class HomeController < ApplicationController
     end
   end
 
+  def all_devices
+    render json: get_em(get_all_data()).select {|e| e =~/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/}
+  end
+
+  def get_user_devices
+    all_data = get_all_data()
+    all_keys = all_data.keys
+    user = params[:user].gsub(".","|")
+    user_from_tree = all_keys.select {|v| v == user}.first
+    if user_from_tree == nil
+      render json: {message: "#{user} not found."}
+    else
+      render json: all_data[user_from_tree].keys.select {|e| e =~/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/}
+    end
+  end
+
   def show
     @current_user = current_user
 
