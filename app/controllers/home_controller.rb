@@ -13,6 +13,18 @@ class HomeController < ApplicationController
     render json: {emotions: emotions}
   end
 
+  def list_device_images
+    device_id = params[:device_id]
+    all_data = get_all_data()
+    all_keys = get_em(all_data)
+    resuls = get_single_device(all_data, device_id, all_keys)
+    if resuls == 0
+      render json: {message: "#{device_id} not found."}
+    else
+      render json: create_json_to_return(resuls)
+    end
+  end
+
   def show
     @current_user = current_user
 
@@ -297,5 +309,50 @@ class HomeController < ApplicationController
     bucket  = storage.bucket "wearableeot-39e6a.appspot.com"
     file    = bucket.file file_name
     file.signed_url
+  end
+
+  def get_all_data
+    result = Net::HTTP.get(URI.parse("https://wearableeot-39e6a.firebaseio.com/.json?auth=#{ENV['auth']}"))
+    JSON.parse result
+  end
+
+  def get_single_device(json_data, device_id, all_keys)
+    device_id_index = all_keys.index(device_id)
+    if device_id_index == nil
+      0
+    else
+      user = all_keys[device_id_index - 1]
+      json_data[user][device_id]["Images"].select { |key, value| value['Path'] }
+    end
+  end
+
+  def get_em(h)
+    h.each_with_object([]) do |(k,v),keys|      
+      keys << k
+      keys.concat(get_em(v)) if v.is_a? Hash
+    end
+  end
+
+  def create_json_to_return(jpegs_path)
+    all_ids = jpegs_path.map {|key, value| key.to_i}
+    all_tags = jpegs_path.map {|key, value| value["Tags"]}
+    id_count = all_ids.count
+    all_ids.map.with_index do |value, index|
+      {
+        "images": {
+          "id": value,
+          "Anger": all_tags[index]["Anger"],
+          "Disgust": all_tags[index]["Disgust"],
+          "FaceDetected": all_tags[index]["FaceDetected"],
+          "Fear": all_tags[index]["Fear"],
+          "Happiness": all_tags[index]["Happiness"],
+          "LargeFaceDetected": all_tags[index]["LargeFaceDetected"],
+          "MotionDetected": all_tags[index]["MotionDetected"],
+          "Neutral": all_tags[index]["Neutral"],
+          "Sadness": all_tags[index]["Sadness"],
+          "Surprise": all_tags[index]["Surprise"]
+        }
+      }
+    end
   end
 end

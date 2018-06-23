@@ -28,5 +28,6 @@ Rails.application.routes.draw do
   get "/feed/:uid" => "home#feeds"
 
   get "/v1/emotions" => "home#list_emotions"
+  get "/v1/device/:device_id/images/" => "home#list_device_images"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
