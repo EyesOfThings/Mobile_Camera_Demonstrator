@@ -355,19 +355,17 @@ class HomeController < ApplicationController
     id_count = all_ids.count
     all_ids.map.with_index do |value, index|
       {
-        "images": {
-          "id": value,
-          "Anger": all_tags[index]["Anger"],
-          "Disgust": all_tags[index]["Disgust"],
-          "FaceDetected": all_tags[index]["FaceDetected"],
-          "Fear": all_tags[index]["Fear"],
-          "Happiness": all_tags[index]["Happiness"],
-          "LargeFaceDetected": all_tags[index]["LargeFaceDetected"],
-          "MotionDetected": all_tags[index]["MotionDetected"],
-          "Neutral": all_tags[index]["Neutral"],
-          "Sadness": all_tags[index]["Sadness"],
-          "Surprise": all_tags[index]["Surprise"]
-        }
+        "id": value,
+        "Anger": all_tags[index]["Anger"],
+        "Disgust": all_tags[index]["Disgust"],
+        "FaceDetected": all_tags[index]["FaceDetected"],
+        "Fear": all_tags[index]["Fear"],
+        "Happiness": all_tags[index]["Happiness"],
+        "LargeFaceDetected": all_tags[index]["LargeFaceDetected"],
+        "MotionDetected": all_tags[index]["MotionDetected"],
+        "Neutral": all_tags[index]["Neutral"],
+        "Sadness": all_tags[index]["Sadness"],
+        "Surprise": all_tags[index]["Surprise"]
       }
     end
   end
