@@ -14,6 +14,10 @@ class HomeController < ApplicationController
   end
 
   def list_device_images
+    project_id = "wearableeot-39e6a"
+    key_file   = "service-account.json"
+    storage = Google::Cloud::Storage.new project: project_id, keyfile: key_file, timeout: 100000000
+    bucket  = storage.bucket "wearableeot-39e6a.appspot.com"
     device_id = params[:device_id]
     all_data = get_all_data()
     all_keys = get_em(all_data)
@@ -21,7 +25,7 @@ class HomeController < ApplicationController
     if resuls == 0
       render json: {message: "#{device_id} not found."}
     else
-      render json: create_json_to_return(resuls)
+      render json: create_json_to_return(resuls, bucket)
     end
   end
 
@@ -321,10 +325,15 @@ class HomeController < ApplicationController
   def get_signed_path(file_name)
     project_id = "wearableeot-39e6a"
     key_file   = "service-account.json"
-    storage = Google::Cloud::Storage.new project: project_id, keyfile: key_file
+    storage = Google::Cloud::Storage.new project: project_id, keyfile: key_file, timeout: 100000000
     bucket  = storage.bucket "wearableeot-39e6a.appspot.com"
     file    = bucket.file file_name
-    file.signed_url
+    file.signed_url method: "GET", expires: 100000000
+  end
+
+  def get_signed_url(file_name, bucket)
+    file    = bucket.file file_name
+    file.signed_url method: "GET", expires: 100000000
   end
 
   def get_all_data
@@ -349,9 +358,10 @@ class HomeController < ApplicationController
     end
   end
 
-  def create_json_to_return(jpegs_path)
+  def create_json_to_return(jpegs_path, bucket)
     all_ids = jpegs_path.map {|key, value| key.to_i}
     all_tags = jpegs_path.map {|key, value| value["Tags"]}
+    all_paths = jpegs_path.map {|key, value| value["Path"]}
     id_count = all_ids.count
     all_ids.map.with_index do |value, index|
       {
@@ -365,7 +375,8 @@ class HomeController < ApplicationController
         "MotionDetected": all_tags[index]["MotionDetected"],
         "Neutral": all_tags[index]["Neutral"],
         "Sadness": all_tags[index]["Sadness"],
-        "Surprise": all_tags[index]["Surprise"]
+        "Surprise": all_tags[index]["Surprise"],
+        "URL": get_signed_url(all_paths[index], bucket)
       }
     end
   end
