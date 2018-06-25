@@ -3,6 +3,115 @@ class Wizard < ApplicationRecord
   require "google/cloud/storage"
   require "pry"
   require 'fileutils'
+  require 'json'
+  require 'open-uri'
+  require 'uri'
+  require 'rest_client'
+  require 'filesize'
+  require 'streamio-ffmpeg'
+  require "google/cloud/storage"
+  require 'dropbox'
+
+  def self.new_device_detected
+    all_data = get_all_data()
+    get_all_keys = get_keys(all_data)
+    get_all_emails = get_all_keys.select {|e| e =~/\A[\w+\-|]+@[a-z\d\-]+(\|[a-z]+)*\|[a-z]+\z/}
+
+    fetch_emails_with_new_devices = get_all_emails.map do |email|
+      all_devices_for_user = get_keys(all_data[email]).select {|e| e =~/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/}
+      bool, macs = compare_to_old_device_if_new_save(all_devices_for_user, email)
+      if bool == true
+        {
+          email: email,
+          devices: macs
+        }
+      end
+    end
+    get_emails_creds = fetch_emails_with_new_devices.compact.each do |user|
+      user[:creds] = get_sync_creds(all_data, user[:email])
+    end
+
+    project_id = "wearableeot-39e6a"
+    key_file   = "service-account.json"
+    storage = Google::Cloud::Storage.new project: project_id, keyfile: key_file
+    bucket  = storage.bucket "wearableeot-39e6a.appspot.com"
+
+    get_emails_creds.each do |an_object|
+      an_object[:devices].flatten.each do |device|
+        jpegs_with_path = get_with_path(extract_images(fetch_database(an_object[:email].gsub("|","%7C")), device)).map { |key, value| value["Path"] }
+        client = Dropbox::Client.new(an_object[:creds][:dropboxToken])
+        send_jpegs_to_evercam_dropbox(jpegs_with_path, bucket, an_object[:email], client)
+      end
+    end
+  end
+
+  def self.send_jpegs_to_evercam_dropbox(jpegs_with_path, bucket, email, client)
+    jpegs_with_path.each do |file_name|
+      begin
+        date = file_name.gsub(/[^0-9]/, '').to_i
+        year = Time.at(date).utc.strftime("%Y")
+        month = Time.at(date).utc.strftime("%m")
+        day = Time.at(date).utc.strftime("%d")
+        hour = Time.at(date).utc.strftime("%H")
+        minutes = Time.at(date).utc.strftime("%M")
+        seconds = Time.at(date).utc.strftime("%S")
+
+        file_evercam = "#{minutes}_#{seconds}_000.jpg"
+        file_dropbox = "#{year}-#{month}-#{day}-#{hour}-#{minutes}_#{seconds}_000.jpg"
+        file = bucket.file file_name
+        file.download file_evercam
+        dir_name = "ever-#{email[0..3]}"
+        db_dir_name = "db-#{email[0..3]}"
+
+        begin
+          read_file = File.open(file_evercam, 'rb') { |file| file.read }
+          client.upload("/#{db_dir_name}/#{file_dropbox}", read_file)
+          RestClient.post("#{ENV['seaweedFiler']}/#{dir_name}/snapshots/recordings/#{year}/#{month}/#{day}/#{hour}/", :name_of_file_param => File.new(file_evercam))
+          File.delete(file_evercam)
+        rescue => e
+          puts "seems like an error on seaweedFiler #{e}"
+        end
+      rescue => e
+        puts "File not found."
+      end
+    end
+  end
+
+  def self.get_sync_creds(all_data, email)
+    {
+      apiKey: all_data[email]["evercam"]["syncIsOn"] == "1" ? all_data[email]["evercam"]["apiKey"] : nil,
+      apiId: all_data[email]["evercam"]["syncIsOn"] == "1" ? all_data[email]["evercam"]["apiId"] : nil,
+      dropboxToken: all_data[email]["dropbox"]["syncIsOn"] == "1" ? all_data[email]["dropbox"]["accessToken"] : nil
+    }
+  end
+
+  def self.compare_to_old_device_if_new_save(all_devices_for_user, email)
+    begin
+      old_devices = JSON.parse(File.read("#{email}_devices.json"))
+      if all_devices_for_user == old_devices
+        puts "there is no new device to save for #{email}"
+        [false, []]
+      else
+        File.open("#{email}_devices.json", "w") do |f|
+          f.write(all_devices_for_user.to_json)
+        end
+        [true, [all_devices_for_user + old_devices - (all_devices_for_user & old_devices)]]
+      end
+    rescue => e
+      puts "Error opening past files, user must be new one #{email}."
+      File.open("#{email}_devices.json", "w") do |f|
+        f.write(all_devices_for_user.to_json)
+      end
+      [true, all_devices_for_user]
+    end
+  end
+
+  def self.get_keys(h)
+    h.each_with_object([]) do |(k,v),keys|      
+      keys << k
+      keys.concat(get_keys(v)) if v.is_a? Hash
+    end
+  end
 
   def self.start
     states = get_working_wizards_states
@@ -140,5 +249,10 @@ class Wizard < ApplicationRecord
     rescue RestClient::ExceptionWithResponse => e
       puts e.response
     end
+  end
+
+  def self.get_all_data
+    result = Net::HTTP.get(URI.parse("https://wearableeot-39e6a.firebaseio.com/.json?auth=#{ENV['auth']}"))
+    JSON.parse result
   end
 end
