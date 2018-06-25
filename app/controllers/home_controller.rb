@@ -21,11 +21,23 @@ class HomeController < ApplicationController
     device_id = params[:device_id]
     all_data = get_all_data()
     all_keys = get_em(all_data)
-    resuls = get_single_device(all_data, device_id, all_keys)
-    if resuls == 0
-      render json: {message: "#{device_id} not found."}
+    all_devices_for = all_keys.select {|e| e =~/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/}
+
+    if all_devices_for.include? device_id
+      get_all_emails = all_keys.select {|e| e =~/\A[\w+\-|]+@[a-z\d\-]+(\|[a-z]+)*\|[a-z]+\z/}
+      all_devices_for_user = get_all_emails.map do |email|
+        {
+          user: email,
+          devices: get_em(all_data[email]).select {|e| e =~/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/}
+        }
+      end
+
+      get_final_user_and_device = all_devices_for_user.map {|e| e[:devices].include?(device_id) ? [e[:user], device_id] : nil}
+      get_final_user_and_device
+      results = get_single_device(all_data, get_final_user_and_device.compact.flatten)
+      render json: create_json_to_return(results, bucket)
     else
-      render json: create_json_to_return(resuls, bucket)
+      render json: {message: "#{device_id} not found."}
     end
   end
 
@@ -332,8 +344,12 @@ class HomeController < ApplicationController
   end
 
   def get_signed_url(file_name, bucket)
-    file    = bucket.file file_name
-    file.signed_url method: "GET", expires: 100000000
+    begin
+      file    = bucket.file file_name
+      file.signed_url method: "GET", expires: 100000000
+    rescue => e
+      "no jpeg on storage."
+    end
   end
 
   def get_all_data
@@ -341,14 +357,8 @@ class HomeController < ApplicationController
     JSON.parse result
   end
 
-  def get_single_device(json_data, device_id, all_keys)
-    device_id_index = all_keys.index(device_id)
-    if device_id_index == nil
-      0
-    else
-      user = all_keys[device_id_index - 1]
-      json_data[user][device_id]["Images"].select { |key, value| value['Path'] }
-    end
+  def get_single_device(json_data, user_device_id)
+    json_data[user_device_id[0]][user_device_id[1]]["Images"].select { |key, value| value['Path'] }
   end
 
   def get_em(h)
