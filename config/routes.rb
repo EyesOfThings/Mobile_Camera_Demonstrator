@@ -30,7 +30,9 @@ Rails.application.routes.draw do
   get "/v1/emotions" => "home#list_emotions"
   get "/v1/devices/:device_id/images/" => "home#list_device_images"
 
-  get "/v1/devices" => "home#all_devices"
+  get "/v1/devices" => "devices#index"
   get "/v1/:user/devices" => "home#get_user_devices"
+
+  get '/v1/swagger' => "home#swagger"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

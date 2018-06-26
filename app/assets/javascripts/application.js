@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require swagger-ui.js
+//= require swagger-ui-standalone.js
 //= require semantic-ui
 //= require moment
 //= require nprogress.js
