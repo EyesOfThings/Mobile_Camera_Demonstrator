@@ -5,6 +5,54 @@
   "resourcePath": "devices",
   "apis": [
     {
+      "path": "/v1/emotions",
+      "operations": [
+        {
+          "summary": "Fetches all the emotions.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            }
+          ],
+          "nickname": "Devices#emotions",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/devices/{device_id}/images",
+      "operations": [
+        {
+          "summary": "Fetches all images for a device.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Not Found"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "device_id",
+              "type": "string",
+              "description": "Deivce Mac Address. e.g 54:98:C4:45.",
+              "required": true
+            }
+          ],
+          "nickname": "Devices#device_images",
+          "method": "get"
+        }
+      ]
+    },
+    {
       "path": "/v1/devices",
       "operations": [
         {
@@ -17,6 +65,37 @@
             }
           ],
           "nickname": "Devices#index",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/{email}/devices",
+      "operations": [
+        {
+          "summary": "Fetches all devices for a user.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Not Found"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "email",
+              "type": "string",
+              "description": "User email from firebase tree. e.g abc@bcd|com.",
+              "required": true
+            }
+          ],
+          "nickname": "Devices#user_devices",
           "method": "get"
         }
       ]

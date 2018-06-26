@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "eot.evercam.io",
+    "title": "Eyes Of Things",
     "version": "1.0"
   },
   "host": "eot.evercam.io",
@@ -22,6 +22,72 @@
         ],
         "operationId": "Devices#index",
         "summary": "Fetches all the devcies."
+      }
+    },
+    "/v1/devices/{device_id}/images": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Deivce Mac Address. e.g 54:98:C4:45.",
+            "in": "path",
+            "name": "device_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "devices"
+        ],
+        "operationId": "Devices#device_images",
+        "summary": "Fetches all images for a device."
+      }
+    },
+    "/v1/emotions": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "tags": [
+          "devices"
+        ],
+        "operationId": "Devices#emotions",
+        "summary": "Fetches all the emotions."
+      }
+    },
+    "/v1/{email}/devices": {
+      "get": {
+        "parameters": [
+          {
+            "description": "User email from firebase tree. e.g abc@bcd|com.",
+            "in": "path",
+            "name": "email",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "devices"
+        ],
+        "operationId": "Devices#user_devices",
+        "summary": "Fetches all devices for a user."
       }
     }
   },

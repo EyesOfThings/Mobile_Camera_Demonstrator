@@ -27,11 +27,11 @@ Rails.application.routes.draw do
   get "/load_public_animation_path", to: "home#load_public_animation_path"
   get "/feed/:uid" => "home#feeds"
 
-  get "/v1/emotions" => "home#list_emotions"
-  get "/v1/devices/:device_id/images/" => "home#list_device_images"
+  get "/v1/emotions" => "devices#emotions"
+  get "/v1/devices/:device_id/images/" => "devices#device_images"
 
   get "/v1/devices" => "devices#index"
-  get "/v1/:user/devices" => "home#get_user_devices"
+  get "/v1/:email/devices" => "devices#user_devices"
 
   get '/v1/swagger' => "home#swagger"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
