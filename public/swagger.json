@@ -1,10 +1,10 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "localhost:3000",
+    "title": "eot.evercam.io",
     "version": "1.0"
   },
-  "host": "localhost:3000",
+  "host": "eot.evercam.io",
   "basePath": "/",
   "schemes": [
     "http"
