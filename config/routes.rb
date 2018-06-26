@@ -29,6 +29,7 @@ Rails.application.routes.draw do
 
   get "/v1/emotions" => "devices#emotions"
   get "/v1/devices/:device_id/images/" => "devices#device_images"
+  get "/v1/devices/:device_id/images/b/" => "home#list_device_images"
 
   get "/v1/devices" => "devices#index"
   get "/v1/:email/devices" => "devices#user_devices"

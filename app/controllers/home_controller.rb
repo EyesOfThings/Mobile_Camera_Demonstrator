@@ -348,10 +348,21 @@ class HomeController < ApplicationController
 
   def get_signed_url(file_name, bucket)
     begin
-      file    = bucket.file file_name
+      file = bucket.file file_name
+      file.download "image.jpg"
       file.signed_url method: "GET", expires: 100000000
     rescue => e
       "no jpeg on storage."
+    end
+  end
+
+  def get_base64_data
+    begin
+      File.open("image.jpg", 'rb') do |img|
+        'data:image/png;base64,' + Base64.strict_encode64(img.read)
+      end
+    rescue => e
+      "no base64 data."
     end
   end
 
@@ -389,7 +400,8 @@ class HomeController < ApplicationController
         "Neutral": all_tags[index]["Neutral"],
         "Sadness": all_tags[index]["Sadness"],
         "Surprise": all_tags[index]["Surprise"],
-        "URL": get_signed_url(all_paths[index], bucket)
+        "URL": get_signed_url(all_paths[index], bucket),
+        "base64": get_base64_data()
       }
     end
   end
