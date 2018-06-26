@@ -1,0 +1,23 @@
+<%= content_for(:title, "Swagger") %>
+<div class="page-content-wrapper">
+  <div id="swagger-ui" class="page-content">
+  </div>
+</div>
+<script>
+window.onload = function() {
+  const ui = SwaggerUIBundle({
+    url:  "http://localhost:3000/swagger.json",
+    dom_id: '#swagger-ui',
+    deepLinking: false,
+    presets: [
+      SwaggerUIBundle.presets.apis,
+      SwaggerUIStandalonePreset
+    ],
+    plugins: [
+      SwaggerUIBundle.plugins.DownloadUrl
+    ],
+    layout: "StandaloneLayout"
+  })
+  window.ui = ui
+}
+</script>

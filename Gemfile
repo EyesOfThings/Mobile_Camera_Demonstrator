@@ -67,3 +67,4 @@ gem "streamio-ffmpeg"
 gem "dropbox-sdk-v2"
 gem "google-cloud-storage"
 gem 'mailgun-ruby', '~>1.1.6'
+gem 'swagger-docs'
