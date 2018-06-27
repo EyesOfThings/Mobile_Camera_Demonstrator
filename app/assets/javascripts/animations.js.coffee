@@ -56,7 +56,7 @@ onLoad = ->
             getAllPathsForEmail(user_email)
         # $('.profile-image').attr 'src', "http://eot.evercam.io/eot.jpg"
         $('.profile-name').text user.displayName
-        $("#feed_of_user").attr("href", "/feed/#{user.uid}")
+        $("#feed_of_user").attr("href", "/feed?email=#{user.email}")
       else
         window.location = '/'
       return

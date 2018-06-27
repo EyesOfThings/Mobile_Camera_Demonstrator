@@ -3,48 +3,56 @@ db_auth = undefined
 whoUserEmail = undefined
 imagePaths = undefined
 
+getUrlParameter = (sParam) ->
+  sPageURL = decodeURIComponent(window.location.search.substring(1))
+  sURLVariables = sPageURL.split('&')
+  sParameterName = undefined
+  i = undefined
+  i = 0
+  while i < sURLVariables.length
+    sParameterName = sURLVariables[i].split('=')
+    if sParameterName[0] == sParam
+      return if sParameterName[1] == undefined then true else sParameterName[1]
+    i++
+  return
+
 onLoad = ->
   $(window).load ->
-    firebase.auth().onAuthStateChanged (user) ->
-      if user
-        NProgress.start()
-        console.log user
-        console.log user.email
-        user_email = user.email
-        whoUserEmail = user_email
-        iam_authenticated = firebase
-        db_auth = firebase.database().ref()
-        obliged_email = "#{user_email}".replace(/\./g,'|')
-        getAllPathsForEmail(user_email)
-        $("#feed_of_user").attr("href", "/feed/#{user.uid}")
-        console.log obliged_email
-        db_auth.once 'value', (snapshot) ->
-          if !snapshot.hasChild(obliged_email)
-            $.notify("No data to show in public feed.", "info");
-            NProgress.done()
-            console.log "No data for show."
-          else
-            console.log "hrurr"
-            db_auth.child("/#{obliged_email}").once 'value', (snapshot) ->
-              mac_address = Object.keys(snapshot.val())[0]
-              globalDeviceKeys = Object.keys(snapshot.val())
-              deletedIntegrations = subtractarrays(globalDeviceKeys, ["evercam", "dropbox"])
-              indexDevice = 0
-              snapshot.forEach (childSnap) ->
-                console.log childSnap
-                if childSnap.val().Images != null
-                  if getLastPart() == user.uid
-                    showPublicFeed(childSnap.val().Images, deletedIntegrations[indexDevice])
-                    indexDevice++
-                  else
-                    $.notify("This user doesn't exist.", "info")
-                  return
-            NProgress.done()
-        $('.profile-name').text user.displayName
+    getAllPathsForEmail(getUrlParameter('email'))
+    obliged_email = "#{getUrlParameter('email')}".replace(/\./g,'|')
+    $("#feed_of_user").attr("href", "/feed?email=#{getUrlParameter('email')}")
+    $(".signout").hide()
+    $(".avatar-parts").hide()
+
+    config = 
+      apiKey: AuthData.apiKey
+      authDomain: AuthData.authDomain
+      databaseURL: AuthData.databaseURL
+      storageBucket: AuthData.storageBucket
+
+    firebase.initializeApp config
+    storage = firebase.storage()
+    storageRef = storage.ref()
+
+    firebase.database().ref().once 'value', (snapshot) ->
+      console.log snapshot
+      if !snapshot.hasChild(obliged_email)
+        $.notify("No data to show in public feed.", "info");
+        NProgress.done()
+        console.log "No data for show."
       else
-        window.location = '/'
-      return
-    return
+        console.log "hrurr"
+        firebase.database().ref().child("/#{obliged_email}").once 'value', (snapshot) ->
+          mac_address = Object.keys(snapshot.val())[0]
+          globalDeviceKeys = Object.keys(snapshot.val())
+          deletedIntegrations = subtractarrays(globalDeviceKeys, ["evercam", "dropbox"])
+          indexDevice = 0
+          snapshot.forEach (childSnap) ->
+            console.log childSnap
+            if childSnap.val().Images != null
+              showPublicFeed(childSnap.val().Images, deletedIntegrations[indexDevice], storageRef)
+              indexDevice++
+        NProgress.done()
 
 subtractarrays = (array1, array2) ->
   difference = []
@@ -120,7 +128,7 @@ getAllPathsForEmail = (email) ->
 
   $.ajax(settings)
 
-showPublicFeed = (Images, deviceMac) ->
+showPublicFeed = (Images, deviceMac, storageRef) ->
   spanTagFeed = ""
   tags = "all"
   $.each Images, (timestamp, Image) ->
@@ -256,7 +264,6 @@ feedTheImage = ->
 
 window.initializeFeeds = ->
   moment.locale()
-  startAuth()
   onLoad()
   feedTheImage()
   onSendToDB()

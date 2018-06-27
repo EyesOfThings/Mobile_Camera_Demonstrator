@@ -37,7 +37,7 @@ onLoad = ->
         iam_authenticated = firebase
         db_auth = firebase.database().ref()
         obliged_email = "#{user_email}".replace(/\./g,'|')
-        $("#feed_of_user").attr("href", "/feed/#{user.uid}")
+        $("#feed_of_user").attr("href", "/feed?email=#{user.email}")
         console.log obliged_email
         db_auth.once 'value', (snapshot) ->
           if !snapshot.hasChild(obliged_email)
