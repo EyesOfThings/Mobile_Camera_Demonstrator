@@ -51,7 +51,7 @@ onLoad = ->
           addMacsToDorpdown(deletedIntegrations)
           # console.log Object.values(snapshot.val())[1]
           mac_address = Object.keys(snapshot.val())[0]
-        $("#feed_of_user").attr("href", "/feed/#{user.uid}")
+        $("#feed_of_user").attr("href", "/feed?email=#{user.email}")
         console.log obliged_email
 
         # $('.profile-image').attr 'src', "http://eot.evercam.io/eot.jpg"

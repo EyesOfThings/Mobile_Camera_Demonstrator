@@ -45,9 +45,10 @@ onSignIn = ->
     firebase.auth().signInWithPopup(provider).then((result) ->
       $("#page-splash").css('display', 'none')
       # $(".profile-image").attr("src", "http://eot.evercam.io/eot.jpg")
+
       $(".profile-name").text(result.user.displayName)
       console.log result.user
-      $("#feed_of_user").attr("href", "/feed/#{result.user.uid}")
+      $("#feed_of_user").attr("href", "/feed?email=#{user.email}")
       console.log result.user.email
       user_email = result.user.email
       iam_authenticated = firebase
@@ -524,6 +525,7 @@ onPopUpClick = ->
       customMetadata:
         isPublic: 'true'
         pFeedDate: "#{moment().unix()}"
+        email: "#{user_email.match(/^([^@]*)@/)[1]}"
 
     storageRef.child("#{forMetaData}").updateMetadata(newMetaData).then((metadata) ->
       console.log metadata
@@ -548,6 +550,7 @@ onDropUpClick = ->
       customMetadata:
         isPublic: 'false'
         pFeedDate: "#{moment().unix()}"
+        email: "#{user_email.match(/^([^@]*)@/)[1]}"
 
     storageRef.child("#{forMetaData}").updateMetadata(newMetaData).then((metadata) ->
       console.log metadata

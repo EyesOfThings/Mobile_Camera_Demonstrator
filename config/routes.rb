@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   get "/load_animation_path", to: "home#load_animation_path"
   post "/change_animation_public", to: "home#change_animation_public"
   get "/load_public_animation_path", to: "home#load_public_animation_path"
-  get "/feed/:uid" => "home#feeds"
+  get "/feed" => "home#feeds"
 
   get "/v1/emotions" => "devices#emotions"
   get "/v1/devices/:device_id/images/" => "devices#device_images"
