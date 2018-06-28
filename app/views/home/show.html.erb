@@ -30,129 +30,129 @@
 
         <!-- ALBUM ITEMS -->
 
-        <div id="album_items">
+      <div id="album_items">
+        <div class="content">
+          <div class="ui labeled icon button left floated dropdown">
+            <i class="dropdown lircle left icon"></i>
+             Devices
+            <div class="menu ui transition hidden pushMacs">
+              <div class="ui radio checkbox item deviceArea">
+                <input type="radio" name="radio" checked="checked">
+                <label for="macValue">All</label>
+              </div>
+            </div>
+          </div>
+          <button class="ui labeled icon button left floated show-me-filter">
+            <i class="filter lircle left icon"></i>
+             Filters
+          </button>
+          <div class="ui labeled icon button left floated dropdown">
+            <i class="dropdown lircle left icon"></i>
+             Action
+            <div class="menu ui transition hidden">
+              <div class="item select-all-images">
+                Select All Images
+              </div>
+              <div class="item deselect-all-images" style="display: none;">
+                Deselect All Images
+              </div>
+              <div class="item createAnimation">Create Animation</div>
+              <div class="item goesToPublicFeed">Share to Public Feed</div>
+            </div>
+          </div>
+
+          <div class="ui calendar left floated" id="date-filter-for">
+            <div class="ui input left icon">
+              <i class="calendar icon"></i>
+              <input type="text">
+              <div class="ui right icon clean-show-all">
+                <i class="remove icon" style="font-size: 24px;margin-top: 8px;"></i>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="ui cards my-gallery">
+
+        </div>
+        <!-- Left menu -->
+        <div class="ui left demo vertical inverted sidebar labeled icon menu">
+          <a class="item" id="all">
+            <i class="block layout icon"></i>
+            All
+          </a>
+          <a class="item" id="normal">
+            <i class="em em-face_with_cowboy_hat layout icon"></i>
+            Normal
+          </a>
+          <a class="item" id="Anger">
+            <i class="em em-angry layout icon"></i>
+            Anger
+          </a>
+          <a class="item" id="Disgust">
+            <i class="em em-persevere layout icon"></i>
+            Disgust
+          </a>
+          <a class="item" id="Fear">
+            <i class="em em-worried layout icon"></i>
+            Fear
+          </a>
+          <a class="item" id="Happiness">
+            <i class="em em-smile layout icon"></i>
+            Happiness
+          </a>
+          <a class="item" id="LargeFaceDetected">
+            <i class="em em-zombie layout icon"></i>
+            Large Face
+          </a>
+          <a class="item" id="Neutral">
+            <i class="em em-neutral_face layout icon"></i>
+            Neutral
+          </a>
+          <a class="item" id="MotionDetected">
+            <i class="em em em-juggling layout icon"></i>
+            MotionDetected
+          </a>
+          <a class="item" id="Sadness">
+            <i class="em em-pensive layout icon"></i>
+            Sadness
+          </a>
+          <a class="item" id="Surprise">
+            <i class="em em-open_mouth layout icon"></i>
+            Surprise
+          </a>
+        </div>
+        <!-- menu end -->
+        <div class="ui small modal imagepage" style="">
+          <div class="header to-time"></div>
           <div class="content">
-            <div class="ui labeled icon button left floated dropdown">
-              <i class="dropdown lircle left icon"></i>
-               Devices
-              <div class="menu ui transition hidden pushMacs">
-                <div class="ui radio checkbox item deviceArea">
-                  <input type="radio" name="radio" checked="checked">
-                  <label for="macValue">All</label>
-                </div>
-              </div>
-            </div>
-            <button class="ui labeled icon button left floated show-me-filter">
-              <i class="filter lircle left icon"></i>
-               Filters
-            </button>
-            <div class="ui labeled icon button left floated dropdown">
-              <i class="dropdown lircle left icon"></i>
-               Action
-              <div class="menu ui transition hidden">
-                <div class="item select-all-images">
-                  Select All Images
-                </div>
-                <div class="item deselect-all-images" style="display: none;">
-                  Deselect All Images
-                </div>
-                <div class="item createAnimation">Create Animation</div>
-                <div class="item goesToPublicFeed">Share to Public Feed</div>
-              </div>
-            </div>
-
-            <div class="ui calendar left floated" id="date-filter-for">
-              <div class="ui input left icon">
-                <i class="calendar icon"></i>
-                <input type="text">
-                <div class="ui right icon clean-show-all">
-                  <i class="remove icon" style="font-size: 24px;margin-top: 8px;"></i>
-                </div>
-              </div>
-            </div>
-
+            <img src="" alt="" class="ui image fluid" />
           </div>
-          <div class="ui cards my-gallery">
-
-          </div>
-          <!-- Left menu -->
-          <div class="ui left demo vertical inverted sidebar labeled icon menu">
-            <a class="item" id="all">
-              <i class="block layout icon"></i>
-              All
-            </a>
-            <a class="item" id="normal">
-              <i class="em em-face_with_cowboy_hat layout icon"></i>
-              Normal
-            </a>
-            <a class="item" id="Anger">
-              <i class="em em-angry layout icon"></i>
-              Anger
-            </a>
-            <a class="item" id="Disgust">
-              <i class="em em-persevere layout icon"></i>
-              Disgust
-            </a>
-            <a class="item" id="Fear">
-              <i class="em em-worried layout icon"></i>
-              Fear
-            </a>
-            <a class="item" id="Happiness">
-              <i class="em em-smile layout icon"></i>
-              Happiness
-            </a>
-            <a class="item" id="LargeFaceDetected">
-              <i class="em em-zombie layout icon"></i>
-              Large Face
-            </a>
-            <a class="item" id="Neutral">
-              <i class="em em-neutral_face layout icon"></i>
-              Neutral
-            </a>
-            <a class="item" id="MotionDetected">
-              <i class="em em em-juggling layout icon"></i>
-              MotionDetected
-            </a>
-            <a class="item" id="Sadness">
-              <i class="em em-pensive layout icon"></i>
-              Sadness
-            </a>
-            <a class="item" id="Surprise">
-              <i class="em em-open_mouth layout icon"></i>
-              Surprise
-            </a>
-          </div>
-          <!-- menu end -->
-          <div class="ui small modal imagepage" style="">
-            <div class="header to-time"></div>
-            <div class="content">
-              <img src="" alt="" class="ui image fluid" />
-            </div>
-            <div class="actions">
-              <div class="ui positive right labeled icon button">
-                Close
-                <i class="checkmark icon"></i>
-              </div>
-            </div>
-          </div>
-          <div class="ui small modal animation-name" style="">
-            <div class="header">Please enter animation name.</div>
-            <div class="content">
-              <div class="ui form">
-                <div class="field">
-                  <label>Animation Name</label>
-                  <input type="text" id="animation-name" name="animation-name" placeholder="Animation Name">
-                </div>
-              </div>
-            </div>
-            <div class="actions">
-              <div class="ui approve button right save-animate-name">Save</div>
-              <div class="ui cancel button right">
-                Cancel
-              </div>
+          <div class="actions">
+            <div class="ui positive right labeled icon button">
+              Close
+              <i class="checkmark icon"></i>
             </div>
           </div>
         </div>
+        <div class="ui small modal animation-name" style="">
+          <div class="header">Please enter animation name.</div>
+          <div class="content">
+            <div class="ui form">
+              <div class="field">
+                <label>Animation Name</label>
+                <input type="text" id="animation-name" name="animation-name" placeholder="Animation Name">
+              </div>
+            </div>
+          </div>
+          <div class="actions">
+            <div class="ui approve button right save-animate-name">Save</div>
+            <div class="ui cancel button right">
+              Cancel
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

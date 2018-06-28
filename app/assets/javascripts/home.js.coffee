@@ -15,6 +15,7 @@ imagePaths = undefined
 window.dateFilter = undefined
 globalDeviceKeys = undefined
 globalDeviceVals = undefined
+window.globalJpegsAppend = []
 
 sendAJAXRequest = (settings) ->
   token = $('meta[name="csrf-token"]')
@@ -88,7 +89,7 @@ window.getAuthWithFirebase = (auth, email) ->
   setTimeout (->
     $("#image_processing").css('display', 'none')
     return
-  ), 5000
+  ), 6000
   db_auth.once 'value', (snapshot) ->
     if !snapshot.hasChild(obliged_email)
       $(".heyyou").css('display', 'block')
@@ -112,15 +113,54 @@ window.getAuthWithFirebase = (auth, email) ->
         addMacsToDorpdown(deletedIntegrations)
         $("#album_items").css("display", "block")
         indExing = 0
+        deviceAndJpegs = []
         snapshot.forEach (childSnap) ->
-          if childSnap.val().Images != null
-            console.log childSnap.val().Images
+          if childSnap.val().Images != undefined
+            # console.log childSnap.val().Images
+            # deviceAndJpegs.push([deletedIntegrations[indExing], childSnap.val().Images])
             logImageDataOnly(childSnap.val().Images, deletedIntegrations[indExing])
             indExing++
             return
+        # console.log deviceAndJpegs
+        setTimeout (->
+          scrollingToBottom()
+          return
+        ), 3000
 
 isset = (variable) ->
   if typeof variable != typeof undefined then true else false
+
+giveContainerPadding = ->
+  $(".do-min").css("padding-bottom", "#{$(window).height()}px")
+
+scrollingToBottom = () ->
+  console.log "we are here now? "
+  if globalJpegsAppend.length > 0
+    $.each globalJpegsAppend, (index, value) ->
+      if index <= 10
+        $(".my-gallery").append(globalJpegsAppend[index])
+        $('.poping-up').popup on: 'hover'
+        $('.droping-up').popup on: 'hover'
+        $('.ui.checkbox').checkbox()
+        globalJpegsAppend.shift()
+
+  lastScrollTop = 0
+  $(window).scroll (event) ->
+    st = $(this).scrollTop()
+    if st > lastScrollTop
+      # downscroll code
+      if globalJpegsAppend.length > 0
+        $.each globalJpegsAppend, (index, value) ->
+          if index <= 9
+            $(".my-gallery").append(globalJpegsAppend[index])
+            $('.poping-up').popup on: 'hover'
+            $('.droping-up').popup on: 'hover'
+            $('.ui.checkbox').checkbox()
+            globalJpegsAppend.shift()
+    else
+      console.log 'up'
+    lastScrollTop = st
+    return
 
 addMacsToDorpdown = (macArray) ->
   tagMac = ''
@@ -146,83 +186,84 @@ capitalizeFirstLetter = (string) ->
   string.charAt(0).toUpperCase() + string.slice(1)
 
 logImageDataOnly = (Images, deviceMac) ->
-  console.log deviceMac
+  # console.log deviceMac
   spanTagFeed = ""
   tags = "all"
   $.each Images, (timestamp, Image) ->
-    tangRef = storageRef.child("#{Image.Path}")
-    tangRef.getMetadata().then((metadata) ->
-      if metadata.customMetadata && metadata.customMetadata.isPublic == "true"
-        spanTagFeed =
-          "<span class='right floated droping-up' data-content='Remove this from public feed.' data-meta='#{Image.Path}'>
-            <i class='undo icon' style='font-size: 20px;'></i>
-          </span>"
-      else
+    if Image.Path != undefined
+      tangRef = storageRef.child("#{Image.Path}")
+      tangRef.getMetadata().then((metadata) ->
+        if metadata.customMetadata && metadata.customMetadata.isPublic == "true"
+          spanTagFeed =
+            "<span class='right floated droping-up' data-content='Remove this from public feed.' data-meta='#{Image.Path}'>
+              <i class='undo icon' style='font-size: 20px;'></i>
+            </span>"
+        else
+          spanTagFeed =
+            "<span class='right floated poping-up' data-content='Add this to your public feed.' data-meta='#{Image.Path}'>
+              <i class='share icon' style='font-size: 20px;'></i>
+            </span>"
+      ).catch (error) ->
+        console.log error
+      if spanTagFeed is ""
         spanTagFeed =
           "<span class='right floated poping-up' data-content='Add this to your public feed.' data-meta='#{Image.Path}'>
             <i class='share icon' style='font-size: 20px;'></i>
           </span>"
-    ).catch (error) ->
-      console.log error
-    if spanTagFeed is ""
-      spanTagFeed =
-        "<span class='right floated poping-up' data-content='Add this to your public feed.' data-meta='#{Image.Path}'>
-          <i class='share icon' style='font-size: 20px;'></i>
-        </span>"
-    
-    tangRef.getDownloadURL().then((url) ->
-      $.each Image.Tags, (i, value) ->
-        if value == 1
-          tags += " #{i}"
-      if tags == "all"
-        tags = "all normal"
-      console.log tags
-      image_tag =
-        "<div class='deviceHolds datetime-filter ui card #{tags}' data-mac='#{deviceMac}' data-timefilter='#{moment.unix(timestamp).format("MMMM M, YYYY")}'>
-          <a class='pop-the-image filer-on-date' href='#{url}' data-mac='#{deviceMac}' data-tags='#{tags}' data-time='#{timestamp}'>
-            <div class='image'>
-              <img src='#{url}'>
-            </div>
-          </a>
-          <div class='content'>
-            <a class='header' data-time='#{timestamp}' data-mac='#{deviceMac}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MMMM M, YYYY, HH-mm-ss")}</a>
-            <div class='meta'>
-              <span class='date'>Device ID: #{deviceMac}</span>
-            </div>
-            <div class='description'>
-              #{returnTagsWithLabel(tags.replace(/all/g,''))}
-            </div>
-          </div>
-          <div class='extra content replacingFirstSpan'>
-            #{spanTagFeed}
-            <span class='right floated social-twitter' data-surl='#{url}'>
-              <i class='twitter square icon' style='font-size: 20px;'></i>
-            </span>
-            <span class='right floated social-facebook' data-surl='#{url}'>
-              <i class='facebook square icon' style='font-size: 20px;'></i>
-            </span>
-            <span class='right floated social-whatsapp' data-surl='#{url}'>
-              <i class='whatsapp icon' style='font-size: 20px;'></i>
-            </span>
-            <span class='right floated social-linkedin' data-surl='#{url}'>
-              <i class='linkedin icon' style='font-size: 20px;'></i>
-            </span>
-            <span>
-              <div class='ui checkbox'>
-                <input type='checkbox' class='checkBx am-image' value='#{url}' name='animateme' data-meta='#{Image.Path}'>
+
+      tangRef.getDownloadURL().then((url) ->
+        $.each Image.Tags, (i, value) ->
+          if value == 1
+            tags += " #{i}"
+        if tags == "all"
+          tags = "all normal"
+        image_tag =
+          "<div class='deviceHolds datetime-filter ui card #{tags}' data-mac='#{deviceMac}' data-timefilter='#{moment.unix(timestamp).format("MMMM M, YYYY")}'>
+            <a class='pop-the-image filer-on-date' href='#{url}' data-mac='#{deviceMac}' data-tags='#{tags}' data-time='#{timestamp}'>
+              <div class='image'>
+                <img src='#{url}'>
               </div>
-            </span>
-          </div>
-        </div>"
-      $(".my-gallery").append(image_tag)
-      $('.poping-up').popup on: 'hover'
-      $('.droping-up').popup on: 'hover'
-      $('.ui.checkbox')
-        .checkbox()
-      tags = "all"
-    ).catch (error) ->
-      console.log error
-      return
+            </a>
+            <div class='content'>
+              <a class='header' data-time='#{timestamp}' data-mac='#{deviceMac}' data-tags='#{tags}'>Date: #{moment.unix(timestamp).format("MMMM M, YYYY, HH-mm-ss")}</a>
+              <div class='meta'>
+                <span class='date'>Device ID: #{deviceMac}</span>
+              </div>
+              <div class='description'>
+                #{returnTagsWithLabel(tags.replace(/all/g,''))}
+              </div>
+            </div>
+            <div class='extra content replacingFirstSpan'>
+              #{spanTagFeed}
+              <span class='right floated social-twitter' data-surl='#{url}'>
+                <i class='twitter square icon' style='font-size: 20px;'></i>
+              </span>
+              <span class='right floated social-facebook' data-surl='#{url}'>
+                <i class='facebook square icon' style='font-size: 20px;'></i>
+              </span>
+              <span class='right floated social-whatsapp' data-surl='#{url}'>
+                <i class='whatsapp icon' style='font-size: 20px;'></i>
+              </span>
+              <span class='right floated social-linkedin' data-surl='#{url}'>
+                <i class='linkedin icon' style='font-size: 20px;'></i>
+              </span>
+              <span>
+                <div class='ui checkbox'>
+                  <input type='checkbox' class='checkBx am-image' value='#{url}' name='animateme' data-meta='#{Image.Path}'>
+                </div>
+              </span>
+            </div>
+          </div>"
+        # $(".my-gallery").append(image_tag)
+        globalJpegsAppend.push(image_tag)
+        $('.poping-up').popup on: 'hover'
+        $('.droping-up').popup on: 'hover'
+        $('.ui.checkbox')
+          .checkbox()
+        tags = "all"
+      ).catch (error) ->
+        console.log error
+        return
 
 showAndHideDevices = ->
   $("#album_items").on "click", ".deviceArea", ->
@@ -667,6 +708,7 @@ shareToPublicFeed = ->
 window.initializeHome = ->
   moment.locale()
   startAuth()
+  giveContainerPadding()
   onSignIn()
   onImageSearch()
   onAllClicked()
