@@ -357,7 +357,7 @@ popTheImage = ->
     $('.ui.imagepage img').attr('src', $(this).attr('href'))
     $('.ui.imagepage .to-time').html(
       "
-        #{moment.unix($(this).data('time')).format("dddd, DD MMMM YYYY hh-mm-ss A")}
+        #{moment.unix($(this).data('time')).format("MMMM M, YYYY, HH-mm-ss")}
         <div class='meta'>
           <span class='date'>Tags: #{$(this).data('tags').replace(/all/g,'')}</span>
         </div>
