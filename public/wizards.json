@@ -1,0 +1,26 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "eot.evercam.io",
+  "resourcePath": "wizards",
+  "apis": [
+    {
+      "path": "/v1/wizards",
+      "operations": [
+        {
+          "summary": "Fetches all the wizards.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            }
+          ],
+          "nickname": "Wizards#index",
+          "method": "get"
+        }
+      ]
+    }
+  ],
+  "authorizations": null
+}

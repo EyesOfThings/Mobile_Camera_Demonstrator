@@ -1,0 +1,59 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "eot.evercam.io",
+  "resourcePath": "animations",
+  "apis": [
+    {
+      "path": "/v1/animations",
+      "operations": [
+        {
+          "summary": "Fetches all animations for a user.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Not Found"
+            }
+          ],
+          "parameters": [
+
+          ],
+          "nickname": "Animations#index",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/animations/public",
+      "operations": [
+        {
+          "summary": "Fetches all public animations for a user.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Not Found"
+            }
+          ],
+          "parameters": [
+
+          ],
+          "nickname": "Animations#public",
+          "method": "get"
+        }
+      ]
+    }
+  ],
+  "authorizations": null
+}

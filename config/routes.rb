@@ -34,6 +34,11 @@ Rails.application.routes.draw do
   get "/v1/devices" => "devices#index"
   get "/v1/:email/devices" => "devices#user_devices"
 
+  get "/v1/wizards" => "wizards#index"
+
+  get "/v1/animations" => "animations#index"
+  get "/v1/animations/public" => "animations#public"
+
   get '/v1/swagger' => "home#swagger"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
