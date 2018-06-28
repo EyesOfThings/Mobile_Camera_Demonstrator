@@ -22,7 +22,13 @@
             }
           ],
           "parameters": [
-
+            {
+              "paramType": "query",
+              "name": "email",
+              "type": "string",
+              "description": "User email for whom you want to load all animations.",
+              "required": true
+            }
           ],
           "nickname": "Animations#index",
           "method": "get"
@@ -47,7 +53,13 @@
             }
           ],
           "parameters": [
-
+            {
+              "paramType": "query",
+              "name": "email",
+              "type": "string",
+              "description": "User email for whom you want to load all animations.",
+              "required": true
+            }
           ],
           "nickname": "Animations#public",
           "method": "get"

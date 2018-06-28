@@ -12,6 +12,15 @@
   "paths": {
     "/v1/animations": {
       "get": {
+        "parameters": [
+          {
+            "description": "User email for whom you want to load all animations.",
+            "in": "query",
+            "name": "email",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success"
@@ -29,6 +38,15 @@
     },
     "/v1/animations/public": {
       "get": {
+        "parameters": [
+          {
+            "description": "User email for whom you want to load all animations.",
+            "in": "query",
+            "name": "email",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success"

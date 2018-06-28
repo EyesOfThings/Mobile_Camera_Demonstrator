@@ -4,7 +4,7 @@ class AnimationsController < ApplicationController
 
   swagger_api :index do
     summary "Fetches all animations for a user."
-    param :path, :email, :string, :required, "User email for whom you want to load all animations."
+    param :query, :email, :string, :required, "User email for whom you want to load all animations."
     response :ok, "Success"
     response :not_found, "Not Found"
   end
@@ -33,7 +33,7 @@ class AnimationsController < ApplicationController
 
   swagger_api :public do
     summary "Fetches all public animations for a user."
-    param :path, :email, :string, :required, "User email for whom you want to load all animations."
+    param :query, :email, :string, :required, "User email for whom you want to load all animations."
     response :ok, "Success"
     response :not_found, "Not Found"
   end
