@@ -144,6 +144,8 @@ scrollingToBottom = () ->
         $('.ui.checkbox').checkbox()
         globalJpegsAppend.shift()
 
+  $(".iamloader").show()
+  $.notify("Scrolldown for more images.", "info")
   lastScrollTop = 0
   $(window).scroll (event) ->
     st = $(this).scrollTop()
@@ -157,6 +159,8 @@ scrollingToBottom = () ->
             $('.droping-up').popup on: 'hover'
             $('.ui.checkbox').checkbox()
             globalJpegsAppend.shift()
+      else
+        $(".iamloader").hide()
     else
       console.log 'up'
     lastScrollTop = st
