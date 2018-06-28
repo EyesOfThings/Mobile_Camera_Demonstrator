@@ -10,6 +10,40 @@
     "http"
   ],
   "paths": {
+    "/v1/animations": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "animations"
+        ],
+        "operationId": "Animations#index",
+        "summary": "Fetches all animations for a user."
+      }
+    },
+    "/v1/animations/public": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "animations"
+        ],
+        "operationId": "Animations#public",
+        "summary": "Fetches all public animations for a user."
+      }
+    },
     "/v1/devices": {
       "get": {
         "responses": {
@@ -64,6 +98,20 @@
         "summary": "Fetches all the emotions."
       }
     },
+    "/v1/wizards": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "tags": [
+          "wizards"
+        ],
+        "operationId": "Wizards#index",
+        "summary": "Fetches all the wizards."
+      }
+    },
     "/v1/{email}/devices": {
       "get": {
         "parameters": [
@@ -93,8 +141,16 @@
   },
   "tags": [
     {
+      "description": "Animations",
+      "name": "animations"
+    },
+    {
       "description": "Devices",
       "name": "devices"
+    },
+    {
+      "description": "Wizards",
+      "name": "wizards"
     }
   ]
 }

@@ -6,6 +6,14 @@
     {
       "path": "/devices.{format}",
       "description": "Devices"
+    },
+    {
+      "path": "/wizards.{format}",
+      "description": "Wizards"
+    },
+    {
+      "path": "/animations.{format}",
+      "description": "Animations"
     }
   ],
   "authorizations": null
