@@ -222,7 +222,7 @@ logImageDataOnly = (Images, deviceMac) ->
         if tags == "all"
           tags = "all normal"
         image_tag =
-          "<div class='deviceHolds datetime-filter ui card #{tags}' data-mac='#{deviceMac}' data-timefilter='#{moment.unix(timestamp).format("MMMM M, YYYY")}'>
+          "<div class='deviceHolds datetime-filter ui card #{tags}' data-mac='#{deviceMac}' data-timefilter=#{timestamp}>
             <a class='pop-the-image filer-on-date' href='#{url}' data-mac='#{deviceMac}' data-tags='#{tags}' data-time='#{timestamp}'>
               <div class='image'>
                 <img src='#{url}'>
@@ -568,10 +568,27 @@ saveMePath = (user_email, path, animationId) ->
   $.ajax(settings)
 
 startCalendar = ->
-  dateFilter = $('#date-filter-for').calendar
-    type: 'date',
+  start = $('#rangestart').calendar
+    type: 'date'
+    endCalendar: $('#rangeend')
+
+  end = $('#rangeend').calendar
+    type: 'date'
+    startCalendar: $('#rangestart')
     onChange: (date, text, mode) ->
-      $('.datetime-filter').hide().filter("[data-timefilter='#{text}']").show();
+      endDate = moment(date).unix()
+      # $('.datetime-filter').hide()
+      startDate = moment($('#rangestart').calendar("get date")).unix()
+
+      $('.datetime-filter').filter ->
+        if $(this).data('timefilter') >= startDate && $(this).data('timefilter') <= endDate then $(this).show() else $(this).hide()
+        return
+
+      # $.each $('.datetime-filter'), ->
+      #   $(this).filter(
+
+      #     $(this).data('timefilter') >= startDate && $(this).data('timefilter') <= endDate
+      #   ).show();
 
 removeDateFilter = ->
   $(".clean-show-all").on "click", ->
