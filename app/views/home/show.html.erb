@@ -31,48 +31,67 @@
         <!-- ALBUM ITEMS -->
 
       <div id="album_items">
-        <div class="content">
-          <div class="ui labeled icon button left floated dropdown">
-            <i class="dropdown lircle left icon"></i>
-             Devices
-            <div class="menu ui transition hidden pushMacs">
-              <div class="ui radio checkbox item deviceArea">
-                <input type="radio" name="radio" checked="checked">
-                <label for="macValue">All</label>
-              </div>
-            </div>
-          </div>
-          <button class="ui labeled icon button left floated show-me-filter">
-            <i class="filter lircle left icon"></i>
-             Filters
-          </button>
-          <div class="ui labeled icon button left floated dropdown">
-            <i class="dropdown lircle left icon"></i>
-             Action
-            <div class="menu ui transition hidden">
-              <div class="item select-all-images">
-                Select All Images
-              </div>
-              <div class="item deselect-all-images" style="display: none;">
-                Deselect All Images
-              </div>
-              <div class="item createAnimation">Create Animation</div>
-              <div class="item goesToPublicFeed">Share to Public Feed</div>
-              <div class="item deleteFromStorage">Delete from Storage</div>
-            </div>
-          </div>
 
-          <div class="ui calendar left floated" id="date-filter-for">
-            <div class="ui input left icon">
-              <i class="calendar icon"></i>
-              <input type="text">
-              <div class="ui right icon clean-show-all">
-                <i class="remove icon" style="font-size: 24px;margin-top: 8px;"></i>
+        <div class="ui grid">
+          <div class="four wide column">
+
+            <div class="ui labeled icon button left floated dropdown">
+              <i class="dropdown lircle left icon"></i>
+               Devices
+              <div class="menu ui transition hidden pushMacs">
+                <div class="ui radio checkbox item deviceArea">
+                  <input type="radio" name="radio" checked="checked">
+                  <label for="macValue">All</label>
+                </div>
+              </div>
+            </div>
+            <button class="ui labeled icon button left floated show-me-filter">
+              <i class="filter lircle left icon"></i>
+               Filters
+            </button>
+            <div class="ui labeled icon button left floated dropdown">
+              <i class="dropdown lircle left icon"></i>
+               Action
+              <div class="menu ui transition hidden">
+                <div class="item select-all-images">
+                  Select All Images
+                </div>
+                <div class="item deselect-all-images" style="display: none;">
+                  Deselect All Images
+                </div>
+                <div class="item createAnimation">Create Animation</div>
+                <div class="item goesToPublicFeed">Share to Public Feed</div>
+                <div class="item deleteFromStorage">Delete from Storage</div>
               </div>
             </div>
           </div>
-
+          <div class="four wide column">
+            <div class="ui form">
+              <div class="fields">
+                <div class="field">
+                  <div class="ui calendar" id="rangestart">
+                    <div class="ui input left icon">
+                      <i class="calendar icon"></i>
+                      <input type="text" class="rangestart" placeholder="Start">
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="ui calendar left floated" id="rangeend">
+                    <div class="ui input left icon">
+                      <i class="calendar icon"></i>
+                      <input type="text" class="rangeend" placeholder="End">
+                      <div class="ui right icon clean-show-all">
+                        <i class="remove icon" style="font-size: 24px;margin-top: 8px;"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>         
+          </div>
         </div>
+
         <div class="ui cards my-gallery">
 
         </div>
