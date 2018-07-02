@@ -465,6 +465,27 @@ onCreateAnimation = ->
       image_count_ani = checkValues.length
       $('.ui.animation-name').modal("show")
 
+deleteFromStorage = ->
+  $(".deleteFromStorage").on "click", ->
+    checkValues = $('input[name=animateme]:checked').map(->
+      $(this).data('meta')
+    ).get()
+
+    if checkValues.length < 1
+      $.notify("Please select few images.", "info")
+    else
+      $('input[name=animateme]:checked').map(->
+        tangRef = storageRef.child("#{$(this).data('meta')}")
+        $(this).closest('.deviceHolds').remove()
+        tangRef.delete().then(->
+          $(this).closest('.deviceHolds').remove()
+          console.log "File has been deleted from storage"
+          return
+        ).catch (error) ->
+          # Uh-oh, an error occurred!
+          return
+      ).get()
+
 onNameSave = ->
   $(".save-animate-name").on "click", ->
     console.log "hi"
@@ -735,3 +756,4 @@ window.initializeHome = ->
   onFBSharingClick()
   shareToPublicFeed()
   showAndHideDevices()
+  deleteFromStorage()
