@@ -220,9 +220,13 @@ class Wizard < ApplicationRecord
         puts "has nothing to do."
       else
         objective[:state_object].each do |file_name|
-          file = bucket.file file_name
-          file.download file_name
-          puts "Downloaded #{file.name}"
+          begin
+            file = bucket.file file_name
+            file.download file_name
+            puts "Downloaded #{file.name}"
+          rescue => e
+            puts "Something went wrong #{e}"
+          end
         end
         send_email_with_attach(objective[:state_object], objective[:email], objective[:emotion])
       end
@@ -239,7 +243,11 @@ class Wizard < ApplicationRecord
     data[:html] = "<html>EoT found the following images that match your settings: Emotion = #{emotion} (See Attached). <br><br> To change your settings, click <a href='http://eot.evercam.io/wizards'>here</a></html>"
     data[:attachment] = []
     jpeg_paths.each do |file_path|
-      data[:attachment] << File.new(file_path)
+      begin
+        data[:attachment] << File.new(file_path)
+      rescue => e
+        puts "something went wrong #{e}"
+      end
     end
     puts data
     begin
