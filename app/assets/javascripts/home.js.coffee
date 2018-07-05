@@ -273,9 +273,11 @@ showAndHideDevices = ->
   $("#album_items").on "click", ".deviceArea", ->
     deviceMac = $($(this).html()).filter('label').text()
     if deviceMac is "All"
+      $(".replaceWithMac").text("All")
       $('.deviceHolds').each ->
         $(this).show()
     else
+      $(".replaceWithMac").text("#{deviceMac}")
       $('.deviceHolds').each ->
         $(this).hide()
         if $(this).data('mac') == "#{deviceMac}"
