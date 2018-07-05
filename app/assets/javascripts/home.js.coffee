@@ -1,5 +1,7 @@
 window.storage = undefined
 window.storageRef = undefined
+window.database = undefined
+window.databaseRef = undefined
 auth_app = undefined
 mac_address = undefined
 window.iam_authenticated = undefined
@@ -27,7 +29,7 @@ sendAJAXRequest = (settings) ->
   true
 
 window.startAuth = ->
-  config = 
+  config =
     apiKey: AuthData.apiKey
     authDomain: AuthData.authDomain
     databaseURL: AuthData.databaseURL
@@ -36,11 +38,15 @@ window.startAuth = ->
   window.firebase.initializeApp config
   window.storage = firebase.storage()
   window.storageRef = storage.ref()
+  window.database = firebase.database()
+  window.databaseRef = database.ref("wearableeot-39e6a")
 
 onSignIn = ->
   $(".auth-provider").on "click", ".auth-with-google", ->
     storage = firebase.storage()
     storageRef = storage.ref()
+    database = firebase.database()
+    databaseRef = database.ref("wearableeot-39e6a")
     console.log "clicked"
     provider = new (firebase.auth.GoogleAuthProvider)
     firebase.auth().signInWithPopup(provider).then((result) ->
@@ -350,7 +356,7 @@ updateSyncDate = (auth, email, timestamp, api_key, api_id) ->
       apiKey: "#{api_key}"
       apiId: "#{api_id}"
       lastSyncDate: "#{timestamp}"
-  console.log "done"  
+  console.log "done"
 
 popTheImage = ->
   $(".my-gallery").on "click", ".pop-the-image", (event) ->
@@ -467,7 +473,7 @@ onCreateAnimation = ->
       image_count_ani = checkValues.length
       $('.ui.animation-name').modal("show")
 
-deleteFromStorage = ->
+deleteFromStorage = (deviceMac) ->
   $(".deleteFromStorage").on "click", ->
     checkValues = $('input[name=animateme]:checked').map(->
       $(this).data('meta')
@@ -477,6 +483,21 @@ deleteFromStorage = ->
       $.notify("Please select few images.", "info")
     else
       $('input[name=animateme]:checked').map(->
+
+        obliged_email = "#{window.user_email}".replace(/\./g,'|')
+        databaseRef = firebase.database().ref("#{obliged_email}/#{mac_address}/Images")
+        myId = $(this).data('meta').split(/[/.]/)
+        myId.forEach (child) ->
+          if !(isNaN(child))
+            elemRef = databaseRef.child("#{child}")
+            elemRef.remove().then(->
+              $(this).closest('.deviceHolds').remove()
+              console.log "File has been deleted from database"
+              return
+            ).catch (error) ->
+              # Uh-oh, an error occurred!
+              return
+
         tangRef = storageRef.child("#{$(this).data('meta')}")
         $(this).closest('.deviceHolds').remove()
         tangRef.delete().then(->
@@ -532,7 +553,7 @@ ceateAndSave = (image_paths, animation_name) ->
 
 uploadToFirebase = (data) ->
   storage = firebase.storage()
-  storageRef = storage.ref("Animations/#{data.directory_name}.mp4")
+  storage = storage.ref("Animations/#{data.directory_name}.mp4")
   storageRef.putString(data.base64String, 'base64').then (snapshot) ->
     console.log 'Uploaded a base64 string!'
   console.log window.user_email
@@ -631,7 +652,7 @@ onDropUpClick = ->
     NProgress.start()
     thisIs = $(this)
     forMetaData = $(this).data('meta')
-    newMetaData = 
+    newMetaData =
       customMetadata:
         isPublic: 'false'
         pFeedDate: "#{moment().unix()}"
