@@ -81,6 +81,7 @@ window.getAuthWithFirebase = (auth, email) ->
   db_auth = auth.database().ref()
   obliged_email = "#{email}".replace(/\./g,'|')
   console.log obliged_email
+  deleteFromStorage(auth)
   $("#image_processing")
     .css('display', 'block')
     .css('z-index', "99999")
@@ -253,7 +254,7 @@ logImageDataOnly = (Images, deviceMac) ->
               </span>
               <span>
                 <div class='ui checkbox'>
-                  <input type='checkbox' class='checkBx am-image' value='#{url}' name='animateme' data-meta='#{Image.Path}'>
+                  <input type='checkbox' class='checkBx am-image' value='#{url}' name='animateme' data-meta='#{Image.Path}' data-mac='#{deviceMac}'>
                 </div>
               </span>
             </div>
@@ -467,7 +468,7 @@ onCreateAnimation = ->
       image_count_ani = checkValues.length
       $('.ui.animation-name').modal("show")
 
-deleteFromStorage = ->
+deleteFromStorage = (auth) ->
   $(".deleteFromStorage").on "click", ->
     checkValues = $('input[name=animateme]:checked').map(->
       $(this).data('meta')
@@ -476,7 +477,18 @@ deleteFromStorage = ->
     if checkValues.length < 1
       $.notify("Please select few images.", "info")
     else
+      obliged_email = "#{window.user_email}".replace(/\./g,'|')
+
       $('input[name=animateme]:checked').map(->
+
+        imageStack = auth.database().ref("/#{obliged_email}/#{$(this).data('mac')}/Images")
+        console.log imageStack
+        imageId = $(this).data('meta').replace(/[^0-9]/g,'')
+        imageStack.child("#{imageId}").remove().then(->
+          console.log "File reference has been removed for db."
+        ).catch (error) ->
+          console.log error
+
         tangRef = storageRef.child("#{$(this).data('meta')}")
         $(this).closest('.deviceHolds').remove()
         tangRef.delete().then(->
@@ -487,6 +499,7 @@ deleteFromStorage = ->
           # Uh-oh, an error occurred!
           return
       ).get()
+      $.notify("File(s) have been deleted.", "info")
 
 onNameSave = ->
   $(".save-animate-name").on "click", ->
@@ -775,4 +788,4 @@ window.initializeHome = ->
   onFBSharingClick()
   shareToPublicFeed()
   showAndHideDevices()
-  deleteFromStorage()
+  # deleteFromStorage()
